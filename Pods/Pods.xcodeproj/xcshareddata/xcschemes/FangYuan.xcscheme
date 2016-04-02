@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '0052D2FAC45A4FC60B0B5B20'
+               BlueprintIdentifier = 'ED174B6C2CCE7AFC0F140688'
                BlueprintName = 'FangYuan'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'FangYuan.framework'>
