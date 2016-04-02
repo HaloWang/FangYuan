@@ -1,0 +1,5 @@
+{
+  "name": "Halo",
+  "version": "0.0.1",
+  "source_files": "**/*.swift"
+}
