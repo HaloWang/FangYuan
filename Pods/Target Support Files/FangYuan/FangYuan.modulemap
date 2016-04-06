@@ -1,6 +1,0 @@
-framework module FangYuan {
-  umbrella header "FangYuan-umbrella.h"
-
-  export *
-  module * { export * }
-}

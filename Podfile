@@ -3,5 +3,6 @@ use_frameworks!
 
 target 'FangYuanDemo' do
     pod 'FangYuan', :path=>"./FangYuan"
+    pod 'Halo'
 end
 

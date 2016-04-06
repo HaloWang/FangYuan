@@ -36,17 +36,17 @@ $ cd <#Your Project Folder#> && pod install
 
 ## 使用方式
 
+你可以在 demo 中直接浏览相关代码
+
 ### UIViewController
 
 ⚠️UnFinish
 
-### UITableViewCell
+### UITableViewCell / UICollecionViewCell
 
 ⚠️UnFinish
 
-### CustomView
-
-⚠️UnFinish
+ObjC 环境下的方圆也使用了上述代码，规则完全一样
 
 ## 方圆的原理
 
