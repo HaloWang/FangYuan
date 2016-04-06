@@ -36,3 +36,5 @@ Pods/*
 
 # Carthage
 Carthage/Build
+Podfile.lock
+FangYuanDemo.xcworkspace
