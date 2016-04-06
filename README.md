@@ -1,5 +1,7 @@
 # 方圆
 
+[![Travis CI](https://travis-ci.org/HaloWang/FangYuan.svg?branch=master)](https://travis-ci.org/HaloWang/FangYuan)
+
 ## 介绍
 
 『方圆』是一个使用简单，轻量级，高性能的布局库。
