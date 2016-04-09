@@ -6,12 +6,14 @@ import Halo
 class FYDViewController: UIViewController {
     
     let titles = [
+        "观察代码",
         "在 ViewController 中使用",
         "在 Cell 中使用",
-        "VS AutoLayout"
+        "对比 SnapKit"
     ]
     
     let vcs = [
+        FYDReactiveCodeViewController.self,
         FYDDemoViewController.self,
         FYDDemoTableViewController.self,
         FYDVSAutoLayoutViewController.self
@@ -24,7 +26,7 @@ class FYDViewController: UIViewController {
         backgroundColor(White)
         
         tableView
-            .registerCellClass(UITableViewCell)
+            .registerCellClass(WCValue1TableViewCell)
             .dataSourceAndDelegate(self)
             .tableFooterViewAdded()
             .superView(view)
@@ -34,7 +36,9 @@ class FYDViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         // TODO: 这里有错误？
-        tableView.fy_edge(UIEdgeInsetsZero)
+        tableView
+            .fy_edge(UIEdgeInsetsZero)
+            .reloadData()
     }
 }
 
@@ -49,7 +53,7 @@ extension FYDViewController : UITableViewDelegate {
 // MARK: - UITableViewDataSource
 extension FYDViewController : UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueCell(UITableViewCell).selectionStyle(.None).accessoryType(.DisclosureIndicator)
+        let cell = tableView.dequeueCell(WCValue1TableViewCell).selectionStyle(.None).accessoryType(.DisclosureIndicator)
         cell.text(titles[indexPath.row])
         return cell
     }

@@ -24,10 +24,6 @@ class FYDDemoTableViewController: UIViewController {
 
 // MARK: - UITableViewDelegate
 extension FYDDemoTableViewController : UITableViewDelegate {
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
-    }
-    
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 44
     }

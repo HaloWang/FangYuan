@@ -14,6 +14,7 @@
 		096A97751CAFA84A00497C1E /* FYDViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 096A97741CAFA84A00497C1E /* FYDViewController.swift */; };
 		096A977A1CAFA84A00497C1E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 096A97791CAFA84A00497C1E /* Assets.xcassets */; };
 		096A977D1CAFA84A00497C1E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 096A977B1CAFA84A00497C1E /* LaunchScreen.storyboard */; };
+		0996DCF31CB9478A00612218 /* FYDReactiveCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0996DCF21CB9478A00612218 /* FYDReactiveCodeViewController.swift */; };
 		D2C1E1B7790E69A2EF0C4F6E /* Pods_FangYuanDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFF3F51A1AB38D36050A9C3F /* Pods_FangYuanDemo.framework */; };
 /* End PBXBuildFile section */
 
@@ -28,6 +29,7 @@
 		096A97791CAFA84A00497C1E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		096A977C1CAFA84A00497C1E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		096A977E1CAFA84A00497C1E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0996DCF21CB9478A00612218 /* FYDReactiveCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FYDReactiveCodeViewController.swift; sourceTree = "<group>"; };
 		E08DFAE07EBBB4F2E9288848 /* Pods-FangYuanDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FangYuanDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-FangYuanDemo/Pods-FangYuanDemo.release.xcconfig"; sourceTree = "<group>"; };
 		EFF3F51A1AB38D36050A9C3F /* Pods_FangYuanDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FangYuanDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -67,6 +69,7 @@
 			children = (
 				096A97721CAFA84A00497C1E /* AppDelegate.swift */,
 				096A97741CAFA84A00497C1E /* FYDViewController.swift */,
+				0996DCF21CB9478A00612218 /* FYDReactiveCodeViewController.swift */,
 				0932F1E11CB4F8F4009596F6 /* FYDDemoViewController.swift */,
 				0932F1E31CB4F90B009596F6 /* FYDDemoTableViewController.swift */,
 				0932F1E51CB50205009596F6 /* FYDVSAutoLayoutViewController.swift */,
@@ -219,6 +222,7 @@
 				096A97751CAFA84A00497C1E /* FYDViewController.swift in Sources */,
 				096A97731CAFA84A00497C1E /* AppDelegate.swift in Sources */,
 				0932F1E61CB50205009596F6 /* FYDVSAutoLayoutViewController.swift in Sources */,
+				0996DCF31CB9478A00612218 /* FYDReactiveCodeViewController.swift in Sources */,
 				0932F1E21CB4F8F4009596F6 /* FYDDemoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
