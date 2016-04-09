@@ -35,18 +35,31 @@ private extension UIView {
 // MARK: - Chainable Getter
 
 public extension UIView {
+    
+    /// 描述某个 **view 右边** 距该 **view 左边**的关系时，使用该属性：
+    ///
+    /// someView.fy_right(self.chainLeft)
     var chainLeft: CGFloat {
         return superview == nil ? 0 : superview!.fy_width - fy_left
     }
 
+    /// 描述某个 **view 左边** 距该 **view 右边**的关系时，使用该属性：
+    ///
+    /// someView.fy_left(self.chainRight)
     var chainRight: CGFloat {
         return fy_left + fy_width
     }
-
+    
+    /// 描述某个 **view 顶部** 距该 **view 底部**的关系时，使用该属性：
+    ///
+    /// someView.fy_top(self.chainBottom)
     var chainBottom: CGFloat {
         return fy_top + fy_height
     }
 
+    /// 描述某个 **view 底部** 距该 **view 顶部**的关系时，使用该属性：
+    ///
+    /// someView.fy_bottom(self.chainTop)
     var chainTop: CGFloat {
         return superview == nil ? 0 : superview!.fy_height - fy_top
     }
