@@ -11,6 +11,11 @@ import UIKit
 // MARK: - Chainable Getter
 
 public extension UIView {
+    
+    //  添加依赖
+    internal func cop(_op:()->Void) {
+        _op()
+    }
 
     /// 描述某个 **view 右边** 距该 **view 左边**的关系时，使用该属性：
     ///
