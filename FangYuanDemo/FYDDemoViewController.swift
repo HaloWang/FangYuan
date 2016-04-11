@@ -48,12 +48,13 @@ class FYDDemoViewController: UIViewController {
             .fy_left(25)
             .fy_width(50)
             .fy_height(80)
-
+        
         dv1
             .fy_bottom(0)
             .fy_left(0)
             .fy_right(0)
             .fy_height(49)
+        
         dv2
             .fy_right(0)
             .fy_width(50)

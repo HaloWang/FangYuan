@@ -1,10 +1,7 @@
-//
-//  FYDDemoTableViewController.swift
-//  FangYuanDemo
-//
-//  Created by 王策 on 16/4/6.
-//  Copyright © 2016年 王策. All rights reserved.
-//
+
+//  ✅ FYDDemoTableViewController
+//  这个视图控制器中简单的演示了如何通过 FangYuan 为 UITableViewCell 布局
+//  请大家主要查看 FYDemoCell 中的代码
 
 import UIKit
 import FangYuan
@@ -70,7 +67,6 @@ extension FYDDemoTableViewController : UITableViewDataSource {
     }
 }
 
-
 // MARK: - FYDemoCell
 class FYDemoCell: UITableViewCell {
     
@@ -135,7 +131,7 @@ class FYDemoCell: UITableViewCell {
             .fy_top((_avatarImageViewRadius * 2 + 5) - _timeLabelHeight)
         
         //  messageTextView.top 和 timeLabel.bottom 距离为 5
-        //  但是高度可能是动态的，所以在这里我们
+        //  但是高度可能是动态的，所以在这里我们在 init 方法中并不指定 messageTextView 的高度或距父视图底边距离
         messageTextView
             .fy_left(avatarImageView.chainRight + 5)
             .fy_top(timeLabel.chainBottom + 5)
@@ -155,7 +151,10 @@ class FYDemoCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        //  在 UIView.layoutSubviews 方法中，该 UIView 的 height 已经被确定了，这时候我们就可以通过设定 messageTextView 距父视图底边距离，来让 messageTextView 自适应了
         messageTextView.fy_bottom(25)
+        
+        //  likeButton 的高度已经确定了，这时候我们只需要设定 likeButton 距父视图底边的距离，FangYuan 就可以自动计算出 likeButtom.frame.origin.y ，并对其进行设定了
         likeButton.fy_bottom(2.5)
     }
 }

@@ -6,10 +6,10 @@ import Halo
 class FYDViewController: UIViewController {
     
     let titles = [
-        "观察代码_Unfinish",
+        "⚠️Unfinish 观察代码",
         "在 ViewController 中使用",
         "在 Cell 中使用",
-        "对比 SnapKit_Unfinish"
+        "⚠️Unfinish 对比 SnapKit"
     ]
     
     let vcs = [
