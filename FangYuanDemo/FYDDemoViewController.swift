@@ -73,6 +73,11 @@ class FYDDemoViewController: UIViewController {
         dv3
             .fy_edge(UIEdgeInsets(top: 64 + _padding, left: 100, bottom: dv1.chainTop + 10, right: dv2.chainLeft + 5))
         
+        dv4
+            .fy_top(100)
+            .fy_left(0)
+            .fy_right(0)
+            .fy_height(50)
         
         //  ⚠️但是，此时你无法使用 dv4.chainBottom
         //  因为 dv4 还没有被设置约束
@@ -88,12 +93,7 @@ class FYDDemoViewController: UIViewController {
         super.viewWillLayoutSubviews()
         
         //  你也可以在 viewWillLayoutSubviews 中使用该方法
-        
-        dv4
-            .fy_top(100)
-            .fy_left(0)
-            .fy_right(0)
-            .fy_height(50)
+
     }
     
 }

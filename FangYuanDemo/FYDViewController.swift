@@ -30,16 +30,12 @@ class FYDViewController: UIViewController {
             .dataSourceAndDelegate(self)
             .tableFooterViewAdded()
             .superView(view)
-        
-    }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        // TODO: 这里有错误，为什么？
-        tableView
             .fy_edge(UIEdgeInsetsZero)
-            .reloadData()
+        
+        tableView.tag = 111
+
     }
+
 }
 
 // MARK: - UITableViewDelegate

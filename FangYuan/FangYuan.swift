@@ -11,7 +11,7 @@ import CoreGraphics
 /// 尺
 ///
 /// 作为 X 轴或 Y 轴的约束
-internal class Ruler {
+internal class Ruler : CustomStringConvertible {
 
     /// 段
     ///
@@ -24,6 +24,10 @@ internal class Ruler {
 
     /// 最后一次设定的约束
     var last : Ruler.Section?
+    
+    var description : String {
+        return "\(a) | \(b) | \(c)"
+    }
 
     /// 第一段
     ///
