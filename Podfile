@@ -9,3 +9,7 @@ target 'FangYuanDemo' do
     pod 'MJRefresh'
 end
 
+target 'FangYuanTests' do
+    pod 'FangYuan', :path=>"./FangYuan"
+end
+

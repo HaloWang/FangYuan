@@ -14,7 +14,10 @@
 		096A97751CAFA84A00497C1E /* FYDViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 096A97741CAFA84A00497C1E /* FYDViewController.swift */; };
 		096A977A1CAFA84A00497C1E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 096A97791CAFA84A00497C1E /* Assets.xcassets */; };
 		096A977D1CAFA84A00497C1E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 096A977B1CAFA84A00497C1E /* LaunchScreen.storyboard */; };
+		097EDA6F1CBB765900A350F0 /* FangYuanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 097EDA6E1CBB765900A350F0 /* FangYuanTests.swift */; };
+		097EDA751CBB7C3300A350F0 /* TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 097EDA741CBB7C3300A350F0 /* TestHelper.swift */; };
 		0996DCF31CB9478A00612218 /* FYDReactiveCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0996DCF21CB9478A00612218 /* FYDReactiveCodeViewController.swift */; };
+		C177AD2A0A46FE93E2569302 /* Pods_FangYuanTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FF6C7C0DF6E02BAC4A15AF7 /* Pods_FangYuanTests.framework */; };
 		D2C1E1B7790E69A2EF0C4F6E /* Pods_FangYuanDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFF3F51A1AB38D36050A9C3F /* Pods_FangYuanDemo.framework */; };
 /* End PBXBuildFile section */
 
@@ -29,7 +32,14 @@
 		096A97791CAFA84A00497C1E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		096A977C1CAFA84A00497C1E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		096A977E1CAFA84A00497C1E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		097EDA6C1CBB765900A350F0 /* FangYuanTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FangYuanTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		097EDA6E1CBB765900A350F0 /* FangYuanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FangYuanTests.swift; sourceTree = "<group>"; };
+		097EDA701CBB765900A350F0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		097EDA741CBB7C3300A350F0 /* TestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHelper.swift; sourceTree = "<group>"; };
 		0996DCF21CB9478A00612218 /* FYDReactiveCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FYDReactiveCodeViewController.swift; sourceTree = "<group>"; };
+		98F7B821F2A140598E82E7C1 /* Pods-FangYuanTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FangYuanTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FangYuanTests/Pods-FangYuanTests.debug.xcconfig"; sourceTree = "<group>"; };
+		9FF6C7C0DF6E02BAC4A15AF7 /* Pods_FangYuanTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FangYuanTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0DF9E4791A965D99F36FD2D /* Pods-FangYuanTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FangYuanTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FangYuanTests/Pods-FangYuanTests.release.xcconfig"; sourceTree = "<group>"; };
 		E08DFAE07EBBB4F2E9288848 /* Pods-FangYuanDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FangYuanDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-FangYuanDemo/Pods-FangYuanDemo.release.xcconfig"; sourceTree = "<group>"; };
 		EFF3F51A1AB38D36050A9C3F /* Pods_FangYuanDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FangYuanDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -43,6 +53,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		097EDA691CBB765900A350F0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C177AD2A0A46FE93E2569302 /* Pods_FangYuanTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -50,6 +68,7 @@
 			isa = PBXGroup;
 			children = (
 				096A97711CAFA84A00497C1E /* FangYuanDemo */,
+				097EDA6D1CBB765900A350F0 /* FangYuanTests */,
 				096A97701CAFA84900497C1E /* Products */,
 				313878728971CDDDE5EC20C4 /* Pods */,
 				A0B7B15D712567F2AF660B0A /* Frameworks */,
@@ -60,6 +79,7 @@
 			isa = PBXGroup;
 			children = (
 				096A976F1CAFA84900497C1E /* FangYuanDemo.app */,
+				097EDA6C1CBB765900A350F0 /* FangYuanTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -80,11 +100,23 @@
 			path = FangYuanDemo;
 			sourceTree = "<group>";
 		};
+		097EDA6D1CBB765900A350F0 /* FangYuanTests */ = {
+			isa = PBXGroup;
+			children = (
+				097EDA6E1CBB765900A350F0 /* FangYuanTests.swift */,
+				097EDA741CBB7C3300A350F0 /* TestHelper.swift */,
+				097EDA701CBB765900A350F0 /* Info.plist */,
+			);
+			path = FangYuanTests;
+			sourceTree = "<group>";
+		};
 		313878728971CDDDE5EC20C4 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
 				08F9B88E7E527EA9BCB51A8D /* Pods-FangYuanDemo.debug.xcconfig */,
 				E08DFAE07EBBB4F2E9288848 /* Pods-FangYuanDemo.release.xcconfig */,
+				98F7B821F2A140598E82E7C1 /* Pods-FangYuanTests.debug.xcconfig */,
+				B0DF9E4791A965D99F36FD2D /* Pods-FangYuanTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -93,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				EFF3F51A1AB38D36050A9C3F /* Pods_FangYuanDemo.framework */,
+				9FF6C7C0DF6E02BAC4A15AF7 /* Pods_FangYuanTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -120,6 +153,26 @@
 			productReference = 096A976F1CAFA84900497C1E /* FangYuanDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
+		097EDA6B1CBB765900A350F0 /* FangYuanTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 097EDA731CBB765900A350F0 /* Build configuration list for PBXNativeTarget "FangYuanTests" */;
+			buildPhases = (
+				110F39E7FB69023B17E3C223 /* Check Pods Manifest.lock */,
+				097EDA681CBB765900A350F0 /* Sources */,
+				097EDA691CBB765900A350F0 /* Frameworks */,
+				097EDA6A1CBB765900A350F0 /* Resources */,
+				B6F954F8DEBB4E9D82EC586E /* Embed Pods Frameworks */,
+				D59405FD1FAD379FDC8674D8 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FangYuanTests;
+			productName = FangYuanTests;
+			productReference = 097EDA6C1CBB765900A350F0 /* FangYuanTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -131,6 +184,9 @@
 				ORGANIZATIONNAME = "王策";
 				TargetAttributes = {
 					096A976E1CAFA84900497C1E = {
+						CreatedOnToolsVersion = 7.3;
+					};
+					097EDA6B1CBB765900A350F0 = {
 						CreatedOnToolsVersion = 7.3;
 					};
 				};
@@ -149,6 +205,7 @@
 			projectRoot = "";
 			targets = (
 				096A976E1CAFA84900497C1E /* FangYuanDemo */,
+				097EDA6B1CBB765900A350F0 /* FangYuanTests */,
 			);
 		};
 /* End PBXProject section */
@@ -163,9 +220,46 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		097EDA6A1CBB765900A350F0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		110F39E7FB69023B17E3C223 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		B6F954F8DEBB4E9D82EC586E /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FangYuanTests/Pods-FangYuanTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		D12F3C95A6266786F4FB97FE /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -179,6 +273,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		D59405FD1FAD379FDC8674D8 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FangYuanTests/Pods-FangYuanTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DFB66534D47DD695B71D157D /* Embed Pods Frameworks */ = {
@@ -224,6 +333,15 @@
 				0932F1E61CB50205009596F6 /* FYDVSAutoLayoutViewController.swift in Sources */,
 				0996DCF31CB9478A00612218 /* FYDReactiveCodeViewController.swift in Sources */,
 				0932F1E21CB4F8F4009596F6 /* FYDDemoViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		097EDA681CBB765900A350F0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				097EDA6F1CBB765900A350F0 /* FangYuanTests.swift in Sources */,
+				097EDA751CBB7C3300A350F0 /* TestHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -350,6 +468,28 @@
 			};
 			name = Release;
 		};
+		097EDA711CBB765900A350F0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 98F7B821F2A140598E82E7C1 /* Pods-FangYuanTests.debug.xcconfig */;
+			buildSettings = {
+				INFOPLIST_FILE = FangYuanTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = WangCe.FangYuanTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		097EDA721CBB765900A350F0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B0DF9E4791A965D99F36FD2D /* Pods-FangYuanTests.release.xcconfig */;
+			buildSettings = {
+				INFOPLIST_FILE = FangYuanTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = WangCe.FangYuanTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -367,6 +507,15 @@
 			buildConfigurations = (
 				096A97821CAFA84A00497C1E /* Debug */,
 				096A97831CAFA84A00497C1E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		097EDA731CBB765900A350F0 /* Build configuration list for PBXNativeTarget "FangYuanTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				097EDA711CBB765900A350F0 /* Debug */,
+				097EDA721CBB765900A350F0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
