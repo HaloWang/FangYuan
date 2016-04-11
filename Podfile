@@ -5,5 +5,7 @@ target 'FangYuanDemo' do
     pod 'FangYuan', :path=>"./FangYuan"
     pod 'Halo'
     pod 'SnapKit'
+    pod 'KMCGeigerCounter'
+    pod 'MJRefresh'
 end
 
