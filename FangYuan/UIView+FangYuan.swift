@@ -12,9 +12,9 @@ import UIKit
 
 public extension UIView {
     
-    //  添加依赖
-    internal func cop(_op:()->Void) {
-        _op()
+    // TODO: 添加依赖
+    private func addDep(@noescape block:()->Void) {
+        block()
     }
 
     /// 描述某个 **view 右边** 距该 **view 左边**的关系时，使用该属性：
@@ -51,17 +51,17 @@ public extension UIView {
 
 public extension UIView {
 
-    func op(_op: () -> Void) {
+    func tellUsingFangYuan(@noescape block: () -> Void) {
         //    dispatch_async(Manager.mainQueue, op)
         usingFangYuan = true
-        _op()
+        block()
     }
     
     // MARK: X
 
     /// 设定某个 UIView 左边距离其 superview 左边的距离，相当于 x
     func fy_left(left: CGFloat) -> Self {
-        op {
+        tellUsingFangYuan {
             self.fy_left = left
         }
         return self
@@ -69,7 +69,7 @@ public extension UIView {
 
     /// 设定某个 UIView 的宽度，相当于 width
     func fy_width(width: CGFloat) -> Self {
-        op {
+        tellUsingFangYuan {
             self.fy_width = width
         }
         return self
@@ -77,7 +77,7 @@ public extension UIView {
 
     /// 设定某个 UIView 右边距离其 superview 右边的距离
     func fy_right(right: CGFloat) -> Self {
-        op {
+        tellUsingFangYuan {
             self.fy_right = right
         }
         return self
@@ -87,7 +87,7 @@ public extension UIView {
 
     /// 设定某个 UIView 顶部距离其 superview 顶部的距离，相当于 y
     func fy_top(top: CGFloat) -> Self {
-        op {
+        tellUsingFangYuan {
             self.fy_top = top
         }
         return self
@@ -95,7 +95,7 @@ public extension UIView {
 
     /// 设定某个 UIView 的高度，相当于 height
     func fy_height(height: CGFloat) -> Self {
-        op {
+        tellUsingFangYuan {
             self.fy_height = height
         }
         return self
@@ -103,7 +103,7 @@ public extension UIView {
 
     /// 设定某个 UIView 底部距离其 superview 底部的距离
     func fy_bottom(bottom: CGFloat) -> Self {
-        op {
+        tellUsingFangYuan {
             self.fy_bottom = bottom
         }
         return self
@@ -113,7 +113,7 @@ public extension UIView {
 
     /// 设定某个 UIView 四个边距离其父视图相对四边的距离
     func fy_edge(edge: UIEdgeInsets) -> Self {
-        op {
+        tellUsingFangYuan {
             self.fy_top = edge.top
             self.fy_bottom = edge.bottom
             self.fy_left = edge.left
