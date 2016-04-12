@@ -42,6 +42,20 @@ internal class Manager {
     // TODO: Or should be only one?
     var caches = [Dependency]()
     
+    var hasDependencies : Bool {
+        let _has = dependencies.count != 0
+        if _has {
+            print(dependencies)
+        }
+        return _has
+    }
+    
+    func layouting(view:UIView) -> Bool {
+        return dependencies.filter { dependency in
+            dependency.from.superview == view
+        }.count != 0
+    }
+    
     var hasCaches : Bool {
         return caches.count != 0
     }
@@ -51,7 +65,6 @@ internal class Manager {
     }
     
     func push(direction:Dependency.Direction, fromView view:UIView) {
-        print("✅", "pushing!", direction)
         let dep = Dependency(from: view, direction: direction)
         caches.append(dep)
     }
@@ -68,20 +81,26 @@ internal class Manager {
         return dispatch_get_main_queue()
     }
     
+    /// 从 dependencies 中移除某个 subview 的依赖
+    class func removeDependencyFrom(view: UIView) {
+        sharedManager.dependencies = sharedManager.dependencies.filter { dependency in
+            dependency.from == view
+        }
+    }
 }
 
 var swizzleToken : dispatch_once_t = 0
 
-internal extension UIView {
-    
+// MARK: - Swizzling
+extension UIView {
     override public class func initialize() {
         _swizzle_layoutSubviews()
     }
     
     private class func _swizzle_layoutSubviews() {
         dispatch_once(&swizzleToken) {
-            let originalSelector = Selector("layoutSubviews")
-            let swizzledSelector = Selector("_swizzle_imp_for_layoutSubviews")
+            let originalSelector = #selector(UIView.layoutSubviews)
+            let swizzledSelector = #selector(UIView._swizzle_imp_for_layoutSubviews)
             let originalMethod   = class_getInstanceMethod(self, originalSelector)
             let swizzledMethod   = class_getInstanceMethod(self, swizzledSelector)
             method_exchangeImplementations(originalMethod, swizzledMethod)
@@ -90,48 +109,76 @@ internal extension UIView {
     
     internal func _swizzle_imp_for_layoutSubviews() {
         
-        _ = subviews.map { subview in
-            
-            guard subview.usingFangYuan else {
-                return
-            }
-            
-            print(Manager.sharedManager.dependencies)
-            
-            _ = Manager.sharedManager.dependencies.map { dependency in
-                if dependency.to == subview {
-                    //  该 subview 有依赖其他 subview
-                    
-                    
-                    
-                    return
+        while Manager.sharedManager.layouting(self) && Manager.sharedManager.hasDependencies {
+            enumSubviews { subview in
+                if subview.usingFangYuan && subview.allConstraintDefined {
+                    print("✅ begin", subview)
+                    subview.layoutWithFangYuan()
+                    print("✅ finish", subview)
+                    print()
+                    Manager.removeDependencyFrom(subview)
                 }
-            }
-            
-            // TODO: 等待依赖（递归）
-            // TODO: 抽出方法
-            // TODO: 对齐怎么办，比如说：想让两个 UIView 的底边对齐
-            
-            //  X
-            if subview.rulerX.a != nil {
-                subview.frame.origin.x = subview.rulerX.a!
-                subview.frame.size.width = subview.rulerX.b ?? fy_width - subview.fy_left - subview.rulerX.c!
-            } else {
-                subview.frame.origin.x = fy_width - subview.fy_width - subview.rulerX.c!
-                subview.frame.size.width = subview.rulerX.b!
-            }
-            
-            //  Y
-            if subview.rulerY.a != nil {
-                subview.frame.origin.y = subview.rulerY.a!
-                subview.frame.size.height = subview.rulerY.b ?? fy_height - subview.fy_top - subview.rulerY.c!
-            } else {
-                subview.frame.origin.y = fy_height - subview.fy_height - subview.rulerY.c!
-                subview.frame.size.height = subview.rulerY.b!
             }
         }
         
         _swizzle_imp_for_layoutSubviews()
     }
-    
 }
+
+// MARK: - Using FangYuan
+internal extension UIView {
+    
+    var allConstraintDefined : Bool {
+        return Manager.sharedManager.dependencies.filter { dependency in
+            dependency.to == self
+        }.count == 0
+    }
+    
+    /// 遍历子视图
+    func enumSubviews(callBack:(subview:UIView) -> Void) {
+        _ = subviews.map { _subview in
+            callBack(subview: _subview)
+        }
+    }
+    
+    // TODO: 这个算法还是应该被 UT 一下
+    /// 在约束已经求解完全的情况下进行 frame 的设置
+    func layoutWithFangYuan() {
+        //  X
+        
+        if self is UILabel {
+            print((self as! UILabel).text!)
+        }
+        
+        if rulerX.a != nil {
+            frame.origin.x = rulerX.a!
+            frame.size.width = rulerX.b ?? superview!.fy_width - fy_left - rulerX.c!
+        } else {
+            frame.origin.x = superview!.fy_width - fy_width - rulerX.c!
+            frame.size.width = rulerX.b!
+        }
+        
+        //  Y
+        if rulerY.a != nil {
+            frame.origin.y = rulerY.a!
+            frame.size.height = rulerY.b ?? superview!.fy_height - fy_top - rulerY.c!
+        } else {
+            frame.origin.y = superview!.fy_height - fy_height - rulerY.c!
+            frame.size.height = rulerY.b!
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

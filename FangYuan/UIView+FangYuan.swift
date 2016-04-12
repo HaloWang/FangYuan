@@ -59,8 +59,8 @@ public extension UIView {
         
         usingFangYuan = true
         
+        Manager.sharedManager.pop(toView: self)
         if Manager.sharedManager.canPop {
-            Manager.sharedManager.pop(toView: self)
         }
         
         block()
