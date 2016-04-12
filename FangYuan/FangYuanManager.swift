@@ -8,24 +8,28 @@
 
 import Foundation
 
-internal class Dependency {
+internal class Dependency : CustomStringConvertible {
     
     var from : UIView
-    var type : Dependency.Type
+    var direction: Direction
     
     var to : UIView!
     
+    var description : String {
+        return "\nDependency:\n✅direction: \(direction) \n⏬from: \(from) \n⏫to: \(to)\n"
+    }
+    
     // TODO: Maybe only X and Y
-    enum Type {
+    enum Direction {
         case BottomTop
         case LeftRigt
         case RightLeft
         case TopBottom
     }
     
-    init(from : UIView , type: Dependency.Type) {
+    init(from : UIView , direction: Dependency.Direction) {
         self.from = from
-        self.type = type
+        self.direction = direction
     }
 }
 
@@ -42,8 +46,13 @@ internal class Manager {
         return caches.count != 0
     }
     
-    func push(type:Dependency.Type, fromView view:UIView) {
-        let dep = Dependency(from: view, type: type)
+    var canPop : Bool {
+        return hasCaches
+    }
+    
+    func push(direction:Dependency.Direction, fromView view:UIView) {
+        print("✅", "pushing!", direction)
+        let dep = Dependency(from: view, direction: direction)
         caches.append(dep)
     }
     
@@ -87,12 +96,21 @@ internal extension UIView {
                 return
             }
             
-            // TODO: 等待依赖
-            // TODO: 抽出方法
-            // TODO: 对齐怎么办
+            print(Manager.sharedManager.dependencies)
             
-            print(subview)
-            print("✅")
+            _ = Manager.sharedManager.dependencies.map { dependency in
+                if dependency.to == subview {
+                    //  该 subview 有依赖其他 subview
+                    
+                    
+                    
+                    return
+                }
+            }
+            
+            // TODO: 等待依赖（递归）
+            // TODO: 抽出方法
+            // TODO: 对齐怎么办，比如说：想让两个 UIView 的底边对齐
             
             //  X
             if subview.rulerX.a != nil {
@@ -115,4 +133,5 @@ internal extension UIView {
         
         _swizzle_imp_for_layoutSubviews()
     }
+    
 }

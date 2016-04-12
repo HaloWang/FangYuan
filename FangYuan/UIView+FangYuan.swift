@@ -13,7 +13,7 @@ import UIKit
 public extension UIView {
     
     // TODO: 添加依赖
-    private func addDep(@noescape block:()->Void) {
+    internal func addDep(@noescape block:()->Void) {
         block()
     }
 
@@ -21,6 +21,7 @@ public extension UIView {
     ///
     /// someView.fy_right(self.chainLeft)
     var chainLeft: CGFloat {
+        Manager.sharedManager.push(.LeftRigt, fromView: self)
         return superview == nil ? 0 : superview!.fy_width - fy_left
     }
 
@@ -28,6 +29,7 @@ public extension UIView {
     ///
     /// someView.fy_left(self.chainRight)
     var chainRight: CGFloat {
+        Manager.sharedManager.push(.RightLeft, fromView: self)
         return fy_left + fy_width
     }
 
@@ -35,6 +37,7 @@ public extension UIView {
     ///
     /// someView.fy_top(self.chainBottom)
     var chainBottom: CGFloat {
+        Manager.sharedManager.push(.BottomTop, fromView: self)
         return fy_top + fy_height
     }
 
@@ -42,6 +45,7 @@ public extension UIView {
     ///
     /// someView.fy_bottom(self.chainTop)
     var chainTop: CGFloat {
+        Manager.sharedManager.push(.TopBottom, fromView: self)
         return superview == nil ? 0 : superview!.fy_height - fy_top
     }
 }
@@ -51,9 +55,14 @@ public extension UIView {
 
 public extension UIView {
 
-    func tellUsingFangYuan(@noescape block: () -> Void) {
-        //    dispatch_async(Manager.mainQueue, op)
+    internal func tellUsingFangYuan(@noescape block: () -> Void) {
+        
         usingFangYuan = true
+        
+        if Manager.sharedManager.canPop {
+            Manager.sharedManager.pop(toView: self)
+        }
+        
         block()
     }
     
