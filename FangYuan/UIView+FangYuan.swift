@@ -14,21 +14,24 @@ private var kRulerY: Any?
 // MARK: - _privte Associated Object
 
 private extension UIView {
-
     /// X 轴标尺
-    private var rulerX: Ruler {
-        if objc_getAssociatedObject(self, &kRulerX) == nil {
-            objc_setAssociatedObject(self, &kRulerX, Ruler(), .OBJC_ASSOCIATION_RETAIN)
+    var rulerX: Ruler {
+        //  终于不用写两次 `objc_getAssociatedObject` 啦：😁 @see UIView+WebCacheOperation.m
+        if let ruler = objc_getAssociatedObject(self, &kRulerX) {
+            return ruler as! Ruler
         }
-        return objc_getAssociatedObject(self, &kRulerX) as! Ruler
+        let ruler = Ruler()
+        objc_setAssociatedObject(self, &kRulerX, Ruler(), .OBJC_ASSOCIATION_RETAIN)
+        return ruler
     }
-
     /// Y 轴表尺
-    private var rulerY: Ruler {
-        if objc_getAssociatedObject(self, &kRulerY) == nil {
-            objc_setAssociatedObject(self, &kRulerY, Ruler(), .OBJC_ASSOCIATION_RETAIN)
+    var rulerY: Ruler {
+        if let ruler = objc_getAssociatedObject(self, &kRulerY) {
+            return ruler as! Ruler
         }
-        return objc_getAssociatedObject(self, &kRulerY) as! Ruler
+        let ruler = Ruler()
+        objc_setAssociatedObject(self, &kRulerY, Ruler(), .OBJC_ASSOCIATION_RETAIN)
+        return ruler
     }
 }
 
