@@ -96,7 +96,7 @@ internal extension UIView {
             return frame.origin.y
         }
         set {
-            frame.origin.y = newValue
+//            frame.origin.y = newValue
             rulerY.a = newValue
 //            if rulerY.c != nil {
 //                frame.size.height = superview!.fy_height - fy_top - rulerY.c!
@@ -109,7 +109,7 @@ internal extension UIView {
             return frame.size.height
         }
         set {
-            frame.size.height = newValue
+//            frame.size.height = newValue
             rulerY.b = newValue
 //            if rulerY.c != nil {
 //                frame.origin.y = superview!.fy_height - fy_height - rulerY.c!

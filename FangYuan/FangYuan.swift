@@ -26,13 +26,13 @@ internal class Ruler : CustomStringConvertible {
     var last : Ruler.Section?
     
     var description : String {
-        return "\(a) | \(b) | \(c)"
+        return "\(a ?? nil) | \(b ?? nil) | \(c ?? nil)"
     }
 
     /// 第一段
     ///
     /// 对应 X 轴的 x 或 Y 轴的 y
-    var a: CGFloat? {
+    var a: CGFloat! {
         didSet {
             guard a != nil else {
                 return
@@ -51,7 +51,7 @@ internal class Ruler : CustomStringConvertible {
     /// 第二段
     ///
     /// 对应 X 轴的 width 或 Y 轴的 height
-    var b: CGFloat? {
+    var b: CGFloat! {
         didSet {
             guard b != nil else {
                 return
@@ -70,7 +70,7 @@ internal class Ruler : CustomStringConvertible {
     /// 第三段
     ///
     /// 对应 X 轴的 right 或 Y 轴的 bottom
-    var c: CGFloat? {
+    var c: CGFloat! {
         didSet {
             guard c != nil else {
                 return

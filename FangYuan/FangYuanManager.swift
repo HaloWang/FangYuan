@@ -145,26 +145,21 @@ internal extension UIView {
     /// 在约束已经求解完全的情况下进行 frame 的设置
     func layoutWithFangYuan() {
         //  X
-        
-        if self is UILabel {
-            print((self as! UILabel).text!)
-        }
-        
         if rulerX.a != nil {
-            frame.origin.x = rulerX.a!
-            frame.size.width = rulerX.b ?? superview!.fy_width - fy_left - rulerX.c!
+            frame.origin.x = rulerX.a
+            frame.size.width = rulerX.b ?? superview!.fy_width - rulerX.a - rulerX.c
         } else {
-            frame.origin.x = superview!.fy_width - fy_width - rulerX.c!
-            frame.size.width = rulerX.b!
+            frame.origin.x = superview!.fy_width - rulerX.b - rulerX.c
+            frame.size.width = rulerX.b
         }
         
         //  Y
         if rulerY.a != nil {
-            frame.origin.y = rulerY.a!
-            frame.size.height = rulerY.b ?? superview!.fy_height - fy_top - rulerY.c!
+            frame.origin.y = rulerY.a
+            frame.size.height = rulerY.b ?? superview!.fy_height - rulerY.a - rulerY.c
         } else {
-            frame.origin.y = superview!.fy_height - fy_height - rulerY.c!
-            frame.size.height = rulerY.b!
+            frame.origin.y = superview!.fy_height - rulerY.b - rulerY.c
+            frame.size.height = rulerY.b
         }
     }
 }
