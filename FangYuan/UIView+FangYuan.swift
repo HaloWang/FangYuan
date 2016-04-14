@@ -7,30 +7,35 @@
 //
 
 import UIKit
-
-private var kRulerX: Any?
-private var kRulerY: Any?
-
 // MARK: - _privte Associated Object
 
 private extension UIView {
+    
+    // Note the use of static var in a private nested struct—this pattern creates the static associated object key we need but doesn’t muck up the global namespace.
+    // From http://nshipster.com/swift-objc-runtime/
+    
+    private struct AssociatedKeys {
+        static var RulerX: Any?
+        static var RulerY: Any?
+    }
+    
     /// X 轴标尺
     var rulerX: Ruler {
         //  终于不用写两次 `objc_getAssociatedObject` 啦：😁 @see UIView+WebCacheOperation.m
-        if let ruler = objc_getAssociatedObject(self, &kRulerX) {
+        if let ruler = objc_getAssociatedObject(self, &AssociatedKeys.RulerX) {
             return ruler as! Ruler
         }
         let ruler = Ruler()
-        objc_setAssociatedObject(self, &kRulerX, Ruler(), .OBJC_ASSOCIATION_RETAIN)
+        objc_setAssociatedObject(self, &AssociatedKeys.RulerX, Ruler(), .OBJC_ASSOCIATION_RETAIN)
         return ruler
     }
     /// Y 轴表尺
     var rulerY: Ruler {
-        if let ruler = objc_getAssociatedObject(self, &kRulerY) {
+        if let ruler = objc_getAssociatedObject(self, &AssociatedKeys.RulerY) {
             return ruler as! Ruler
         }
         let ruler = Ruler()
-        objc_setAssociatedObject(self, &kRulerY, Ruler(), .OBJC_ASSOCIATION_RETAIN)
+        objc_setAssociatedObject(self, &AssociatedKeys.RulerY, Ruler(), .OBJC_ASSOCIATION_RETAIN)
         return ruler
     }
 }
