@@ -83,8 +83,31 @@ internal class Manager {
     
     /// 从 dependencies 中移除某个 subview 的依赖
     class func removeDependencyFrom(view: UIView) {
-        sharedManager.dependencies = sharedManager.dependencies.filter { dependency in
+        
+        // 抽取所有需要设定的约束
+        let _dependenciesShowP = sharedManager.dependencies.filter { dependency in
             dependency.from == view
+        }
+        
+        // 设定这些约束
+        _ = _dependenciesShowP.map { dependency in
+            let _from = dependency.from
+            let _to = dependency.to
+            switch dependency.direction {
+            case .BottomTop:
+                _to.rulerY.a = _from.fy_top + _from.fy_height + _to.rulerY.a!
+            case .LeftRigt:
+                _to.rulerX.c = _from.superview!.fy_width - _from.fy_left + _to.rulerX.c!
+            case .RightLeft:
+                _to.rulerX.a = _from.fy_left + _from.fy_width + _to.rulerX.a!
+            case .TopBottom:
+                _to.rulerY.c = _from.superview!.fy_height + _from.fy_top + _to.rulerY.c!
+            }
+        }
+        
+        // 移除已设定的约束
+        sharedManager.dependencies = sharedManager.dependencies.filter { dependency in
+            dependency.from != view
         }
     }
 }

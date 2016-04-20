@@ -22,7 +22,7 @@ public extension UIView {
     /// someView.fy_right(self.chainLeft)
     var chainLeft: CGFloat {
         Manager.sharedManager.push(.LeftRigt, fromView: self)
-        return superview == nil ? 0 : superview!.fy_width - fy_left
+        return 0
     }
 
     /// 描述某个 **view 左边** 距该 **view 右边**的关系时，使用该属性：
@@ -30,7 +30,7 @@ public extension UIView {
     /// someView.fy_left(self.chainRight)
     var chainRight: CGFloat {
         Manager.sharedManager.push(.RightLeft, fromView: self)
-        return fy_left + fy_width
+        return 0
     }
 
     /// 描述某个 **view 顶部** 距该 **view 底部**的关系时，使用该属性：
@@ -38,7 +38,7 @@ public extension UIView {
     /// someView.fy_top(self.chainBottom)
     var chainBottom: CGFloat {
         Manager.sharedManager.push(.BottomTop, fromView: self)
-        return fy_top + fy_height
+        return 0
     }
 
     /// 描述某个 **view 底部** 距该 **view 顶部**的关系时，使用该属性：
@@ -46,7 +46,7 @@ public extension UIView {
     /// someView.fy_bottom(self.chainTop)
     var chainTop: CGFloat {
         Manager.sharedManager.push(.TopBottom, fromView: self)
-        return superview == nil ? 0 : superview!.fy_height - fy_top
+        return 0
     }
 }
 

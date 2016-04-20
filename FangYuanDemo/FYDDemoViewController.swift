@@ -34,20 +34,13 @@ class FYDDemoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        for i in 0..<demoSubviews.count {
-            let demoSubview = self.demoSubviews[i]
-            demoSubview.text = "dv\(i)"
-            demoSubview.textAlignment = .Center
-            self.view.addSubview(demoSubview)
-        }
-        
         //  按住 Alt + 点击方法名来查看方法说明
         
-        dv0
-            .fy_top(50)
-            .fy_left(25)
-            .fy_width(50)
-            .fy_height(80)
+        dv3
+            .fy_top(164)
+            .fy_left(100)
+            .fy_bottom(dv1.chainTop + 10)
+            .fy_right(dv2.chainLeft + 5)
         
         dv1
             .fy_bottom(0)
@@ -55,25 +48,17 @@ class FYDDemoViewController: UIViewController {
             .fy_right(0)
             .fy_height(49)
         
+        dv0
+            .fy_top(50)
+            .fy_left(25)
+            .fy_width(50)
+            .fy_height(80)
+        
         dv2
             .fy_right(0)
             .fy_width(50)
             .fy_height(100)
             .fy_top(200)
-        
-        //  同时设定 dv3 四个边的约束
-        
-        //  这里使用了 chainLeft
-        //  意义为：使 dv3 的右边距离 dv2 的左边距离为 5
-        
-        //  这里使用了 chainTop
-        //  意义为：使 dv3 的底部距离 dv1 的顶部距离为 10
-        
-        let _padding : CGFloat = 100
-        
-        
-        dv3
-            .fy_edge(UIEdgeInsets(top: 64 + _padding, left: 100, bottom: dv1.chainTop + 10, right: dv2.chainLeft + 5))
         
         dv4
             .fy_top(100)
@@ -81,21 +66,11 @@ class FYDDemoViewController: UIViewController {
             .fy_right(0)
             .fy_height(50)
         
-        //  ⚠️但是，此时你无法使用 dv4.chainBottom
-        //  因为 dv4 还没有被设置约束
-        //  dv4.chainBottom = 0
-        //  囧rz
-        //  dv3.fy_top(dv4.chainBottom + 4)
-        
-        //  ✅ 你可以在使用 dv4.chainBottom 之前设定好 dv4 的约束
-        
+        for i in 0..<demoSubviews.count {
+            let demoSubview = self.demoSubviews[i]
+            demoSubview.text = "dv\(i)"
+            demoSubview.textAlignment = .Center
+            self.view.addSubview(demoSubview)
+        }
     }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        
-        //  你也可以在 viewWillLayoutSubviews 中使用该方法
-
-    }
-    
 }
