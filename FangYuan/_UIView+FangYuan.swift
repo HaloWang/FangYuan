@@ -18,6 +18,9 @@ private var kUsingFangYuan: Any?
 // TODO: 或许方圆可以变成一个协议？FangAble？😁然后为 CALayer 提供？PS: 主要是觉得这个文件所含有的内容越来越少了
 
 internal extension UIView {
+    
+    // TODO: 这里也可以做成 JSPatch 那样
+    
     /// X 轴标尺
     var rulerX: Ruler {
         if objc_getAssociatedObject(self, &kRulerX) == nil {
@@ -55,9 +58,6 @@ internal extension UIView {
         }
         set {
             rulerX.a = newValue
-//            if rulerX.c != nil {
-//                frame.size.width = superview!.fy_width - fy_left - rulerX.c!
-//            }
         }
     }
     
@@ -67,11 +67,6 @@ internal extension UIView {
         }
         set {
             rulerX.b = newValue
-            
-//            frame.size.width = newValue
-//            if rulerX.c != nil {
-//                frame.origin.x = superview!.fy_width - fy_width - rulerX.c!
-//            }
         }
     }
     
@@ -81,11 +76,6 @@ internal extension UIView {
         }
         set {
             rulerX.c = newValue
-//            if rulerX.a != nil {
-//                frame.size.width = superview!.fy_width - fy_left - rulerX.c!
-//            } else {
-//                frame.origin.x = superview!.fy_width - fy_width - rulerX.c!
-//            }
         }
     }
     
@@ -96,11 +86,7 @@ internal extension UIView {
             return frame.origin.y
         }
         set {
-//            frame.origin.y = newValue
             rulerY.a = newValue
-//            if rulerY.c != nil {
-//                frame.size.height = superview!.fy_height - fy_top - rulerY.c!
-//            }
         }
     }
     
@@ -109,11 +95,7 @@ internal extension UIView {
             return frame.size.height
         }
         set {
-//            frame.size.height = newValue
             rulerY.b = newValue
-//            if rulerY.c != nil {
-//                frame.origin.y = superview!.fy_height - fy_height - rulerY.c!
-//            }
         }
     }
     
@@ -123,11 +105,6 @@ internal extension UIView {
         }
         set {
             rulerY.c = newValue
-//            if rulerY.a != nil {
-//                frame.size.height = superview!.fy_height - fy_top - rulerY.c!
-//            } else {
-//                frame.origin.y = superview!.fy_height - fy_height - rulerY.c!
-//            }
         }
     }
 }
