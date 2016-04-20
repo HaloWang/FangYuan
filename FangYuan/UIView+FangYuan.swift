@@ -26,7 +26,7 @@ private extension UIView {
             return ruler as! Ruler
         }
         let ruler = Ruler()
-        objc_setAssociatedObject(self, &AssociatedKeys.RulerX, Ruler(), .OBJC_ASSOCIATION_RETAIN)
+        objc_setAssociatedObject(self, &AssociatedKeys.RulerX, ruler, .OBJC_ASSOCIATION_RETAIN)
         return ruler
     }
     /// Y 轴表尺
@@ -35,7 +35,7 @@ private extension UIView {
             return ruler as! Ruler
         }
         let ruler = Ruler()
-        objc_setAssociatedObject(self, &AssociatedKeys.RulerY, Ruler(), .OBJC_ASSOCIATION_RETAIN)
+        objc_setAssociatedObject(self, &AssociatedKeys.RulerY, ruler, .OBJC_ASSOCIATION_RETAIN)
         return ruler
     }
 }
