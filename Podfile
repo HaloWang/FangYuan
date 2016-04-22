@@ -7,6 +7,7 @@ target 'FangYuanDemo' do
     pod 'SnapKit'
     pod 'KMCGeigerCounter'
     pod 'MJRefresh'
+    pod 'Reveal-iOS-SDK', :configurations => ["Debug"]
 end
 
 target 'FangYuanTests' do

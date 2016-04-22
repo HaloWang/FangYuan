@@ -39,7 +39,7 @@ class FYDDemoViewController: UIViewController {
         dv3
             .fy_top(164)
             .fy_left(100)
-            .fy_bottom(dv1.chainTop + 10)
+            .fy_bottom(dv1.chainTop - 20)
             .fy_right(dv2.chainLeft + 5)
         
         dv1
