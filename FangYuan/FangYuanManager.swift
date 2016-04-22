@@ -101,7 +101,7 @@ internal class Manager {
             case .RightLeft:
                 _to.rulerX.a = _from.fy_left + _from.fy_width + _to.rulerX.a!
             case .TopBottom:
-                _to.rulerY.c = _from.superview!.fy_height + _from.fy_top + _to.rulerY.c!
+                _to.rulerY.c = _from.superview!.fy_height - _from.fy_top + _to.rulerY.c!
             }
         }
         
