@@ -56,13 +56,8 @@ public extension UIView {
 public extension UIView {
 
     internal func tellUsingFangYuan(@noescape block: () -> Void) {
-        
         usingFangYuan = true
-        
         Manager.sharedManager.pop(toView: self)
-        if Manager.sharedManager.canPop {
-        }
-        
         block()
     }
     

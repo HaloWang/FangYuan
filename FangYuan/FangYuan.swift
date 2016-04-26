@@ -6,12 +6,14 @@
 //  Copyright © 2015年 WangCe. All rights reserved.
 //
 
+//  该文件构建了一个 FIFO 的 `Ruler`
+
 import CoreGraphics
 
 /// 尺
 ///
 /// 作为 X 轴或 Y 轴的约束
-internal class Ruler : CustomStringConvertible {
+internal class Ruler {
 
     /// 段
     ///
@@ -24,10 +26,6 @@ internal class Ruler : CustomStringConvertible {
 
     /// 最后一次设定的约束
     var last : Ruler.Section?
-    
-    var description : String {
-        return "\(a ?? nil) | \(b ?? nil) | \(c ?? nil)"
-    }
 
     /// 第一段
     ///
@@ -84,5 +82,12 @@ internal class Ruler : CustomStringConvertible {
             }
             last = .C
         }
+    }
+}
+
+// MARK: - CustomStringConvertible
+extension Ruler : CustomStringConvertible {
+    var description : String {
+        return "\(a ?? nil) | \(b ?? nil) | \(c ?? nil)"
     }
 }

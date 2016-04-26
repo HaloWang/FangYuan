@@ -64,11 +64,24 @@ internal class Manager {
         return hasCaches
     }
     
+    // TODO: 真的要做成一个池子吗？
+    
+    /**
+     将约束加入到约束池中
+     
+     - parameter direction: 约束方向
+     - parameter view:      约束来自于哪个 view
+     */
     func push(direction:Dependency.Direction, fromView view:UIView) {
         let dep = Dependency(from: view, direction: direction)
         caches.append(dep)
     }
     
+    /**
+     从约束池中取出某个约束
+     
+     - parameter view: 这个约束约束了谁
+     */
     func pop(toView view:UIView) {
         for dependency in caches {
             dependency.to = view
