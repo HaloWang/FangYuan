@@ -136,12 +136,13 @@ class FYDemoCell: UITableViewCell {
             .fy_left(avatarImageView.chainRight + 5)
             .fy_top(timeLabel.chainBottom + 5)
             .fy_right(15)
+            .fy_bottom(25)
         
         likeButton
             .fy_right(15)
             .fy_width(60)
             .fy_height(20)
-        
+            .fy_bottom(2.5)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -150,11 +151,6 @@ class FYDemoCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        //  在 UIView.layoutSubviews 方法中，该 UIView 的 height 已经被确定了，这时候我们就可以通过设定 messageTextView 距父视图底边距离，来让 messageTextView 自适应了
-        messageTextView.fy_bottom(25)
-        
-        //  likeButton 的高度已经确定了，这时候我们只需要设定 likeButton 距父视图底边的距离，FangYuan 就可以自动计算出 likeButtom.frame.origin.y ，并对其进行设定了
-        likeButton.fy_bottom(2.5)
     }
+
 }
