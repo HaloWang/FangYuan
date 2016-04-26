@@ -130,10 +130,13 @@ var swizzleToken : dispatch_once_t = 0
 
 // MARK: - Swizzling
 private extension UIView {
+
+    /// 不允许调用 load 方法了
     override public class func initialize() {
         _swizzle_layoutSubviews()
     }
-    
+
+    /// 交换实现
     private class func _swizzle_layoutSubviews() {
         dispatch_once(&swizzleToken) {
             let originalSelector = #selector(UIView.layoutSubviews)
@@ -143,22 +146,31 @@ private extension UIView {
             method_exchangeImplementations(originalMethod, swizzledMethod)
         }
     }
-    
-    internal func _swizzle_imp_for_layoutSubviews() {
+
+    @objc func _swizzle_imp_for_layoutSubviews() {
         
-        while DependencyManager.sharedManager.layouting(self) && DependencyManager.sharedManager.hasDependencies {
-            enumSubviews { subview in
-                if subview.usingFangYuan && subview.allConstraintDefined {
-//                    print("✅ begin", subview)
-                    subview.layoutWithFangYuan()
-//                    print("✅ finish", subview)
-                    DependencyManager.removeDependencyFrom(subview)
-                }
+        if DependencyManager.sharedManager.hasDependencies {
+            while DependencyManager.sharedManager.layouting(self) && DependencyManager.sharedManager.hasDependencies {
+                fangYuanLayout()
+            }
+        } else {
+            if DependencyManager.sharedManager.layouting(self) {
+                fangYuanLayout()
             }
         }
-        
+
         _swizzle_imp_for_layoutSubviews()
     }
+    
+    func fangYuanLayout() {
+        enumSubviews { subview in
+            if subview.usingFangYuan && subview.allConstraintDefined {
+                subview.layoutWithFangYuan()
+                DependencyManager.removeDependencyFrom(subview)
+            }
+        }
+    }
+    
 }
 
 // MARK: - Using FangYuan
