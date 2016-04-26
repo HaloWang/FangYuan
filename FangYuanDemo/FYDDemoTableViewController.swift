@@ -11,7 +11,7 @@ class FYDDemoTableViewController: UIViewController {
     
     lazy var tableView = UITableView(frame: UIScreen.mainScreen().bounds, style: UITableViewStyle.Plain)
     lazy var heightArray = [CGFloat]()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(tableView)
@@ -20,7 +20,7 @@ class FYDDemoTableViewController: UIViewController {
         tableView.registerClass(FYDemoCell.self, forCellReuseIdentifier: NSStringFromClass(FYDemoCell))
         tableView.tableFooterView = UIView()
         
-        dispatch_async(dispatch_get_main_queue()) { 
+        dispatch_async(dispatch_get_main_queue()) {
             for _ in 0...999 {
                 self.heightArray.append(105 + CGFloat(arc4random() % 60))
             }
@@ -28,7 +28,7 @@ class FYDDemoTableViewController: UIViewController {
         }
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "帧率监视", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(FYDDemoTableViewController.changeStatus))
-
+        
     }
     
     func changeStatus() {
@@ -86,18 +86,18 @@ class FYDemoCell: UITableViewCell {
         addSubview(nickNameLabel)
         
         let _avatarImageViewRadius         = CGFloat(18)
-
+        
         avatarImageView.backgroundColor    = UIColor(red: 1, green: 0.5, blue: 0.6, alpha: 1)
         avatarImageView.layer.cornerRadius = 18
-
+        
         nickNameLabel.backgroundColor      = UIColor.whiteColor()
         nickNameLabel.font                 = UIFont.systemFontOfSize(10)
-
+        
         timeLabel.backgroundColor          = UIColor(red: 0.6, green: 0.5, blue: 1, alpha: 1)
-
+        
         messageTextView.backgroundColor    = UIColor(red: 0.8, green: 1, blue: 0.9, alpha: 1)
         messageTextView.scrollEnabled      = false
-
+        
         likeButton.backgroundColor         = UIColor.whiteColor()
         likeButton.setTitle("♥️", forState: UIControlState.Normal)
         likeButton.layer.cornerRadius = 3
