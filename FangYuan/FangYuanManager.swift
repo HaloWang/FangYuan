@@ -8,43 +8,14 @@
 
 import Foundation
 
-/// 约束依赖
-internal class Dependency : CustomStringConvertible {
-    
-    weak var from : UIView!
-    weak var to : UIView!
-    
-    var direction: Direction
-    var value : CGFloat = 0
-    var hasSet = false
-    
-    var description : String {
-        return "\nDependency:\n✅direction: \(direction) \n⏬from: \(from) \n⏫to: \(to)\n"
-    }
-    
-    // TODO: Maybe only X and Y
-    enum Direction {
-        case BottomTop
-        case LeftRigt
-        case RightLeft
-        case TopBottom
-    }
-    
-    init(from : UIView , direction: Dependency.Direction) {
-        self.from = from
-        self.direction = direction
-    }
-}
-
 /// 约束依赖管理者
-internal class DependencyManager {
+class DependencyManager {
 
     static let sharedManager = DependencyManager()
     
     var dependencies = [Dependency]()
     
-    // TODO: Or should be only one?
-    var caches = [Dependency]()
+    var dependencyHolder : Dependency?
     
     var hasDependencies : Bool {
         let _has = dependencies.count != 0
@@ -60,56 +31,33 @@ internal class DependencyManager {
         }.count != 0
     }
     
-    var hasCaches : Bool {
-        return caches.count != 0
-    }
-    
     var hasUnSetDependencies : Bool {
         return dependencies.filter { dependency in
             dependency.hasSet == false
         }.count != 0
     }
     
-    var canPop : Bool {
-        return hasCaches
+    func hasUnSetDependencies(view:UIView) -> Bool {
+        return false
     }
     
-    // TODO: 真的要做成一个池子吗？
-    
-    /**
-     将约束加入到约束池中
-     
-     - parameter direction: 约束方向
-     - parameter view:      约束来自于哪个 view
-     */
     func push(direction:Dependency.Direction, fromView view:UIView) {
-        let dep = Dependency(from: view, direction: direction)
-        caches.append(dep)
+        dependencyHolder = Dependency(from: view, direction: direction)
     }
     
-    /**
-     从约束池中取出某个约束
-     
-     - parameter view: 这个约束约束了谁
-     */
     func pop(toView view:UIView, value:CGFloat) {
-        for dependency in caches {
-            dependency.to = view
-            dependency.value = value
-            dependencies.append(dependency)
+        guard let h = dependencyHolder else {
+            return
         }
-        caches.removeAll()
-    }
-
-    var op_queue : dispatch_queue_t {
-        return dispatch_get_main_queue()
+        h.to = view;
+        h.value = value
+        dependencies.append(h)
     }
     
-    /// 从 dependencies 中移除某个 subview 的依赖
-    class func setDependencyFrom(view: UIView) {
+    func setDependencyFrom(view: UIView) {
         
         // 抽取所有需要设定的约束
-        let _dependenciesShowP = sharedManager.dependencies.filter { dependency in
+        let _dependenciesShowP = dependencies.filter { dependency in
             dependency.from == view
         }
         
@@ -137,12 +85,31 @@ internal class DependencyManager {
             dep.hasSet = false
         }
     }
+    
+    func allConstraintDefined(view:UIView) -> Bool {
+        return dependencies.filter { dep in
+            dep.to == view
+        }.filter { dep in
+            dep.hasSet == false
+        }.count == 0
+    }
+    
+    func managering(view:UIView) -> Bool {
+        for subview in view.subviews {
+            for dep in dependencies {
+                if dep.from == subview {
+                    return true
+                }
+            }
+        }
+        return false
+    }
 }
 
 var swizzleToken : dispatch_once_t = 0
 
 // MARK: - Swizzling
-internal extension UIView {
+extension UIView {
     
     // TODO: 这里还是有访问权限的警告
 
@@ -163,45 +130,61 @@ internal extension UIView {
     }
 
     @objc func _swizzle_imp_for_layoutSubviews() {
+        _swizzle_imp_for_layoutSubviews()
         
-        if DependencyManager.sharedManager.hasDependencies {
-            while DependencyManager.sharedManager.layouting(self) && DependencyManager.sharedManager.hasUnSetDependencies {
+        let dm = DependencyManager.sharedManager
+        
+        guard dm.managering(self) else {
+            return
+        }
+        
+        if dm.hasUnSetDependencies(self) {
+            while dm.hasUnSetDependencies(self) {
                 enumSubviews { subview in
-                    if subview.usingFangYuan && subview.allConstraintDefined {
+                    if subview.usingFangYuan && dm.allConstraintDefined(subview) {
                         subview.layoutWithFangYuan()
-                        DependencyManager.setDependencyFrom(subview)
+                        dm.setDependencyFrom(subview)
                     }
                 }
             }
-            DependencyManager.sharedManager.allDepNeedReset()
         } else {
-            if DependencyManager.sharedManager.layouting(self) {
-                enumSubviews { subview in
-                    if subview.usingFangYuan && subview.allConstraintDefined {
-                        subview.layoutWithFangYuan()
-                    }
+            enumSubviews { subview in
+                if subview.usingFangYuan {
+                    subview.layoutWithFangYuan()
                 }
             }
         }
-
-        _swizzle_imp_for_layoutSubviews()
+        
+        
+        
+        
+//        if DependencyManager.sharedManager.hasDependencies {
+//            while DependencyManager.sharedManager.layouting(self) && DependencyManager.sharedManager.hasUnSetDependencies {
+//                enumSubviews { subview in
+//                    if subview.usingFangYuan && DependencyManager.sharedManager.allConstraintDefined(subview) {
+//                        subview.layoutWithFangYuan()
+//                        DependencyManager.sharedManager.setDependencyFrom(subview)
+//                    }
+//                }
+//            }
+//            DependencyManager.sharedManager.allDepNeedReset()
+//        } else {
+//            if DependencyManager.sharedManager.layouting(self) {
+//                enumSubviews { subview in
+//                    if subview.usingFangYuan && DependencyManager.sharedManager.allConstraintDefined(subview) {
+//                        subview.layoutWithFangYuan()
+//                    }
+//                }
+//            }
+//        }
+        
+        
     }
     
 }
 
 // MARK: - Using FangYuan
-internal extension UIView {
-    
-    var allConstraintDefined : Bool {
-//        return DependencyManager.sharedManager.dependencies.filter { dependency in
-//            dependency.to == self
-//        }.count == 0
-        return DependencyManager.sharedManager.dependencies.filter { dep in
-            dep.to == self
-        }.filter { dep in
-            dep.hasSet == false
-        }.count == 0
-    }
+extension UIView {
     
     /// 遍历子视图
     func enumSubviews(callBack:(subview:UIView) -> Void) {
