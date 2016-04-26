@@ -64,7 +64,7 @@ extension FYDDemoTableViewController : UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return heightArray.count > 0 ? 1 : 0
+        return heightArray.count > 0 ? 1:0
     }
 }
 

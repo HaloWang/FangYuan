@@ -13,7 +13,9 @@ internal class Dependency : CustomStringConvertible {
     
     weak var from : UIView!
     weak var to : UIView!
+    
     var direction: Direction
+    var value : CGFloat = 0
     var hasSet = false
     
     var description : String {
@@ -90,9 +92,10 @@ internal class DependencyManager {
      
      - parameter view: 这个约束约束了谁
      */
-    func pop(toView view:UIView) {
+    func pop(toView view:UIView, value:CGFloat) {
         for dependency in caches {
             dependency.to = view
+            dependency.value = value
             dependencies.append(dependency)
         }
         caches.removeAll()
@@ -114,17 +117,24 @@ internal class DependencyManager {
         _ = _dependenciesShowP.map { dependency in
             let _from = dependency.from
             let _to = dependency.to
+            let _value = dependency.value
             switch dependency.direction {
             case .BottomTop:
-                _to.rulerY.a = _from.fy_top + _from.fy_height + _to.rulerY.a!
+                _to.rulerY.a = _from.fy_top + _from.fy_height + _value
             case .LeftRigt:
-                _to.rulerX.c = _from.superview!.fy_width - _from.fy_left + _to.rulerX.c!
+                _to.rulerX.c = _from.superview!.fy_width - _from.fy_left + _value
             case .RightLeft:
-                _to.rulerX.a = _from.fy_left + _from.fy_width + _to.rulerX.a!
+                _to.rulerX.a = _from.fy_left + _from.fy_width + _value
             case .TopBottom:
-                _to.rulerY.c = _from.superview!.fy_height - _from.fy_top + _to.rulerY.c!
+                _to.rulerY.c = _from.superview!.fy_height - _from.fy_top + _value
             }
             dependency.hasSet = true
+        }
+    }
+    
+    func allDepNeedReset() {
+        dependencies.map { dep in
+            dep.hasSet = false
         }
     }
 }
@@ -162,8 +172,8 @@ internal extension UIView {
                         DependencyManager.setDependencyFrom(subview)
                     }
                 }
-
             }
+            DependencyManager.sharedManager.allDepNeedReset()
         } else {
             if DependencyManager.sharedManager.layouting(self) {
                 enumSubviews { subview in
