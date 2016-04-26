@@ -8,11 +8,11 @@
 
 import Foundation
 
+/// 约束依赖
 internal class Dependency : CustomStringConvertible {
     
     var from : UIView
     var direction: Direction
-    
     var to : UIView!
     
     var description : String {
@@ -33,9 +33,10 @@ internal class Dependency : CustomStringConvertible {
     }
 }
 
-internal class Manager {
-    
-    static let sharedManager = Manager()
+/// 约束依赖管理者
+internal class DependencyManager {
+
+    static let sharedManager = DependencyManager()
     
     var dependencies = [Dependency]()
     
@@ -128,7 +129,7 @@ internal class Manager {
 var swizzleToken : dispatch_once_t = 0
 
 // MARK: - Swizzling
-extension UIView {
+private extension UIView {
     override public class func initialize() {
         _swizzle_layoutSubviews()
     }
@@ -145,13 +146,13 @@ extension UIView {
     
     internal func _swizzle_imp_for_layoutSubviews() {
         
-        while Manager.sharedManager.layouting(self) && Manager.sharedManager.hasDependencies {
+        while DependencyManager.sharedManager.layouting(self) && DependencyManager.sharedManager.hasDependencies {
             enumSubviews { subview in
                 if subview.usingFangYuan && subview.allConstraintDefined {
 //                    print("✅ begin", subview)
                     subview.layoutWithFangYuan()
 //                    print("✅ finish", subview)
-                    Manager.removeDependencyFrom(subview)
+                    DependencyManager.removeDependencyFrom(subview)
                 }
             }
         }
@@ -164,7 +165,7 @@ extension UIView {
 internal extension UIView {
     
     var allConstraintDefined : Bool {
-        return Manager.sharedManager.dependencies.filter { dependency in
+        return DependencyManager.sharedManager.dependencies.filter { dependency in
             dependency.to == self
         }.count == 0
     }
