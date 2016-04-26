@@ -11,9 +11,10 @@ import Foundation
 /// 约束依赖
 internal class Dependency : CustomStringConvertible {
     
-    var from : UIView
+    weak var from : UIView!
+    weak var to : UIView!
     var direction: Direction
-    var to : UIView!
+    var hasSet = false
     
     var description : String {
         return "\nDependency:\n✅direction: \(direction) \n⏬from: \(from) \n⏫to: \(to)\n"
@@ -61,6 +62,12 @@ internal class DependencyManager {
         return caches.count != 0
     }
     
+    var hasUnSetDependencies : Bool {
+        return dependencies.filter { dependency in
+            dependency.hasSet == false
+        }.count != 0
+    }
+    
     var canPop : Bool {
         return hasCaches
     }
@@ -96,7 +103,7 @@ internal class DependencyManager {
     }
     
     /// 从 dependencies 中移除某个 subview 的依赖
-    class func removeDependencyFrom(view: UIView) {
+    class func setDependencyFrom(view: UIView) {
         
         // 抽取所有需要设定的约束
         let _dependenciesShowP = sharedManager.dependencies.filter { dependency in
@@ -117,11 +124,7 @@ internal class DependencyManager {
             case .TopBottom:
                 _to.rulerY.c = _from.superview!.fy_height - _from.fy_top + _to.rulerY.c!
             }
-        }
-        
-        // 移除已设定的约束
-        sharedManager.dependencies = sharedManager.dependencies.filter { dependency in
-            dependency.from != view
+            dependency.hasSet = true
         }
     }
 }
@@ -129,7 +132,9 @@ internal class DependencyManager {
 var swizzleToken : dispatch_once_t = 0
 
 // MARK: - Swizzling
-private extension UIView {
+internal extension UIView {
+    
+    // TODO: 这里还是有访问权限的警告
 
     /// 不允许调用 load 方法了
     override public class func initialize() {
@@ -137,7 +142,7 @@ private extension UIView {
     }
 
     /// 交换实现
-    private class func _swizzle_layoutSubviews() {
+    class func _swizzle_layoutSubviews() {
         dispatch_once(&swizzleToken) {
             let originalSelector = #selector(UIView.layoutSubviews)
             let swizzledSelector = #selector(UIView._swizzle_imp_for_layoutSubviews)
@@ -150,25 +155,26 @@ private extension UIView {
     @objc func _swizzle_imp_for_layoutSubviews() {
         
         if DependencyManager.sharedManager.hasDependencies {
-            while DependencyManager.sharedManager.layouting(self) && DependencyManager.sharedManager.hasDependencies {
-                fangYuanLayout()
+            while DependencyManager.sharedManager.layouting(self) && DependencyManager.sharedManager.hasUnSetDependencies {
+                enumSubviews { subview in
+                    if subview.usingFangYuan && subview.allConstraintDefined {
+                        subview.layoutWithFangYuan()
+                        DependencyManager.setDependencyFrom(subview)
+                    }
+                }
+
             }
         } else {
             if DependencyManager.sharedManager.layouting(self) {
-                fangYuanLayout()
+                enumSubviews { subview in
+                    if subview.usingFangYuan && subview.allConstraintDefined {
+                        subview.layoutWithFangYuan()
+                    }
+                }
             }
         }
 
         _swizzle_imp_for_layoutSubviews()
-    }
-    
-    func fangYuanLayout() {
-        enumSubviews { subview in
-            if subview.usingFangYuan && subview.allConstraintDefined {
-                subview.layoutWithFangYuan()
-                DependencyManager.removeDependencyFrom(subview)
-            }
-        }
     }
     
 }
@@ -177,8 +183,13 @@ private extension UIView {
 internal extension UIView {
     
     var allConstraintDefined : Bool {
-        return DependencyManager.sharedManager.dependencies.filter { dependency in
-            dependency.to == self
+//        return DependencyManager.sharedManager.dependencies.filter { dependency in
+//            dependency.to == self
+//        }.count == 0
+        return DependencyManager.sharedManager.dependencies.filter { dep in
+            dep.to == self
+        }.filter { dep in
+            dep.hasSet == false
         }.count == 0
     }
     
