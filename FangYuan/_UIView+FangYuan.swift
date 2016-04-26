@@ -8,45 +8,59 @@
 
 import Foundation
 
-
-private var kRulerX: Any?
-private var kRulerY: Any?
-private var kUsingFangYuan: Any?
-
 // MARK: - _privte Associated Object
 
 // TODO: 或许方圆可以变成一个协议？FangAble？😁然后为 CALayer 提供？PS: 主要是觉得这个文件所含有的内容越来越少了
 
 internal extension UIView {
     
-    // TODO: 这里也可以做成 JSPatch 那样
+    // TODO: 这里也可以做成 JSPatch 那样，使用某个 object 作为 <##>
+    
+    private struct AssociatedKeys {
+        static var RulerX: Any?
+        static var RulerY: Any?
+        static var kUsingFangYuan: Any?
+    }
     
     /// X 轴标尺
     var rulerX: Ruler {
-        if objc_getAssociatedObject(self, &kRulerX) == nil {
-            objc_setAssociatedObject(self, &kRulerX, Ruler(), .OBJC_ASSOCIATION_RETAIN)
+        //  终于不用写两次 `objc_getAssociatedObject` 啦：😁 @see UIView+WebCacheOperation.m
+        if let ruler = objc_getAssociatedObject(self, &AssociatedKeys.RulerX) {
+            return ruler as! Ruler
         }
-        return objc_getAssociatedObject(self, &kRulerX) as! Ruler
+        let ruler = Ruler()
+        objc_setAssociatedObject(self, &AssociatedKeys.RulerX, ruler, .OBJC_ASSOCIATION_RETAIN)
+        return ruler
     }
+    
     /// Y 轴表尺
     var rulerY: Ruler {
-        if objc_getAssociatedObject(self, &kRulerY) == nil {
-            objc_setAssociatedObject(self, &kRulerY, Ruler(), .OBJC_ASSOCIATION_RETAIN)
+        if let ruler = objc_getAssociatedObject(self, &AssociatedKeys.RulerY) {
+            return ruler as! Ruler
         }
-        return objc_getAssociatedObject(self, &kRulerY) as! Ruler
+        let ruler = Ruler()
+        objc_setAssociatedObject(self, &AssociatedKeys.RulerY, ruler, .OBJC_ASSOCIATION_RETAIN)
+        return ruler
     }
+    
     /// 该 View 是否在使用 FangYuan
     var usingFangYuan: Bool {
         get {
-            return objc_getAssociatedObject(self, &kUsingFangYuan) != nil
+            return objc_getAssociatedObject(self, &AssociatedKeys.kUsingFangYuan) != nil
         }
         set {
-            objc_setAssociatedObject(self, &kUsingFangYuan, newValue ? "" : nil, .OBJC_ASSOCIATION_RETAIN)
+            objc_setAssociatedObject(self, &AssociatedKeys.kUsingFangYuan, newValue ? "" : nil, .OBJC_ASSOCIATION_RETAIN)
         }
     }
+    
+    // Note the use of static var in a private nested struct—this pattern creates the static associated object key we need but doesn’t muck up the global namespace.
+    // From http://nshipster.com/swift-objc-runtime/
+
 }
 
 // MARK: - _private Computed Properties
+
+// TODO: 也许可以作为将来 FangYuanAble 的协议？
 
 internal extension UIView {
     

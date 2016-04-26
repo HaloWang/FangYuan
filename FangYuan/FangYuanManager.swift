@@ -148,10 +148,9 @@ extension UIView {
         while Manager.sharedManager.layouting(self) && Manager.sharedManager.hasDependencies {
             enumSubviews { subview in
                 if subview.usingFangYuan && subview.allConstraintDefined {
-                    print("✅ begin", subview)
+//                    print("✅ begin", subview)
                     subview.layoutWithFangYuan()
-                    print("✅ finish", subview)
-                    print()
+//                    print("✅ finish", subview)
                     Manager.removeDependencyFrom(subview)
                 }
             }

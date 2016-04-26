@@ -11,11 +11,6 @@ import UIKit
 // MARK: - Chainable Getter
 
 public extension UIView {
-    
-    // TODO: 添加依赖
-    internal func addDep(@noescape block:()->Void) {
-        block()
-    }
 
     /// 描述某个 **view 右边** 距该 **view 左边**的关系时，使用该属性：
     ///
@@ -55,35 +50,29 @@ public extension UIView {
 
 public extension UIView {
 
-    internal func tellUsingFangYuan(@noescape block: () -> Void) {
-        usingFangYuan = true
-        Manager.sharedManager.pop(toView: self)
-        block()
-    }
-    
     // MARK: X
 
     /// 设定某个 UIView 左边距离其 superview 左边的距离，相当于 x
     func fy_left(left: CGFloat) -> Self {
-        tellUsingFangYuan {
-            self.fy_left = left
-        }
+        usingFangYuan = true
+        Manager.sharedManager.pop(toView: self)
+        self.fy_left = left
         return self
     }
 
     /// 设定某个 UIView 的宽度，相当于 width
     func fy_width(width: CGFloat) -> Self {
-        tellUsingFangYuan {
-            self.fy_width = width
-        }
+        usingFangYuan = true
+        Manager.sharedManager.pop(toView: self)
+        self.fy_width = width
         return self
     }
 
     /// 设定某个 UIView 右边距离其 superview 右边的距离
     func fy_right(right: CGFloat) -> Self {
-        tellUsingFangYuan {
-            self.fy_right = right
-        }
+        usingFangYuan = true
+        Manager.sharedManager.pop(toView: self)
+        self.fy_right = right
         return self
     }
 
@@ -91,25 +80,25 @@ public extension UIView {
 
     /// 设定某个 UIView 顶部距离其 superview 顶部的距离，相当于 y
     func fy_top(top: CGFloat) -> Self {
-        tellUsingFangYuan {
-            self.fy_top = top
-        }
+        usingFangYuan = true
+        Manager.sharedManager.pop(toView: self)
+        self.fy_top = top
         return self
     }
 
     /// 设定某个 UIView 的高度，相当于 height
     func fy_height(height: CGFloat) -> Self {
-        tellUsingFangYuan {
-            self.fy_height = height
-        }
+        usingFangYuan = true
+        Manager.sharedManager.pop(toView: self)
+        self.fy_height = height
         return self
     }
 
     /// 设定某个 UIView 底部距离其 superview 底部的距离
     func fy_bottom(bottom: CGFloat) -> Self {
-        tellUsingFangYuan {
-            self.fy_bottom = bottom
-        }
+        usingFangYuan = true
+        Manager.sharedManager.pop(toView: self)
+        self.fy_bottom = bottom
         return self
     }
 
@@ -117,12 +106,12 @@ public extension UIView {
 
     /// 设定某个 UIView 四个边距离其父视图相对四边的距离
     func fy_edge(edge: UIEdgeInsets) -> Self {
-        tellUsingFangYuan {
-            self.fy_top = edge.top
-            self.fy_bottom = edge.bottom
-            self.fy_left = edge.left
-            self.fy_right = edge.right
-        }
+        usingFangYuan = true
+        Manager.sharedManager.pop(toView: self)
+        self.fy_top = edge.top
+        self.fy_bottom = edge.bottom
+        self.fy_left = edge.left
+        self.fy_right = edge.right
         return self
     }
 }
