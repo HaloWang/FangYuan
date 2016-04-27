@@ -25,7 +25,7 @@ internal class Ruler {
     }
 
     /// 最后一次设定的约束
-    var last : Ruler.Section?
+    var last: Ruler.Section?
 
     /// 第一段
     ///
@@ -87,7 +87,7 @@ internal class Ruler {
 
 // MARK: - CustomStringConvertible
 extension Ruler : CustomStringConvertible {
-    var description : String {
+    var description: String {
         return "\(a ?? nil) | \(b ?? nil) | \(c ?? nil)"
     }
 }

@@ -4,34 +4,34 @@ import FangYuan
 import Halo
 
 class FYDViewController: UIViewController {
-    
+
     let titles = [
         "⚠️Unfinish 观察代码",
         "在 ViewController 中使用",
         "在 Cell 中使用",
         "⚠️Unfinish 对比 SnapKit"
     ]
-    
+
     let vcs = [
         FYDReactiveCodeViewController.self,
         FYDDemoViewController.self,
         FYDDemoTableViewController.self,
         FYDVSAutoLayoutViewController.self
     ]
-    
+
     lazy var tableView = UITableView(frame: ScreenBounds, style: .Plain)
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         backgroundColor(White)
-        
+
         tableView
             .registerCellClass(UITableViewCell)
             .dataSourceAndDelegate(self)
             .tableFooterViewAdded()
             .superView(view)
             .fy_edge(UIEdgeInsetsZero)
-        
+
         tableView.tag = 111
 
     }
@@ -53,9 +53,8 @@ extension FYDViewController : UITableViewDataSource {
         cell.text(titles[indexPath.row])
         return cell
     }
-    
+
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return titles.count
     }
 }
-

@@ -15,16 +15,16 @@ func RandomCGFloat() -> CGFloat {
 }
 
 /// 创建测试环境
-func CreateEnvironment(@noescape finish:(superview : UIView, view : UIView) -> Void) -> CGRect {
-    
+func CreateEnvironment(@noescape finish:(superview: UIView, view: UIView) -> Void) -> CGRect {
+
     let superview = UIView()
     superview.frame = CGRect(x: 0, y: 0, width: 1000, height: 1000)
-    
+
     let view = UIView()
-    
+
     superview.addSubview(view)
-    
+
     finish(superview: superview, view: view)
-    
+
     return view.frame
 }

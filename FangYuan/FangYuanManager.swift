@@ -12,55 +12,55 @@ import Foundation
 class DependencyManager {
 
     static let sharedManager = DependencyManager()
-    
+
     var dependencies = [Dependency]()
-    
-    var dependencyHolder : Dependency?
-    
-    var hasDependencies : Bool {
+
+    var dependencyHolder: Dependency?
+
+    var hasDependencies: Bool {
         let _has = dependencies.count != 0
         if _has {
             print(dependencies)
         }
         return _has
     }
-    
-    func layouting(view:UIView) -> Bool {
+
+    func layouting(view: UIView) -> Bool {
         return dependencies.filter { dependency in
             dependency.from.superview == view
         }.count != 0
     }
-    
-    var hasUnSetDependencies : Bool {
+
+    var hasUnSetDependencies: Bool {
         return dependencies.filter { dependency in
             dependency.hasSet == false
         }.count != 0
     }
-    
-    func hasUnSetDependencies(view:UIView) -> Bool {
+
+    func hasUnSetDependencies(view: UIView) -> Bool {
         return false
     }
-    
-    func push(direction:Dependency.Direction, fromView view:UIView) {
+
+    func push(direction: Dependency.Direction, fromView view: UIView) {
         dependencyHolder = Dependency(from: view, direction: direction)
     }
-    
-    func pop(toView view:UIView, value:CGFloat) {
+
+    func pop(toView view: UIView, value: CGFloat) {
         guard let h = dependencyHolder else {
             return
         }
-        h.to = view;
+        h.to = view
         h.value = value
         dependencies.append(h)
     }
-    
+
     func setDependencyFrom(view: UIView) {
-        
+
         // 抽取所有需要设定的约束
         let _dependenciesShowP = dependencies.filter { dependency in
             dependency.from == view
         }
-        
+
         // 设定这些约束
         _ = _dependenciesShowP.map { dependency in
             let _from = dependency.from
@@ -79,22 +79,22 @@ class DependencyManager {
             dependency.hasSet = true
         }
     }
-    
+
     func allDepNeedReset() {
         dependencies.map { dep in
             dep.hasSet = false
         }
     }
-    
-    func allConstraintDefined(view:UIView) -> Bool {
+
+    func allConstraintDefined(view: UIView) -> Bool {
         return dependencies.filter { dep in
             dep.to == view
         }.filter { dep in
             dep.hasSet == false
         }.count == 0
     }
-    
-    func managering(view:UIView) -> Bool {
+
+    func managering(view: UIView) -> Bool {
         for subview in view.subviews {
             for dep in dependencies {
                 if dep.from == subview {
@@ -106,11 +106,11 @@ class DependencyManager {
     }
 }
 
-var swizzleToken : dispatch_once_t = 0
+var swizzleToken: dispatch_once_t = 0
 
 // MARK: - Swizzling
 extension UIView {
-    
+
     // TODO: 这里还是有访问权限的警告
 
     /// 不允许调用 load 方法了
@@ -131,13 +131,13 @@ extension UIView {
 
     @objc func _swizzle_imp_for_layoutSubviews() {
         _swizzle_imp_for_layoutSubviews()
-        
+
         let dm = DependencyManager.sharedManager
-        
+
         guard dm.managering(self) else {
             return
         }
-        
+
         if dm.hasUnSetDependencies(self) {
             while dm.hasUnSetDependencies(self) {
                 enumSubviews { subview in
@@ -154,10 +154,10 @@ extension UIView {
                 }
             }
         }
-        
-        
-        
-        
+
+
+
+
 //        if DependencyManager.sharedManager.hasDependencies {
 //            while DependencyManager.sharedManager.layouting(self) && DependencyManager.sharedManager.hasUnSetDependencies {
 //                enumSubviews { subview in
@@ -177,22 +177,22 @@ extension UIView {
 //                }
 //            }
 //        }
-        
-        
+
+
     }
-    
+
 }
 
 // MARK: - Using FangYuan
 extension UIView {
-    
+
     /// 遍历子视图
-    func enumSubviews(callBack:(subview:UIView) -> Void) {
+    func enumSubviews(callBack:(subview: UIView) -> Void) {
         _ = subviews.map { _subview in
             callBack(subview: _subview)
         }
     }
-    
+
     // TODO: 这个算法还是应该被 UT 一下
     /// 在约束已经求解完全的情况下进行 frame 的设置
     func layoutWithFangYuan() {
@@ -204,7 +204,7 @@ extension UIView {
             frame.origin.x = superview!.fy_width - rulerX.b - rulerX.c
             frame.size.width = rulerX.b
         }
-        
+
         //  Y
         if rulerY.a != nil {
             frame.origin.y = rulerY.a
@@ -215,17 +215,3 @@ extension UIView {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
