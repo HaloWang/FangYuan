@@ -134,10 +134,6 @@ extension UIView {
 
         let dm = DependencyManager.sharedManager
 
-        guard dm.managering(self) else {
-            return
-        }
-
         if dm.hasUnSetDependencies(self) {
             while dm.hasUnSetDependencies(self) {
                 enumSubviews { subview in

@@ -6,6 +6,7 @@ import Halo
 class FYDViewController: UIViewController {
 
     let titles = [
+        "矩形拖拽",
         "⚠️Unfinish 观察代码",
         "在 ViewController 中使用",
         "在 Cell 中使用",
@@ -13,6 +14,7 @@ class FYDViewController: UIViewController {
     ]
 
     let vcs = [
+        FYDRectViewController.self,
         FYDReactiveCodeViewController.self,
         FYDDemoViewController.self,
         FYDDemoTableViewController.self,
