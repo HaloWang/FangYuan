@@ -20,7 +20,7 @@ class Dependency {
     /// 约束方向
     var direction: Direction
 
-    /// 该约束的数字常量
+    /// 该约束的数字量
     var value: CGFloat = 0
 
     /// 该约束在当前 layoutSubviews 方法中是否已经求解完毕

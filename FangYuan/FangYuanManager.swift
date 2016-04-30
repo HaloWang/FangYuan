@@ -122,6 +122,7 @@ class DependencyManager {
         }
     }
 
+    // TODO: hasSet 这个点好像有点问题，这些约束只用装载一次吗？
     func allDepNeedReset() {
         _ = dependencies.map { dep in
             dep.hasSet = false
@@ -214,13 +215,6 @@ extension UIView {
     var usingFangYuanSubviews : [UIView] {
         return subviews.filter { subview in
             return subview.usingFangYuan
-        }
-    }
-    
-    /// 遍历子视图，主要是忽略警告
-    func enumSubviews(@noescape callBack:(subview: UIView) -> Void) {
-        _ = subviews.map { _subview in
-            callBack(subview: _subview)
         }
     }
 
