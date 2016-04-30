@@ -22,7 +22,7 @@ class FYDDemoTableViewController: UIViewController {
 
         dispatch_async(dispatch_get_main_queue()) {
             for _ in 0...999 {
-                self.heightArray.append(105 + CGFloat(arc4random() % 160))
+                self.heightArray.append(75 + CGFloat(arc4random() % 200))
             }
             self.tableView.reloadData()
         }
@@ -32,9 +32,9 @@ class FYDDemoTableViewController: UIViewController {
     }
 
     func changeStatus() {
-//        KMCGeigerCounter.sharedGeigerCounter().enabled = !KMCGeigerCounter.sharedGeigerCounter().enabled
-//        navigationItem.rightBarButtonItem = UIBarButtonItem(title: KMCGeigerCounter.sharedGeigerCounter().enabled ? "关闭帧率监视" : "开启帧率监视", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(FYDDemoTableViewController.changeStatus))
-        tableView.reloadData()
+        KMCGeigerCounter.sharedGeigerCounter().enabled = !KMCGeigerCounter.sharedGeigerCounter().enabled
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: KMCGeigerCounter.sharedGeigerCounter().enabled ? "关闭帧率监视" : "开启帧率监视", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(FYDDemoTableViewController.changeStatus))
+//        tableView.reloadData()
     }
 
 }
@@ -47,7 +47,7 @@ extension FYDDemoTableViewController : UITableViewDelegate {
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 105 + CGFloat(arc4random() % 160)
+        return heightArray[indexPath.row]
     }
 }
 
@@ -64,7 +64,7 @@ extension FYDDemoTableViewController : UITableViewDataSource {
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return heightArray.count > 0 ? 1:0
+        return heightArray.count
     }
 }
 
@@ -149,9 +149,4 @@ class FYDemoCell: UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-    }
-
 }

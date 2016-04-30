@@ -64,6 +64,7 @@ class DependencyManager {
         }
     }
     
+    // TODO: Swizzle UIViewController.viewDidDisappear ?
     func removeUselessDep() {
         dependencies = dependencies.filter { dep in
             dep.to != nil && dep.from != nil
@@ -189,10 +190,8 @@ extension UIView {
                 }
             }
         } else {
-            enumSubviews { subview in
-                if subview.usingFangYuan {
-                    subview.layoutWithFangYuan()
-                }
+            _ = usingFangYuanSubviews.map { subview in
+                subview.layoutWithFangYuan()
             }
         }
     }
@@ -226,24 +225,49 @@ extension UIView {
     }
 
     // TODO: 这个算法还是应该被 UT 一下
+    // TODO: 大量的 if (!=) = 会不会有问题？
     /// 在约束已经求解完全的情况下进行 frame 的设置
     func layoutWithFangYuan() {
         //  X
-        if rulerX.a != nil {
-            frame.origin.x = rulerX.a
-            frame.size.width = rulerX.b ?? superview!.fy_width - rulerX.a - rulerX.c
+        let newX = rulerX.a
+        if newX != nil {
+            if frame.origin.x != newX {
+                frame.origin.x = newX
+            }
+            let newWidth = rulerX.b ?? superview!.fy_width - newX - rulerX.c
+            if frame.size.width != newWidth {
+                frame.size.width = newWidth
+            }
         } else {
-            frame.origin.x = superview!.fy_width - rulerX.b - rulerX.c
-            frame.size.width = rulerX.b
+            let newX = superview!.fy_width - rulerX.b - rulerX.c
+            if frame.origin.x != newX {
+                frame.origin.x = newX
+            }
+            let newWidth = rulerX.b
+            if frame.size.width != newWidth {
+                frame.size.width = newWidth
+            }
         }
 
         //  Y
-        if rulerY.a != nil {
-            frame.origin.y = rulerY.a
-            frame.size.height = rulerY.b ?? superview!.fy_height - rulerY.a - rulerY.c
+        let newY = rulerY.a
+        if newY != nil {
+            if frame.origin.y != newY {
+                frame.origin.y = newY
+            }
+            let newHeight = rulerY.b ?? superview!.fy_height - newY - rulerY.c
+            if frame.size.height != newHeight {
+                frame.size.height = newHeight
+            }
         } else {
-            frame.origin.y = superview!.fy_height - rulerY.b - rulerY.c
-            frame.size.height = rulerY.b
+            let newY = superview!.fy_height - rulerY.b - rulerY.c
+            if frame.origin.y != newY {
+                frame.origin.y = newY
+            }
+            let newHeight = rulerY.b
+            if frame.size.height != newHeight {
+                frame.size.height = newHeight
+            }
         }
     }
 }
