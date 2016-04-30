@@ -124,29 +124,35 @@ internal extension UIView {
         static var RulerX: Any?
         static var RulerY: Any?
         static var kUsingFangYuan: Any?
+        static var AO : Any?
+    }
+    
+    class AssociateObject {
+        let rulerX = Ruler()
+        let rulerY = Ruler()
+    }
+    
+    var ao : AssociateObject {
+        //  终于不用写两次 `objc_getAssociatedObject` 啦：😁 @see UIView+WebCacheOperation.m
+        if let _ao = objc_getAssociatedObject(self, &AssociatedKeys.AO) {
+            return _ao as! AssociateObject
+        }
+        let _ao = AssociateObject()
+        objc_setAssociatedObject(self, &AssociatedKeys.AO, _ao, .OBJC_ASSOCIATION_RETAIN)
+        return _ao
     }
 
     /// X 轴标尺
     var rulerX: Ruler {
-        //  终于不用写两次 `objc_getAssociatedObject` 啦：😁 @see UIView+WebCacheOperation.m
-        if let ruler = objc_getAssociatedObject(self, &AssociatedKeys.RulerX) {
-            return ruler as! Ruler
-        }
-        let ruler = Ruler()
-        objc_setAssociatedObject(self, &AssociatedKeys.RulerX, ruler, .OBJC_ASSOCIATION_RETAIN)
-        return ruler
+        return ao.rulerX
     }
 
     /// Y 轴表尺
     var rulerY: Ruler {
-        if let ruler = objc_getAssociatedObject(self, &AssociatedKeys.RulerY) {
-            return ruler as! Ruler
-        }
-        let ruler = Ruler()
-        objc_setAssociatedObject(self, &AssociatedKeys.RulerY, ruler, .OBJC_ASSOCIATION_RETAIN)
-        return ruler
+        return ao.rulerY
     }
 
+    // TODO: 并发遍历？
     /// 该 View 是否在使用 FangYuan
     var usingFangYuan: Bool {
         get {
@@ -156,8 +162,9 @@ internal extension UIView {
             objc_setAssociatedObject(self, &AssociatedKeys.kUsingFangYuan, newValue ? "" : nil, .OBJC_ASSOCIATION_RETAIN)
         }
     }
-
 }
+
+
 
 // MARK: - _private Computed Properties
 
