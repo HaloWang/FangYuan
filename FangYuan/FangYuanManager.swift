@@ -6,22 +6,43 @@
 //
 //
 
-import Foundation
+import UIKit
+
+/// 什么时候移除无效的约束？
 
 /// 约束依赖管理者
 class DependencyManager {
-
+    /// 单例
     static let sharedManager = DependencyManager()
-
+    /// 全部约束
     var dependencies = [Dependency]()
-
+    /// 刚刚压入的约束
     var dependencyHolder: Dependency?
-
+    /// 推入约束
+    func push(from: UIView?, to: UIView?, direction: Dependency.Direction, value: CGFloat = 0) {
+        print("Push")
+        dependencyHolder = Dependency(from: from, to: to, direction: direction, value: value)
+        print(dependencyHolder!)
+    }
+    /// 推出约束
+    func pop(from: UIView?, to: UIView?, direction: Dependency.Direction, value: CGFloat = 0) {
+        
+        guard let _h = dependencyHolder else {
+            return
+        }
+        
+        print("Pop")
+        _h.to        = to
+        _h.value     = value
+        _h.direction = direction
+        
+        dependencies.append(_h)
+        print(_h)
+        dependencyHolder = nil
+    }
+    
     var hasDependencies: Bool {
         let _has = dependencies.count != 0
-        if _has {
-            print(dependencies)
-        }
         return _has
     }
 
@@ -36,22 +57,42 @@ class DependencyManager {
             dependency.hasSet == false
         }.count != 0
     }
-
-    func hasUnSetDependencies(view: UIView) -> Bool {
-        return false
-    }
-
-    func push(direction: Dependency.Direction, fromView view: UIView) {
-        dependencyHolder = Dependency(from: view, direction: direction)
-    }
-
-    func pop(toView view: UIView, value: CGFloat) {
-        guard let h = dependencyHolder else {
-            return
+    
+    var unsetDeps : [Dependency] {
+        return dependencies.filter {
+            !$0.hasSet
         }
-        h.to = view
-        h.value = value
-        dependencies.append(h)
+    }
+    
+    func removeUselessDep() {
+        dependencies = dependencies.filter { dep in
+            dep.to != nil && dep.from != nil
+        }
+    }
+    
+    // TODO: 性能优化
+    func hasUnSetDependencies(view: UIView) -> Bool {
+
+        //  正在设定某 view.subviews
+        guard view.subviewUsingFangYuan else {
+            return false
+        }
+        
+        //  还有未设定的约束
+        let needSetDeps = unsetDeps
+        guard needSetDeps.count != 0 else {
+            return false
+        }
+
+        for usingFangYuanSubview in view.usingFangYuanSubviews {
+            for dep in needSetDeps {
+                if dep.to == usingFangYuanSubview {
+                    return true
+                }
+            }
+        }
+        
+        return false
     }
 
     func setDependencyFrom(view: UIView) {
@@ -81,7 +122,7 @@ class DependencyManager {
     }
 
     func allDepNeedReset() {
-        dependencies.map { dep in
+        _ = dependencies.map { dep in
             dep.hasSet = false
         }
     }
@@ -112,7 +153,6 @@ var swizzleToken: dispatch_once_t = 0
 extension UIView {
 
     // TODO: 这里还是有访问权限的警告
-
     /// 不允许调用 load 方法了
     override public class func initialize() {
         _swizzle_layoutSubviews()
@@ -128,16 +168,21 @@ extension UIView {
             method_exchangeImplementations(originalMethod, swizzledMethod)
         }
     }
-
-    @objc func _swizzle_imp_for_layoutSubviews() {
+    
+    func _swizzle_imp_for_layoutSubviews() {
         _swizzle_imp_for_layoutSubviews()
+        
+        guard subviewUsingFangYuan else {
+            return
+        }
 
         let dm = DependencyManager.sharedManager
-
+        dm.removeUselessDep()
+        
         if dm.hasUnSetDependencies(self) {
             while dm.hasUnSetDependencies(self) {
-                enumSubviews { subview in
-                    if subview.usingFangYuan && dm.allConstraintDefined(subview) {
+                _ = usingFangYuanSubviews.map { subview in
+                    if dm.allConstraintDefined(subview) {
                         subview.layoutWithFangYuan()
                         dm.setDependencyFrom(subview)
                     }
@@ -150,40 +195,31 @@ extension UIView {
                 }
             }
         }
-
-
-
-
-//        if DependencyManager.sharedManager.hasDependencies {
-//            while DependencyManager.sharedManager.layouting(self) && DependencyManager.sharedManager.hasUnSetDependencies {
-//                enumSubviews { subview in
-//                    if subview.usingFangYuan && DependencyManager.sharedManager.allConstraintDefined(subview) {
-//                        subview.layoutWithFangYuan()
-//                        DependencyManager.sharedManager.setDependencyFrom(subview)
-//                    }
-//                }
-//            }
-//            DependencyManager.sharedManager.allDepNeedReset()
-//        } else {
-//            if DependencyManager.sharedManager.layouting(self) {
-//                enumSubviews { subview in
-//                    if subview.usingFangYuan && DependencyManager.sharedManager.allConstraintDefined(subview) {
-//                        subview.layoutWithFangYuan()
-//                    }
-//                }
-//            }
-//        }
-
-
     }
-
 }
 
 // MARK: - Using FangYuan
 extension UIView {
-
-    /// 遍历子视图
-    func enumSubviews(callBack:(subview: UIView) -> Void) {
+    
+    // TODO: 性能优化
+    var subviewUsingFangYuan : Bool {
+        for subview in subviews {
+            if subview.usingFangYuan {
+                return true
+            }
+        }
+        return false
+    }
+    
+    /// 使用 FangYuan 的 subview
+    var usingFangYuanSubviews : [UIView] {
+        return subviews.filter { subview in
+            return subview.usingFangYuan
+        }
+    }
+    
+    /// 遍历子视图，主要是忽略警告
+    func enumSubviews(@noescape callBack:(subview: UIView) -> Void) {
         _ = subviews.map { _subview in
             callBack(subview: _subview)
         }

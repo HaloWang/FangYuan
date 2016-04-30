@@ -8,6 +8,7 @@ class FYDViewController: UIViewController {
     let titles = [
         "矩形拖拽",
         "⚠️Unfinish 观察代码",
+        "Chain 调用",
         "在 ViewController 中使用",
         "在 Cell 中使用",
         "⚠️Unfinish 对比 SnapKit"
@@ -16,6 +17,7 @@ class FYDViewController: UIViewController {
     let vcs = [
         FYDRectViewController.self,
         FYDReactiveCodeViewController.self,
+        FYDChainViewController.self,
         FYDDemoViewController.self,
         FYDDemoTableViewController.self,
         FYDVSAutoLayoutViewController.self

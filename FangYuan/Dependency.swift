@@ -6,7 +6,7 @@
 //
 //
 
-import Foundation
+import UIKit
 
 /// 约束依赖
 class Dependency {
@@ -34,15 +34,16 @@ class Dependency {
         case TopBottom
     }
 
-    /// 调用 Chain 方法时，使用该方法初始化一个约束
-    init(from: UIView, direction: Dependency.Direction) {
+    init(from: UIView?, to: UIView?, direction: Dependency.Direction, value: CGFloat = 0) {
         self.from = from
+        self.to = to
         self.direction = direction
+        self.value = value
     }
 }
 
 extension Dependency : CustomStringConvertible {
     var description: String {
-        return "\nDependency:\n✅direction: \(direction) \n⏬from: \(from) \n⏫to: \(to)\n"
+        return "\nDependency:\n✅direction: \(direction) \n⏬from: \(from) \n⏫to: \(to)\nℹ️Value: \(value)\nℹ️Setted: \(hasSet)"
     }
 }

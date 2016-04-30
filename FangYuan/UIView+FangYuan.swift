@@ -16,7 +16,7 @@ public extension UIView {
     ///
     /// someView.fy_right(self.chainLeft)
     var chainLeft: CGFloat {
-        DependencyManager.sharedManager.push(.LeftRigt, fromView: self)
+        DependencyManager.sharedManager.push(self, to: nil, direction: .LeftRigt)
         return 0
     }
 
@@ -24,7 +24,7 @@ public extension UIView {
     ///
     /// someView.fy_left(self.chainRight)
     var chainRight: CGFloat {
-        DependencyManager.sharedManager.push(.RightLeft, fromView: self)
+        DependencyManager.sharedManager.push(self, to: nil, direction: .RightLeft)
         return 0
     }
 
@@ -32,7 +32,7 @@ public extension UIView {
     ///
     /// someView.fy_top(self.chainBottom)
     var chainBottom: CGFloat {
-        DependencyManager.sharedManager.push(.BottomTop, fromView: self)
+        DependencyManager.sharedManager.push(self, to: nil, direction: .BottomTop)
         return 0
     }
 
@@ -40,7 +40,7 @@ public extension UIView {
     ///
     /// someView.fy_bottom(self.chainTop)
     var chainTop: CGFloat {
-        DependencyManager.sharedManager.push(.TopBottom, fromView: self)
+        DependencyManager.sharedManager.push(self, to: nil, direction: .TopBottom)
         return 0
     }
 }
@@ -55,15 +55,14 @@ public extension UIView {
     /// 设定某个 UIView 左边距离其 superview 左边的距离，相当于 x
     func fy_left(left: CGFloat) -> Self {
         usingFangYuan = true
-        DependencyManager.sharedManager.pop(toView: self, value: left)
         fy_left = left
+        DependencyManager.sharedManager.pop(nil, to: self, direction: .RightLeft, value: left)
         return self
     }
 
     /// 设定某个 UIView 的宽度，相当于 width
     func fy_width(width: CGFloat) -> Self {
         usingFangYuan = true
-        DependencyManager.sharedManager.pop(toView: self, value: width)
         fy_width = width
         return self
     }
@@ -71,8 +70,8 @@ public extension UIView {
     /// 设定某个 UIView 右边距离其 superview 右边的距离
     func fy_right(right: CGFloat) -> Self {
         usingFangYuan = true
-        DependencyManager.sharedManager.pop(toView: self, value: right)
         fy_right = right
+        DependencyManager.sharedManager.pop(nil, to: self, direction: .LeftRigt, value: right)
         return self
     }
 
@@ -81,15 +80,14 @@ public extension UIView {
     /// 设定某个 UIView 顶部距离其 superview 顶部的距离，相当于 y
     func fy_top(top: CGFloat) -> Self {
         usingFangYuan = true
-        DependencyManager.sharedManager.pop(toView: self, value: top)
         fy_top = top
+        DependencyManager.sharedManager.pop(nil, to: self, direction: .BottomTop, value: top)
         return self
     }
 
     /// 设定某个 UIView 的高度，相当于 height
     func fy_height(height: CGFloat) -> Self {
         usingFangYuan = true
-        DependencyManager.sharedManager.pop(toView: self, value: height)
         fy_height = height
         return self
     }
@@ -97,8 +95,8 @@ public extension UIView {
     /// 设定某个 UIView 底部距离其 superview 底部的距离
     func fy_bottom(bottom: CGFloat) -> Self {
         usingFangYuan = true
-        DependencyManager.sharedManager.pop(toView: self, value: bottom)
         fy_bottom = bottom
+        DependencyManager.sharedManager.pop(nil, to: self, direction: .TopBottom, value: bottom)
         return self
     }
 
@@ -106,15 +104,7 @@ public extension UIView {
 
     /// 设定某个 UIView 四个边距离其父视图相对四边的距离
     func fy_edge(edge: UIEdgeInsets) -> Self {
-        usingFangYuan = true
-        DependencyManager.sharedManager.pop(toView: self, value: edge.top)
-        fy_top = edge.top
-        DependencyManager.sharedManager.pop(toView: self, value: edge.bottom)
-        fy_bottom = edge.bottom
-        DependencyManager.sharedManager.pop(toView: self, value: edge.left)
-        fy_left = edge.left
-        DependencyManager.sharedManager.pop(toView: self, value: edge.right)
-        fy_right = edge.right
+        fy_top(edge.top).fy_bottom(edge.bottom).fy_left(edge.left).fy_right(edge.right)
         return self
     }
 }

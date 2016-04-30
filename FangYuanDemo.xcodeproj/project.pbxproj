@@ -17,6 +17,7 @@
 		097EDA6F1CBB765900A350F0 /* FangYuanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 097EDA6E1CBB765900A350F0 /* FangYuanTests.swift */; };
 		097EDA751CBB7C3300A350F0 /* TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 097EDA741CBB7C3300A350F0 /* TestHelper.swift */; };
 		0996DCF31CB9478A00612218 /* FYDReactiveCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0996DCF21CB9478A00612218 /* FYDReactiveCodeViewController.swift */; };
+		09F2EB6B1CD50AC800E4EA17 /* FYDChainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F2EB6A1CD50AC800E4EA17 /* FYDChainViewController.swift */; };
 		09F439111CD0BA400058029F /* FYDRectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F439101CD0BA400058029F /* FYDRectViewController.swift */; };
 		C177AD2A0A46FE93E2569302 /* Pods_FangYuanTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FF6C7C0DF6E02BAC4A15AF7 /* Pods_FangYuanTests.framework */; };
 		D2C1E1B7790E69A2EF0C4F6E /* Pods_FangYuanDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFF3F51A1AB38D36050A9C3F /* Pods_FangYuanDemo.framework */; };
@@ -38,6 +39,7 @@
 		097EDA701CBB765900A350F0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		097EDA741CBB7C3300A350F0 /* TestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHelper.swift; sourceTree = "<group>"; };
 		0996DCF21CB9478A00612218 /* FYDReactiveCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FYDReactiveCodeViewController.swift; sourceTree = "<group>"; };
+		09F2EB6A1CD50AC800E4EA17 /* FYDChainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FYDChainViewController.swift; sourceTree = "<group>"; };
 		09F439101CD0BA400058029F /* FYDRectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FYDRectViewController.swift; sourceTree = "<group>"; };
 		98F7B821F2A140598E82E7C1 /* Pods-FangYuanTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FangYuanTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FangYuanTests/Pods-FangYuanTests.debug.xcconfig"; sourceTree = "<group>"; };
 		9FF6C7C0DF6E02BAC4A15AF7 /* Pods_FangYuanTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FangYuanTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -91,6 +93,7 @@
 			children = (
 				096A97721CAFA84A00497C1E /* AppDelegate.swift */,
 				096A97741CAFA84A00497C1E /* FYDViewController.swift */,
+				09F2EB6A1CD50AC800E4EA17 /* FYDChainViewController.swift */,
 				0996DCF21CB9478A00612218 /* FYDReactiveCodeViewController.swift */,
 				09F439101CD0BA400058029F /* FYDRectViewController.swift */,
 				0932F1E11CB4F8F4009596F6 /* FYDDemoViewController.swift */,
@@ -334,6 +337,7 @@
 				096A97751CAFA84A00497C1E /* FYDViewController.swift in Sources */,
 				096A97731CAFA84A00497C1E /* AppDelegate.swift in Sources */,
 				0932F1E61CB50205009596F6 /* FYDVSAutoLayoutViewController.swift in Sources */,
+				09F2EB6B1CD50AC800E4EA17 /* FYDChainViewController.swift in Sources */,
 				0996DCF31CB9478A00612218 /* FYDReactiveCodeViewController.swift in Sources */,
 				09F439111CD0BA400058029F /* FYDRectViewController.swift in Sources */,
 				0932F1E21CB4F8F4009596F6 /* FYDDemoViewController.swift in Sources */,
