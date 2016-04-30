@@ -10,7 +10,7 @@ class FYDViewController: UIViewController {
         "⚠️Unfinish 观察代码",
         "Chain 调用",
         "在 ViewController 中使用",
-        "⚠️Unfinish 在 Cell 中使用",
+        "在 Cell 中使用",
         "⚠️Unfinish 对比 SnapKit"
     ]
 
