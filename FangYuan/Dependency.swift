@@ -9,7 +9,9 @@
 import UIKit
 
 /// 约束依赖
-class Dependency {
+class Dependency : Hashable {
+    
+    static var DependencyHash = 0
 
     /// 约束来源于那个视图
     weak var from: UIView!
@@ -33,13 +35,22 @@ class Dependency {
         case RightLeft
         case TopBottom
     }
+    
+    var hashValue: Int
 
     init(from: UIView?, to: UIView?, direction: Dependency.Direction, value: CGFloat = 0) {
+        Dependency.DependencyHash += 1
+        self.hashValue = Dependency.DependencyHash
         self.from = from
         self.to = to
         self.direction = direction
         self.value = value
     }
+    
+}
+
+func ==(lhs: Dependency, rhs: Dependency) -> Bool {
+    return lhs.hashValue == rhs.hashValue
 }
 
 extension Dependency : CustomStringConvertible {

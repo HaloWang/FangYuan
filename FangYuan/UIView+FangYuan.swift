@@ -229,5 +229,73 @@ internal extension UIView {
             rulerY.c = newValue
         }
     }
-
 }
+
+// MARK: - Using FangYuan
+extension UIView {
+
+    // TODO: 性能优化
+    var subviewUsingFangYuan : Bool {
+        for subview in subviews {
+            if subview.usingFangYuan {
+                return true
+            }
+        }
+        return false
+    }
+
+    /// 使用 FangYuan 的 subview
+    var usingFangYuanSubviews : [UIView] {
+        return subviews.filter { subview in
+            return subview.usingFangYuan
+        }
+    }
+
+    // TODO: 这个算法还是应该被 UT 一下
+    // TODO: 大量的 if (!=) = 会不会有问题？
+    /// 在约束已经求解完全的情况下进行 frame 的设置
+    func layoutWithFangYuan() {
+        //  X
+        let newX = rulerX.a
+        if newX != nil {
+            if frame.origin.x != newX {
+                frame.origin.x = newX
+            }
+            let newWidth = rulerX.b ?? superview!.fy_width - newX - rulerX.c
+            if frame.size.width != newWidth {
+                frame.size.width = newWidth
+            }
+        } else {
+            let newX = superview!.fy_width - rulerX.b - rulerX.c
+            if frame.origin.x != newX {
+                frame.origin.x = newX
+            }
+            let newWidth = rulerX.b
+            if frame.size.width != newWidth {
+                frame.size.width = newWidth
+            }
+        }
+
+        //  Y
+        let newY = rulerY.a
+        if newY != nil {
+            if frame.origin.y != newY {
+                frame.origin.y = newY
+            }
+            let newHeight = rulerY.b ?? superview!.fy_height - newY - rulerY.c
+            if frame.size.height != newHeight {
+                frame.size.height = newHeight
+            }
+        } else {
+            let newY = superview!.fy_height - rulerY.b - rulerY.c
+            if frame.origin.y != newY {
+                frame.origin.y = newY
+            }
+            let newHeight = rulerY.b
+            if frame.size.height != newHeight {
+                frame.size.height = newHeight
+            }
+        }
+    }
+}
+

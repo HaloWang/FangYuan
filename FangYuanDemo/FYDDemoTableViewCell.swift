@@ -66,7 +66,7 @@ class FYDDemoTableViewCell: UITableViewCell {
             .fy_left(avatarImageView.chainRight + 5)
             .fy_top(timeLabel.chainBottom + 5)
             .fy_right(15)
-            .fy_bottom(25)
+            .fy_bottom(likeButton.chainTop + 10)
         
         likeButton
             .fy_right(15)

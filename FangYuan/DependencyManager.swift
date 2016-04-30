@@ -1,14 +1,5 @@
-//
-//  FangYuanManager.swift
-//  Pods
-//
-//  Created by 王策 on 16/4/11.
-//
-//
 
 import UIKit
-
-/// 什么时候移除无效的约束？
 
 /// 约束依赖管理者
 class DependencyManager {
@@ -20,9 +11,7 @@ class DependencyManager {
     var dependencyHolder: Dependency?
     /// 推入约束
     func push(from: UIView?, to: UIView?, direction: Dependency.Direction, value: CGFloat = 0) {
-        print("Push")
         dependencyHolder = Dependency(from: from, to: to, direction: direction, value: value)
-        print(dependencyHolder!)
     }
     /// 推出约束
     func pop(from: UIView?, to: UIView?, direction: Dependency.Direction, value: CGFloat = 0) {
@@ -31,13 +20,17 @@ class DependencyManager {
             return
         }
         
-        print("Pop")
+        // TODO: Check direction
+        guard direction == _h.direction else {
+            print("⚠️TODO: check direction")
+            return
+        }
+        
         _h.to        = to
         _h.value     = value
         _h.direction = direction
         
         dependencies.append(_h)
-        print(_h)
         dependencyHolder = nil
     }
     
@@ -71,7 +64,7 @@ class DependencyManager {
         }
     }
     
-    // TODO: 性能优化
+    // TODO: Performence
     func hasUnSetDependencies(view: UIView) -> Bool {
 
         //  正在设定某 view.subviews
@@ -96,7 +89,25 @@ class DependencyManager {
         return false
     }
 
-    func setDependencyFrom(view: UIView) {
+    // TODO: Quick map?
+    func layout(view: UIView) {
+        if hasUnSetDependencies(view) {
+            while hasUnSetDependencies(view) {
+                _ = view.usingFangYuanSubviews.map { subview in
+                    if allConstraintDefined(subview) {
+                        subview.layoutWithFangYuan()
+                        setDependency(subview)
+                    }
+                }
+            }
+        } else {
+            _ = view.usingFangYuanSubviews.map { subview in
+                subview.layoutWithFangYuan()
+            }
+        }
+    }
+
+    func setDependency(view: UIView) {
 
         // 抽取所有需要设定的约束
         let _dependenciesShowP = dependencies.filter { dependency in
@@ -123,6 +134,11 @@ class DependencyManager {
     }
 
     // TODO: hasSet 这个点好像有点问题，这些约束只用装载一次吗？
+    // TODO: 很严重，我完全不知道这段代码的意义！
+    // TODO: 而且加上了之后，还出现了意想不到的问题！
+    // TODO: 如何重新装载约束？
+    // TODO: 动画？
+    // TODO: 和其他布局库的兼容性？
     func allDepNeedReset() {
         _ = dependencies.map { dep in
             dep.hasSet = false
@@ -130,6 +146,7 @@ class DependencyManager {
     }
 
     func allConstraintDefined(view: UIView) -> Bool {
+        removeUselessDep()
         return dependencies.filter { dep in
             dep.to == view
         }.filter { dep in
@@ -163,8 +180,8 @@ extension UIView {
     /// 交换实现
     class func _swizzle_layoutSubviews() {
         dispatch_once(&swizzleToken) {
-            let originalSelector = #selector(UIView.layoutSubviews)
-            let swizzledSelector = #selector(UIView._swizzle_imp_for_layoutSubviews)
+            let originalSelector = #selector(layoutSubviews)
+            let swizzledSelector = #selector(_swizzle_imp_for_layoutSubviews)
             let originalMethod   = class_getInstanceMethod(self, originalSelector)
             let swizzledMethod   = class_getInstanceMethod(self, swizzledSelector)
             method_exchangeImplementations(originalMethod, swizzledMethod)
@@ -173,95 +190,38 @@ extension UIView {
     
     func _swizzle_imp_for_layoutSubviews() {
         _swizzle_imp_for_layoutSubviews()
-        
         guard subviewUsingFangYuan else {
             return
         }
-
-        let dm = DependencyManager.sharedManager
-        dm.removeUselessDep()
-        
-        if dm.hasUnSetDependencies(self) {
-            while dm.hasUnSetDependencies(self) {
-                _ = usingFangYuanSubviews.map { subview in
-                    if dm.allConstraintDefined(subview) {
-                        subview.layoutWithFangYuan()
-                        dm.setDependencyFrom(subview)
-                    }
-                }
-            }
-        } else {
-            _ = usingFangYuanSubviews.map { subview in
-                subview.layoutWithFangYuan()
-            }
-        }
+        DependencyManager.sharedManager.layout(self)
+        // TODO: 这里这样使用会不会有什么问题？
+//        dispatch_async(dispatch_get_main_queue()) { [weak self] in
+//            guard let weakSelf = self else {
+//                return
+//            }
+//            DependencyManager.sharedManager.layout(weakSelf)
+//        }
     }
 }
 
-// MARK: - Using FangYuan
-extension UIView {
-    
-    // TODO: 性能优化
-    var subviewUsingFangYuan : Bool {
-        for subview in subviews {
-            if subview.usingFangYuan {
-                return true
-            }
-        }
-        return false
+extension UIViewController {
+    override public class func initialize() {
+        _swizzle_viewDidDisappear()
     }
     
-    /// 使用 FangYuan 的 subview
-    var usingFangYuanSubviews : [UIView] {
-        return subviews.filter { subview in
-            return subview.usingFangYuan
+    class func _swizzle_viewDidDisappear() {
+        dispatch_once(&swizzleToken) {
+            let originalSelector = #selector(viewDidDisappear(_:))
+            let swizzledSelector = #selector(_swizzle_imp_for_viewDidDisappear(_:))
+            let originalMethod   = class_getInstanceMethod(self, originalSelector)
+            let swizzledMethod   = class_getInstanceMethod(self, swizzledSelector)
+            method_exchangeImplementations(originalMethod, swizzledMethod)
         }
     }
-
-    // TODO: 这个算法还是应该被 UT 一下
-    // TODO: 大量的 if (!=) = 会不会有问题？
-    /// 在约束已经求解完全的情况下进行 frame 的设置
-    func layoutWithFangYuan() {
-        //  X
-        let newX = rulerX.a
-        if newX != nil {
-            if frame.origin.x != newX {
-                frame.origin.x = newX
-            }
-            let newWidth = rulerX.b ?? superview!.fy_width - newX - rulerX.c
-            if frame.size.width != newWidth {
-                frame.size.width = newWidth
-            }
-        } else {
-            let newX = superview!.fy_width - rulerX.b - rulerX.c
-            if frame.origin.x != newX {
-                frame.origin.x = newX
-            }
-            let newWidth = rulerX.b
-            if frame.size.width != newWidth {
-                frame.size.width = newWidth
-            }
-        }
-
-        //  Y
-        let newY = rulerY.a
-        if newY != nil {
-            if frame.origin.y != newY {
-                frame.origin.y = newY
-            }
-            let newHeight = rulerY.b ?? superview!.fy_height - newY - rulerY.c
-            if frame.size.height != newHeight {
-                frame.size.height = newHeight
-            }
-        } else {
-            let newY = superview!.fy_height - rulerY.b - rulerY.c
-            if frame.origin.y != newY {
-                frame.origin.y = newY
-            }
-            let newHeight = rulerY.b
-            if frame.size.height != newHeight {
-                frame.size.height = newHeight
-            }
-        }
+    
+    func _swizzle_imp_for_viewDidDisappear(animated: Bool) {
+        _swizzle_imp_for_viewDidDisappear(animated)
+        DependencyManager.sharedManager.removeUselessDep()
     }
 }
+
