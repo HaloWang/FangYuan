@@ -1,5 +1,6 @@
 
 import UIKit
+import FangYuan
 import Halo
 
 class FYDChainViewController: UIViewController {
@@ -21,27 +22,22 @@ class FYDChainViewController: UIViewController {
 
         chainBottomView
             .text("chainBottomView")
-            .textAlignmentCenter()
-            .backgroundColor(RGB(200, 255, 200))
-            .superView(view)
         
         chainLeftView
             .text("chainLeftView")
-            .textAlignmentCenter()
-            .backgroundColor(RGB(200, 255, 200))
-            .superView(view)
         
         chainTopView
             .text("chainTopView")
-            .textAlignmentCenter()
-            .backgroundColor(RGB(200, 255, 200))
-            .superView(view)
         
         chainRightView
             .text("chainRightView")
-            .textAlignmentCenter()
-            .backgroundColor(RGB(200, 255, 200))
-            .superView(view)
+        
+        _ = [chainBottomView, chainLeftView, chainTopView, chainRightView].map { label in
+            label
+                .textAlignmentCenter()
+                .backgroundColor(RGB(200, 255, 200))
+                .superView(view)
+        }
 
         chainBottomView
             .fy_top(baseView.chainBottom + 100)

@@ -8,6 +8,7 @@
 
 import UIKit
 import FangYuan
+import Halo
 
 class FYDRectViewController: UIViewController {
 
@@ -21,9 +22,13 @@ class FYDRectViewController: UIViewController {
         rectView.backgroundColor = UIColor(red: 1, green: 0.8, blue: 0.8, alpha: 1)
         rectView.frame = CGRect(x: 50, y: 200, width: 200, height: 200)
 
-        rectView.addSubview(view)
+        rectView.addSubview(panView)
         panView.backgroundColor = UIColor(red: 1, green: 0.7, blue: 0.1, alpha: 1)
-        panView.fy_bottom(-10).fy_height(20).fy_right(-10).fy_width(20)
+        panView
+            .fy_bottom(-10)
+            .fy_height(20)
+            .fy_right(-10)
+            .fy_width(20)
         panView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(FYDRectViewController.pan(_:))))
 
     }

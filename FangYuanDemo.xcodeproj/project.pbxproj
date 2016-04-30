@@ -93,9 +93,9 @@
 			children = (
 				096A97721CAFA84A00497C1E /* AppDelegate.swift */,
 				096A97741CAFA84A00497C1E /* FYDViewController.swift */,
-				09F2EB6A1CD50AC800E4EA17 /* FYDChainViewController.swift */,
-				0996DCF21CB9478A00612218 /* FYDReactiveCodeViewController.swift */,
 				09F439101CD0BA400058029F /* FYDRectViewController.swift */,
+				0996DCF21CB9478A00612218 /* FYDReactiveCodeViewController.swift */,
+				09F2EB6A1CD50AC800E4EA17 /* FYDChainViewController.swift */,
 				0932F1E11CB4F8F4009596F6 /* FYDDemoViewController.swift */,
 				0932F1E31CB4F90B009596F6 /* FYDDemoTableViewController.swift */,
 				0932F1E51CB50205009596F6 /* FYDVSAutoLayoutViewController.swift */,
