@@ -55,10 +55,6 @@ extension FYDDemoTableViewController : UITableViewDataSource {
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(FYDDemoTableViewCell)) as! FYDDemoTableViewCell
-        let _row = indexPath.row
-        cell.nickNameLabel.text = "昵称 \(_row)"
-        cell.timeLabel.text = "时间 \(_row)"
-        cell.messageTextView.text = "文本内容 文本内容 文本内容 文本内容 文本内容 文本内容 文本内容 文本内容 文本内容 "
         return cell
     }
 
