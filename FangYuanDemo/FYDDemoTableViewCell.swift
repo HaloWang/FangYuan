@@ -9,7 +9,7 @@
 import UIKit
 
 class FYDDemoTableViewCell: UITableViewCell {
-
+    
     lazy var avatarImageView = UIImageView()
     lazy var nickNameLabel   = UILabel()
     lazy var timeLabel       = UILabel()
@@ -39,9 +39,9 @@ class FYDDemoTableViewCell: UITableViewCell {
         messageTextView.scrollEnabled      = false
         
         likeButton.backgroundColor         = UIColor.whiteColor()
-        likeButton.layer.cornerRadius = 3
-        likeButton.layer.borderWidth = 0.5
-        likeButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+        likeButton.layer.cornerRadius      = 3
+        likeButton.layer.borderWidth       = 0.5
+        likeButton.layer.borderColor       = UIColor.lightGrayColor().CGColor
         
         //  昵称在头像的右边
         //  昵称的左边于头像的右边距离为 5
@@ -81,10 +81,11 @@ class FYDDemoTableViewCell: UITableViewCell {
             .fy_top(5)
             .fy_width(_avatarImageViewRadius * 2)
             .fy_height(_avatarImageViewRadius * 2)
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
 }

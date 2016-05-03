@@ -3,6 +3,11 @@ import UIKit
 
 /// 约束依赖管理者
 class DependencyManager {
+
+    private init() {
+
+    }
+
     /// 单例
     static let sharedManager = DependencyManager()
     /// 全部约束
@@ -22,6 +27,7 @@ class DependencyManager {
         
         // TODO: Check direction，这里还要做一下安全检查
         guard direction == _h.direction else {
+            print("⚠️ Whoops!")
             return
         }
         
@@ -193,7 +199,7 @@ extension UIView {
             return
         }
         DependencyManager.sharedManager.layout(self)
-        // TODO: 这里这样使用会不会有什么问题？
+        //  TODO: 这里这样使用会不会有什么问题？
 //        dispatch_async(dispatch_get_main_queue()) { [weak self] in
 //            guard let weakSelf = self else {
 //                return

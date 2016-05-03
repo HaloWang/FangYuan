@@ -11,24 +11,29 @@ class FYDDemoTableViewController: UIViewController {
 
     lazy var tableView = UITableView(frame: UIScreen.mainScreen().bounds, style: UITableViewStyle.Plain)
     lazy var heightArray = [CGFloat]()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.addSubview(tableView)
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.registerClass(FYDDemoTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(FYDDemoTableViewCell))
-        tableView.tableFooterView = UIView()
-
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nil, bundle: nil)
         dispatch_async(dispatch_get_main_queue()) {
             for _ in 0...99 {
                 self.heightArray.append(75 + CGFloat(arc4random() % 200))
             }
             self.tableView.reloadData()
         }
-
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.addSubview(tableView)
+        tableView.dataSource      = self
+        tableView.delegate        = self
+        tableView.tableFooterView = UIView()
+        tableView.registerClass(FYDDemoTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(FYDDemoTableViewCell))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "帧率监视", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(FYDDemoTableViewController.changeStatus))
-
     }
 
     func changeStatus() {
