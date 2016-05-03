@@ -39,7 +39,6 @@ class FYDDemoTableViewCell: UITableViewCell {
         messageTextView.scrollEnabled      = false
         
         likeButton.backgroundColor         = UIColor.whiteColor()
-        likeButton.setTitle("♥️", forState: UIControlState.Normal)
         likeButton.layer.cornerRadius = 3
         likeButton.layer.borderWidth = 0.5
         likeButton.layer.borderColor = UIColor.lightGrayColor().CGColor
@@ -68,6 +67,8 @@ class FYDDemoTableViewCell: UITableViewCell {
             .fy_right(15)
             .fy_bottom(likeButton.chainTop + 10)
         
+        //  距离父视图 (Cell) 右边的距离为 15
+        //  距离父视图底部的距离为 2.5
         likeButton
             .fy_right(15)
             .fy_width(60)

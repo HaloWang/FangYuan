@@ -20,9 +20,8 @@ class DependencyManager {
             return
         }
         
-        // TODO: Check direction
+        // TODO: Check direction，这里还要做一下安全检查
         guard direction == _h.direction else {
-            print("⚠️TODO: check direction")
             return
         }
         

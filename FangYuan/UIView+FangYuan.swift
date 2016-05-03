@@ -54,6 +54,7 @@ public extension UIView {
 
     /// 设定某个 UIView 左边距离其 superview 左边的距离，相当于 x
     func fy_left(left: CGFloat) -> Self {
+        setNeedsLayout()
         usingFangYuan = true
         fy_left = left
         DependencyManager.sharedManager.pop(nil, to: self, direction: .RightLeft, value: left)
@@ -62,6 +63,7 @@ public extension UIView {
 
     /// 设定某个 UIView 的宽度，相当于 width
     func fy_width(width: CGFloat) -> Self {
+        setNeedsLayout()
         usingFangYuan = true
         fy_width = width
         return self
@@ -69,6 +71,7 @@ public extension UIView {
 
     /// 设定某个 UIView 右边距离其 superview 右边的距离
     func fy_right(right: CGFloat) -> Self {
+        setNeedsLayout()
         usingFangYuan = true
         fy_right = right
         DependencyManager.sharedManager.pop(nil, to: self, direction: .LeftRigt, value: right)
@@ -79,6 +82,7 @@ public extension UIView {
 
     /// 设定某个 UIView 顶部距离其 superview 顶部的距离，相当于 y
     func fy_top(top: CGFloat) -> Self {
+        setNeedsLayout()
         usingFangYuan = true
         fy_top = top
         DependencyManager.sharedManager.pop(nil, to: self, direction: .BottomTop, value: top)
@@ -87,6 +91,7 @@ public extension UIView {
 
     /// 设定某个 UIView 的高度，相当于 height
     func fy_height(height: CGFloat) -> Self {
+        setNeedsLayout()
         usingFangYuan = true
         fy_height = height
         return self
@@ -94,6 +99,7 @@ public extension UIView {
 
     /// 设定某个 UIView 底部距离其 superview 底部的距离
     func fy_bottom(bottom: CGFloat) -> Self {
+        setNeedsLayout()
         usingFangYuan = true
         fy_bottom = bottom
         DependencyManager.sharedManager.pop(nil, to: self, direction: .TopBottom, value: bottom)
