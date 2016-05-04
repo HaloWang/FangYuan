@@ -104,7 +104,7 @@ class DependencyManager {
                 _ = view.usingFangYuanSubviews.map { subview in
                     if allConstraintDefined(subview) {
                         subview.layoutWithFangYuan()
-                        setDependency(subview)
+                        loadDependenciesOf(subview)
                     }
                 }
             }
@@ -115,7 +115,7 @@ class DependencyManager {
         }
     }
 
-    func setDependency(view: UIView) {
+    func loadDependenciesOf(view: UIView) {
 
         // 抽取所有需要设定的约束
         let _dependenciesShowP = dependencies.filter { dependency in
@@ -160,17 +160,6 @@ class DependencyManager {
         }.filter { dep in
             dep.hasSet == false
         }.count == 0
-    }
-
-    func managering(view: UIView) -> Bool {
-        for subview in view.subviews {
-            for dep in dependencies {
-                if dep.from == subview {
-                    return true
-                }
-            }
-        }
-        return false
     }
 }
 
