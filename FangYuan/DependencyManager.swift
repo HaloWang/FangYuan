@@ -154,6 +154,7 @@ class DependencyManager {
     }
 
     func allConstraintDefined(view: UIView) -> Bool {
+        // TODO: 这块儿的代码写的不好！务必改一下！原本是一个取值的东西，怎么还能在里面给变量赋值呢？！
         removeUselessDep()
         return dependencies.filter { dep in
             dep.to == view
