@@ -45,9 +45,12 @@ class DependencyManager {
     }
 
     func layouting(view: UIView) -> Bool {
-        return dependencies.filter { dependency in
-            dependency.from.superview == view
-        }.count != 0
+        for dep in dependencies {
+            if dep.from.superview == view {
+                return true
+            }
+        }
+        return false
     }
 
     var hasUnSetDependencies: Bool {
