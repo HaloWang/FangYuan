@@ -6,7 +6,6 @@ target 'FangYuanDemo' do
     pod 'Halo'
     pod 'SnapKit'
     pod 'KMCGeigerCounter'
-    pod 'MJRefresh'
     pod 'Reveal-iOS-SDK', :configurations => ["Debug"]
 end
 
