@@ -13,7 +13,7 @@ import CoreGraphics
 /// 尺
 ///
 /// 作为 X 轴或 Y 轴的约束
-internal class Ruler {
+class Ruler {
 
     /// 段
     ///

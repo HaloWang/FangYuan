@@ -119,7 +119,7 @@ public extension UIView {
 
 // TODO: 或许方圆可以变成一个协议？FangAble？😁然后为 CALayer 提供？PS: 主要是觉得这个文件所含有的内容越来越少了
 
-internal extension UIView {
+extension UIView {
 
     // TODO: 这里也可以做成 JSPatch 那样，使用某个 object 作为 <##>
 
@@ -174,7 +174,7 @@ internal extension UIView {
 
 // TODO: 也许可以作为将来 FangYuanAble 的协议？
 
-internal extension UIView {
+extension UIView {
 
     // MARK: X
 
