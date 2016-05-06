@@ -3,13 +3,9 @@ import UIKit
 
 /// 约束依赖管理者
 class DependencyManager {
-
-    private init() {
-
-    }
-
     /// 单例
     static let sharedManager = DependencyManager()
+    private init() {}
     /// 全部约束
     var dependencies = [Dependency]()
     /// 刚刚压入的约束
