@@ -1,9 +1,9 @@
 //
 //  Dependency.swift
-//  Pods
+//  Halo
 //
-//  Created by 王策 on 16/4/26.
-//
+//  Created by 王策 on 16/5/6.
+//  Copyright © 2016年 WangCe. All rights reserved.
 //
 
 import UIKit

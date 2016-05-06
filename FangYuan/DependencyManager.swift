@@ -1,3 +1,10 @@
+//
+//  DependencyManager.swift
+//  Halo
+//
+//  Created by 王策 on 16/5/6.
+//  Copyright © 2016年 WangCe. All rights reserved.
+//
 
 import UIKit
 
