@@ -175,13 +175,13 @@ extension DependencyManager {
             let _value = dependency.value
             switch dependency.direction {
             case .BottomTop:
-                _to.rulerY.a = _from.fy_top + _from.fy_height + _value
+                _to.rulerY.a = _from.frame.origin.y + _from.frame.height + _value
             case .TopBottom:
-                _to.rulerY.c = _from.superview!.fy_height - _from.fy_top + _value
+                _to.rulerY.c = _from.superview!.frame.height - _from.frame.origin.y + _value
             case .RightLeft:
-                _to.rulerX.a = _from.fy_left + _from.fy_width + _value
+                _to.rulerX.a = _from.frame.origin.x + _from.frame.width + _value
             case .LeftRigt:
-                _to.rulerX.c = _from.superview!.fy_width - _from.fy_left + _value
+                _to.rulerX.c = _from.superview!.frame.width - _from.frame.origin.x + _value
             }
             dependency.hasSet = true
         }
@@ -225,58 +225,5 @@ extension DependencyManager {
         
         singleton.dependencies.insert(holder)
         singleton.dependencyHolder = nil
-    }
-}
-
-var swizzleToken: dispatch_once_t = 0
-
-// MARK: - Swizzling
-extension UIView {
-    /// 不允许调用 load 方法了
-    override public class func initialize() {
-        _swizzle_layoutSubviews()
-    }
-    /// 交换实现
-    class func _swizzle_layoutSubviews() {
-        dispatch_once(&swizzleToken) {
-            let originalSelector = #selector(layoutSubviews)
-            let swizzledSelector = #selector(_swizzle_imp_for_layoutSubviews)
-            let originalMethod   = class_getInstanceMethod(self, originalSelector)
-            let swizzledMethod   = class_getInstanceMethod(self, swizzledSelector)
-            method_exchangeImplementations(originalMethod, swizzledMethod)
-        }
-    }
-    
-    func _swizzle_imp_for_layoutSubviews() {
-        _swizzle_imp_for_layoutSubviews()
-        guard subviewUsingFangYuan else {
-            return
-        }
-        DependencyManager.layout(self)
-    }
-}
-
-extension UIButton {
-    
-    override public class func initialize() {
-        _swizzle_layoutSubviews()
-    }
-
-    override class func _swizzle_layoutSubviews() {
-        dispatch_once(&swizzleToken) {
-            let originalSelector = #selector(layoutSubviews)
-            let swizzledSelector = #selector(_swizzle_imp_for_layoutSubviews)
-            let originalMethod   = class_getInstanceMethod(self, originalSelector)
-            let swizzledMethod   = class_getInstanceMethod(self, swizzledSelector)
-            method_exchangeImplementations(originalMethod, swizzledMethod)
-        }
-    }
-    
-    override func _swizzle_imp_for_layoutSubviews() {
-        _swizzle_imp_for_layoutSubviews()
-        guard subviewUsingFangYuan else {
-            return
-        }
-        DependencyManager.layout(self)
     }
 }

@@ -47,7 +47,6 @@ public extension UIView {
 
 // MARK: - Chainable Method
 
-
 public extension UIView {
 
     // MARK: X
@@ -56,7 +55,7 @@ public extension UIView {
     func fy_left(left: CGFloat) -> Self {
         setNeedsLayout()
         usingFangYuan = true
-        fy_left = left
+        rulerX.a = left
         DependencyManager.popDependencyTo(self, direction: .RightLeft, value: left)
         return self
     }
@@ -65,7 +64,7 @@ public extension UIView {
     func fy_width(width: CGFloat) -> Self {
         setNeedsLayout()
         usingFangYuan = true
-        fy_width = width
+        rulerX.b = width
         return self
     }
 
@@ -73,7 +72,7 @@ public extension UIView {
     func fy_right(right: CGFloat) -> Self {
         setNeedsLayout()
         usingFangYuan = true
-        fy_right = right
+        rulerX.c = right
         DependencyManager.popDependencyTo(self, direction: .LeftRigt, value: right)
         return self
     }
@@ -84,7 +83,7 @@ public extension UIView {
     func fy_top(top: CGFloat) -> Self {
         setNeedsLayout()
         usingFangYuan = true
-        fy_top = top
+        rulerY.a = top
         DependencyManager.popDependencyTo(self, direction: .BottomTop, value: top)
         return self
     }
@@ -93,7 +92,7 @@ public extension UIView {
     func fy_height(height: CGFloat) -> Self {
         setNeedsLayout()
         usingFangYuan = true
-        fy_height = height
+        rulerY.b = height
         return self
     }
 
@@ -101,7 +100,7 @@ public extension UIView {
     func fy_bottom(bottom: CGFloat) -> Self {
         setNeedsLayout()
         usingFangYuan = true
-        fy_bottom = bottom
+        rulerY.c = bottom
         DependencyManager.popDependencyTo(self, direction: .TopBottom, value: bottom)
         return self
     }
@@ -134,8 +133,9 @@ extension UIView {
     }
     
     class AssociateObject {
-        let rulerX = Ruler()
-        let rulerY = Ruler()
+        lazy var rulerX = Ruler()
+        lazy var rulerY = Ruler()
+        var usingFangYuan = false
     }
     
     var ao : AssociateObject {
@@ -162,81 +162,45 @@ extension UIView {
     /// 该 View 是否在使用 FangYuan
     var usingFangYuan: Bool {
         get {
-            return objc_getAssociatedObject(self, &AssociatedKeys.kUsingFangYuan) != nil
+            return ao.usingFangYuan
         }
         set {
-            objc_setAssociatedObject(self, &AssociatedKeys.kUsingFangYuan, newValue ? "" : nil, .OBJC_ASSOCIATION_RETAIN)
+            ao.usingFangYuan = newValue
         }
     }
 }
 
-// MARK: - _private Computed Properties
-
-// TODO: 也许可以作为将来 FangYuanAble 的协议？
-
-extension UIView {
-
-    // MARK: X
-
-    var fy_left: CGFloat {
-        get {
-            return frame.origin.x
-        }
-        set {
-            rulerX.a = newValue
-        }
-    }
-
-    var fy_width: CGFloat {
-        get {
-            return frame.size.width
-        }
-        set {
-            rulerX.b = newValue
-        }
-    }
-
-    var fy_right: CGFloat {
-        get {
-            return superview!.fy_width - chainRight
-        }
-        set {
-            rulerX.c = newValue
-        }
-    }
-
-    // MARK: Y
-
-    var fy_top: CGFloat {
-        get {
-            return frame.origin.y
-        }
-        set {
-            rulerY.a = newValue
-        }
-    }
-
-    var fy_height: CGFloat {
-        get {
-            return frame.size.height
-        }
-        set {
-            rulerY.b = newValue
-        }
-    }
-
-    var fy_bottom: CGFloat {
-        get {
-            return superview!.fy_height - chainBottom
-        }
-        set {
-            rulerY.c = newValue
-        }
-    }
-}
 
 // MARK: - Using FangYuan
 extension UIView {
+    
+    private struct once {
+        static var token: dispatch_once_t = 0
+    }
+    
+    /// 不允许调用 load 方法了
+    override public class func initialize() {
+        dispatch_once(&once.token) {
+            _swizzle_layoutSubviews()
+        }
+    }
+    
+    /// 交换实现
+    class func _swizzle_layoutSubviews() {
+        let originalSelector = #selector(layoutSubviews)
+        let swizzledSelector = #selector(_swizzle_imp_for_layoutSubviews)
+        let originalMethod   = class_getInstanceMethod(self, originalSelector)
+        let swizzledMethod   = class_getInstanceMethod(self, swizzledSelector)
+        method_exchangeImplementations(originalMethod, swizzledMethod)
+    }
+    
+    func _swizzle_imp_for_layoutSubviews() {
+        _swizzle_imp_for_layoutSubviews()
+        guard subviewUsingFangYuan else {
+            return
+        }
+        DependencyManager.layout(self)
+    }
 
     // TODO: 性能优化
     var subviewUsingFangYuan : Bool {
@@ -265,17 +229,17 @@ extension UIView {
             if frame.origin.x != newX {
                 frame.origin.x = newX
             }
-            let newWidth = rulerX.b ?? superview!.fy_width - newX - rulerX.c
+            let newWidth = rulerX.b ?? superview!.frame.width - newX - rulerX.c
             if frame.size.width != newWidth {
                 frame.size.width = newWidth
             }
         } else {
-            let newX = superview!.fy_width - rulerX.b - rulerX.c
+            let newX = superview!.frame.width - rulerX.b - rulerX.c
             if frame.origin.x != newX {
                 frame.origin.x = newX
             }
             let newWidth = rulerX.b
-            if frame.size.width != newWidth {
+            if frame.width != newWidth {
                 frame.size.width = newWidth
             }
         }
@@ -286,20 +250,48 @@ extension UIView {
             if frame.origin.y != newY {
                 frame.origin.y = newY
             }
-            let newHeight = rulerY.b ?? superview!.fy_height - newY - rulerY.c
-            if frame.size.height != newHeight {
+            let newHeight = rulerY.b ?? superview!.frame.height - newY - rulerY.c
+            if frame.height != newHeight {
                 frame.size.height = newHeight
             }
         } else {
-            let newY = superview!.fy_height - rulerY.b - rulerY.c
+            let newY = superview!.frame.height - rulerY.b - rulerY.c
             if frame.origin.y != newY {
                 frame.origin.y = newY
             }
             let newHeight = rulerY.b
-            if frame.size.height != newHeight {
+            if frame.height != newHeight {
                 frame.size.height = newHeight
             }
         }
     }
 }
 
+extension UIButton {
+    
+    private struct uibutton_once {
+        static var token: dispatch_once_t = 0
+    }
+    
+    override public class func initialize() {
+        dispatch_once(&uibutton_once.token) {
+            _swizzle_layoutSubviews()
+        }
+    }
+    
+    override class func _swizzle_layoutSubviews() {
+        let originalSelector = #selector(layoutSubviews)
+        let swizzledSelector = #selector(_swizzle_imp_for_layoutSubviews)
+        let originalMethod   = class_getInstanceMethod(self, originalSelector)
+        let swizzledMethod   = class_getInstanceMethod(self, swizzledSelector)
+        method_exchangeImplementations(originalMethod, swizzledMethod)
+    }
+    
+    override func _swizzle_imp_for_layoutSubviews() {
+        _swizzle_imp_for_layoutSubviews()
+        guard subviewUsingFangYuan else {
+            return
+        }
+        DependencyManager.layout(self)
+    }
+}
