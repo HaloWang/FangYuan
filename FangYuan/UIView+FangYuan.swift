@@ -16,7 +16,7 @@ public extension UIView {
     ///
     /// someView.fy_right(self.chainLeft)
     var chainLeft: CGFloat {
-        DependencyManager.sharedManager.push(self, to: nil, direction: .LeftRigt)
+        DependencyManager.pushDependencyFrom(self, direction: .LeftRigt)
         return 0
     }
 
@@ -24,7 +24,7 @@ public extension UIView {
     ///
     /// someView.fy_left(self.chainRight)
     var chainRight: CGFloat {
-        DependencyManager.sharedManager.push(self, to: nil, direction: .RightLeft)
+        DependencyManager.pushDependencyFrom(self, direction: .RightLeft)
         return 0
     }
 
@@ -32,7 +32,7 @@ public extension UIView {
     ///
     /// someView.fy_top(self.chainBottom)
     var chainBottom: CGFloat {
-        DependencyManager.sharedManager.push(self, to: nil, direction: .BottomTop)
+        DependencyManager.pushDependencyFrom(self, direction: .BottomTop)
         return 0
     }
 
@@ -40,7 +40,7 @@ public extension UIView {
     ///
     /// someView.fy_bottom(self.chainTop)
     var chainTop: CGFloat {
-        DependencyManager.sharedManager.push(self, to: nil, direction: .TopBottom)
+        DependencyManager.pushDependencyFrom(self, direction: .TopBottom)
         return 0
     }
 }
@@ -57,7 +57,7 @@ public extension UIView {
         setNeedsLayout()
         usingFangYuan = true
         fy_left = left
-        DependencyManager.sharedManager.pop(nil, to: self, direction: .RightLeft, value: left)
+        DependencyManager.popDependencyTo(self, direction: .RightLeft, value: left)
         return self
     }
 
@@ -74,7 +74,7 @@ public extension UIView {
         setNeedsLayout()
         usingFangYuan = true
         fy_right = right
-        DependencyManager.sharedManager.pop(nil, to: self, direction: .LeftRigt, value: right)
+        DependencyManager.popDependencyTo(self, direction: .LeftRigt, value: right)
         return self
     }
 
@@ -85,7 +85,7 @@ public extension UIView {
         setNeedsLayout()
         usingFangYuan = true
         fy_top = top
-        DependencyManager.sharedManager.pop(nil, to: self, direction: .BottomTop, value: top)
+        DependencyManager.popDependencyTo(self, direction: .BottomTop, value: top)
         return self
     }
 
@@ -102,7 +102,7 @@ public extension UIView {
         setNeedsLayout()
         usingFangYuan = true
         fy_bottom = bottom
-        DependencyManager.sharedManager.pop(nil, to: self, direction: .TopBottom, value: bottom)
+        DependencyManager.popDependencyTo(self, direction: .TopBottom, value: bottom)
         return self
     }
 
@@ -169,8 +169,6 @@ internal extension UIView {
         }
     }
 }
-
-
 
 // MARK: - _private Computed Properties
 
