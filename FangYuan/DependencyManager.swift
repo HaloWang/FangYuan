@@ -31,6 +31,23 @@ class DependencyManager {
         }
         return false
     }
+    
+    var hasUnSetDependencies: Bool {
+        return dependencies.filter { dependency in
+            dependency.hasSet == false
+            }.count != 0
+    }
+    
+    var unsetDeps : [Dependency] {
+        return dependencies.filter {
+            !$0.hasSet
+        }
+    }
+    
+    var hasDependencies: Bool {
+        let _has = dependencies.count != 0
+        return _has
+    }
 }
 
 // MARK: - Private Methods
@@ -103,12 +120,7 @@ extension DependencyManager {
             }
         }
     }
-    
-    var hasDependencies: Bool {
-        let _has = dependencies.count != 0
-        return _has
-    }
-    
+
     func layouting(view: UIView) -> Bool {
         for dep in dependencies {
             if dep.from.superview == view {
@@ -116,18 +128,6 @@ extension DependencyManager {
             }
         }
         return false
-    }
-    
-    var hasUnSetDependencies: Bool {
-        return dependencies.filter { dependency in
-            dependency.hasSet == false
-            }.count != 0
-    }
-    
-    var unsetDeps : [Dependency] {
-        return dependencies.filter {
-            !$0.hasSet
-        }
     }
     
     func hasUnSetDependencies(view: UIView) -> Bool {
@@ -225,12 +225,10 @@ var swizzleToken: dispatch_once_t = 0
 
 // MARK: - Swizzling
 extension UIView {
-    
     /// 不允许调用 load 方法了
     override public class func initialize() {
         _swizzle_layoutSubviews()
     }
-
     /// 交换实现
     class func _swizzle_layoutSubviews() {
         dispatch_once(&swizzleToken) {
