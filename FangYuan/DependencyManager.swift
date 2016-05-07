@@ -163,6 +163,7 @@ private extension DependencyManager {
 // MARK: Assistant
 private extension DependencyManager {
     
+    // TODO: 这里是不是可以用上 Set ?
     func removeDuplicateDependencyOf(view:UIView, at direction:Dependency.Direction) {
         _ = dependencies.map { dep in
             if dep.to == view && dep.direction == direction {
