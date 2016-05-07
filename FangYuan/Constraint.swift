@@ -1,5 +1,5 @@
 //
-//  Dependency.swift
+//  Constraint.swift
 //  Halo
 //
 //  Created by 王策 on 16/5/6.
@@ -8,16 +8,16 @@
 
 import UIKit
 
-func ==(lhs: Dependency, rhs: Dependency) -> Bool {
+func ==(lhs: Constraint, rhs: Constraint) -> Bool {
     return lhs.hashValue == rhs.hashValue
 }
 
 /// 约束依赖
-class Dependency: Hashable {
+class Constraint: Hashable {
 
     let hashValue: Int
 
-    static var DependencyHash = 0
+    static var ConstraintHash = 0
 
     /// 约束来源于那个视图
     weak var from: UIView!
@@ -42,9 +42,9 @@ class Dependency: Hashable {
         case TopBottom
     }
 
-    init(from: UIView?, to: UIView?, direction: Dependency.Direction, value: CGFloat = 0) {
-        Dependency.DependencyHash += 1
-        self.hashValue = Dependency.DependencyHash
+    init(from: UIView?, to: UIView?, direction: Constraint.Direction, value: CGFloat = 0) {
+        Constraint.ConstraintHash += 1
+        self.hashValue = Constraint.ConstraintHash
         self.from = from
         self.to = to
         self.direction = direction
@@ -52,8 +52,8 @@ class Dependency: Hashable {
     }
 }
 
-extension Dependency: CustomStringConvertible {
+extension Constraint: CustomStringConvertible {
     var description: String {
-        return "\nDependency:\n✅direction: \(direction) \n⏬from: \(from) \n⏫to: \(to)\nℹ️Value: \(value)\nℹ️Setted: \(hasSet)"
+        return "\nConstraint:\n✅direction: \(direction) \n⏬from: \(from) \n⏫to: \(to)\nℹ️Value: \(value)\nℹ️Setted: \(hasSet)"
     }
 }

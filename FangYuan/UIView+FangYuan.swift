@@ -16,7 +16,7 @@ public extension UIView {
     ///
     /// someView.fy_right(self.chainLeft)
     var chainLeft: CGFloat {
-        DependencyManager.getDependencyFrom(self, direction: .LeftRigt)
+        ConstraintManager.getConstraintFrom(self, direction: .LeftRigt)
         return 0
     }
 
@@ -24,7 +24,7 @@ public extension UIView {
     ///
     /// someView.fy_left(self.chainRight)
     var chainRight: CGFloat {
-        DependencyManager.getDependencyFrom(self, direction: .RightLeft)
+        ConstraintManager.getConstraintFrom(self, direction: .RightLeft)
         return 0
     }
 
@@ -32,7 +32,7 @@ public extension UIView {
     ///
     /// someView.fy_top(self.chainBottom)
     var chainBottom: CGFloat {
-        DependencyManager.getDependencyFrom(self, direction: .BottomTop)
+        ConstraintManager.getConstraintFrom(self, direction: .BottomTop)
         return 0
     }
 
@@ -40,7 +40,7 @@ public extension UIView {
     ///
     /// someView.fy_bottom(self.chainTop)
     var chainTop: CGFloat {
-        DependencyManager.getDependencyFrom(self, direction: .TopBottom)
+        ConstraintManager.getConstraintFrom(self, direction: .TopBottom)
         return 0
     }
 }
@@ -57,7 +57,7 @@ public extension UIView {
     func fy_left(left: CGFloat) -> Self {
         usingFangYuan = true
         rulerX.a = left
-        DependencyManager.setDependencyTo(self, direction: .RightLeft, value: left)
+        ConstraintManager.setConstraintTo(self, direction: .RightLeft, value: left)
         return self
     }
 
@@ -72,7 +72,7 @@ public extension UIView {
     func fy_right(right: CGFloat) -> Self {
         usingFangYuan = true
         rulerX.c = right
-        DependencyManager.setDependencyTo(self, direction: .LeftRigt, value: right)
+        ConstraintManager.setConstraintTo(self, direction: .LeftRigt, value: right)
         return self
     }
 
@@ -82,7 +82,7 @@ public extension UIView {
     func fy_top(top: CGFloat) -> Self {
         usingFangYuan = true
         rulerY.a = top
-        DependencyManager.setDependencyTo(self, direction: .BottomTop, value: top)
+        ConstraintManager.setConstraintTo(self, direction: .BottomTop, value: top)
         return self
     }
 
@@ -97,7 +97,7 @@ public extension UIView {
     func fy_bottom(bottom: CGFloat) -> Self {
         usingFangYuan = true
         rulerY.c = bottom
-        DependencyManager.setDependencyTo(self, direction: .TopBottom, value: bottom)
+        ConstraintManager.setConstraintTo(self, direction: .TopBottom, value: bottom)
         return self
     }
 
@@ -112,6 +112,6 @@ public extension UIView {
 
     /// 触发动画
     func toAnimation() {
-        DependencyManager.layout(self)
+        ConstraintManager.layout(self)
     }
 }

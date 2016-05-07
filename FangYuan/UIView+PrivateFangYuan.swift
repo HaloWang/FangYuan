@@ -146,7 +146,7 @@ extension UIView {
 
     func _swizzle_imp_for_layoutSubviews() {
         _swizzle_imp_for_layoutSubviews()
-        DependencyManager.layout(self)
+        ConstraintManager.layout(self)
     }
 
 }
@@ -175,6 +175,6 @@ extension UIButton {
 
     override func _swizzle_imp_for_layoutSubviews() {
         _swizzle_imp_for_layoutSubviews()
-        DependencyManager.layout(self)
+        ConstraintManager.layout(self)
     }
 }
