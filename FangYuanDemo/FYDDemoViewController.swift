@@ -36,17 +36,6 @@ class FYDDemoViewController: UIViewController {
 
         //  按住 Alt + 点击方法名来查看方法说明
 
-        // TODO: 还没处理调用顺序出错的情况
-        // TODO: 不同调用顺序的检查
-        // TODO: 方法重命名
-        // TODO: 性能优化 - 检查可以避免的 frame 设定
-        // TODO: Unit Test
-        // TODO: 文字展示高度计算
-        // TODO: 更优秀的 git 管理
-        // TODO: 工程化
-        // TODO: Center 之类方法？
-        // TODO: CHANGELOG.md
-
         dv3
             .fy_top(164)
             .fy_left(100)

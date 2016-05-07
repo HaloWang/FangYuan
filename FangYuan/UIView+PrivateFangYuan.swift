@@ -1,9 +1,9 @@
 //
 //  UIView+PrivateFangYuan.swift
-//  Pods
+//  Halo
 //
 //  Created by 王策 on 16/5/7.
-//
+//  Copyright © 2015年 WangCe. All rights reserved.
 //
 
 import Foundation
@@ -164,6 +164,10 @@ extension UIButton {
             _swizzle_layoutSubviews()
         }
     }
+    
+    //  If following method is not implemented
+    //  -[_UINavigationBarBackground state]: unrecognized selector sent to instance 0x137e804d0
+    //  Interesting!
 
     override class func _swizzle_layoutSubviews() {
         let originalSelector = #selector(layoutSubviews)

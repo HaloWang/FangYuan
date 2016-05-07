@@ -92,7 +92,7 @@ extension ConstraintManager {
 // MARK: Layout
 private extension ConstraintManager {
 
-    // TODO: hasSetconstraintsOf 不是每次都要遍历的，可以提前生成一个渲染序列，这个渲染序列的副产品就是检查是否有依赖循环
+    // TODO: hassetConstraintsOf 不是每次都要遍历的，可以提前生成一个渲染序列，这个渲染序列的副产品就是检查是否有依赖循环
     // TODO: 这个算法的复杂度是多少
     /// 核心布局方法
     func layout(views: [UIView]) {
@@ -100,9 +100,9 @@ private extension ConstraintManager {
             var layoutingViews = Set(views)
             repeat {
                 _ = layoutingViews.map { view in
-                    if hasSetconstraintsOf(view) {
+                    if hassetConstraintsOf(view) {
                         view.layoutWithFangYuan()
-                        setconstraintsOf(view)
+                        setConstraintsOf(view)
                         layoutingViews.remove(view)
                     }
                 }
@@ -133,7 +133,7 @@ private extension ConstraintManager {
         return false
     }
 
-    func hasSetconstraintsOf(view:UIView) -> Bool {
+    func hassetConstraintsOf(view:UIView) -> Bool {
         for con in constraints {
             if con.to == view && !con.hasSet {
                 return false;
@@ -142,7 +142,7 @@ private extension ConstraintManager {
         return true
     }
 
-    func setconstraintsOf(view: UIView) {
+    func setConstraintsOf(view: UIView) {
 
         // 抽取所有需要设定的约束
         // TODO: 这才是关键所在！，每次你抽取的是全部约束
