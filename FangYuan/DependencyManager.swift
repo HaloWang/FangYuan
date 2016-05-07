@@ -17,6 +17,7 @@ class DependencyManager {
     private init() {}
 
     // TODO: Set vs Array (performance) ?
+    // TODO: 看吧，到底用不用遍历全部约束？甚至从来没有一个 Dependency.hasSet -> false 的情况发生！
     /// 全部约束
     var dependencies = Set<Dependency>()
 
@@ -24,7 +25,7 @@ class DependencyManager {
     var dependencyHolder: Dependency?
 
     /// 未设定约束相关信息
-    var unsetDependencyInfo : (has: Bool, unsetDependencies: [Dependency]) {
+    var unsetDependencyInfo : (has: Bool, dependencies: [Dependency]) {
         let unsetDeps = dependencies.filter { dep in
             !dep.hasSet
         }
@@ -88,36 +89,38 @@ extension DependencyManager {
 // MARK: Layout
 private extension DependencyManager {
 
-    // TODO: allDependenciesLoaddedOf 不是每次都要遍历的，可以提前生成一个渲染序列，这个渲染序列的副产品就是检查是否有依赖循环
+    // TODO: hasSetDependenciesOf 不是每次都要遍历的，可以提前生成一个渲染序列，这个渲染序列的副产品就是检查是否有依赖循环
     // TODO: 这个算法的复杂度事多少😂
     /// 核心布局方法
     func layout(views: [UIView]) {
         if hasUnsetDependenciesOf(views) {
+            var layoutingViews = Set(views)
             repeat {
-                _ = views.map { subview in
-                    if allDependenciesLoaddedOf(subview) {
-                        subview.layoutWithFangYuan()
-                        loadDependenciesOf(subview)
+                _ = layoutingViews.map { view in
+                    if hasSetDependenciesOf(view) {
+                        view.layoutWithFangYuan()
+                        setDependenciesOf(view)
+                        layoutingViews.remove(view)
                     }
                 }
             } while hasUnsetDependenciesOf(views)
         } else {
-            _ = views.map { subview in
-                subview.layoutWithFangYuan()
+            _ = views.map { view in
+                view.layoutWithFangYuan()
             }
         }
     }
 
     func hasUnsetDependenciesOf(views:[UIView]) -> Bool {
 
-        let dependencyInfo = unsetDependencyInfo
+        let unsetInfo = unsetDependencyInfo
 
-        guard dependencyInfo.has else {
+        guard unsetInfo.has else {
             return false
         }
 
         for view in views {
-            for dep in dependencyInfo.unsetDependencies {
+            for dep in unsetInfo.dependencies {
                 if dep.to == view {
                     return true
                 }
@@ -127,7 +130,7 @@ private extension DependencyManager {
         return false
     }
 
-    func allDependenciesLoaddedOf(view:UIView) -> Bool {
+    func hasSetDependenciesOf(view:UIView) -> Bool {
         for dep in dependencies {
             if dep.to == view && !dep.hasSet {
                 return false;
@@ -136,7 +139,7 @@ private extension DependencyManager {
         return true
     }
 
-    func loadDependenciesOf(view: UIView) {
+    func setDependenciesOf(view: UIView) {
 
         // 抽取所有需要设定的约束
         let _dependenciesShowP = dependencies.filter { dependency in
