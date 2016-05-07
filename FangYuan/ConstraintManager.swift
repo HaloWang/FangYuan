@@ -93,7 +93,7 @@ extension ConstraintManager {
 private extension ConstraintManager {
 
     // TODO: hassetConstraintsOf 不是每次都要遍历的，可以提前生成一个渲染序列，这个渲染序列的副产品就是检查是否有依赖循环
-    // TODO: 这个算法的复杂度是多少
+    // TODO: 这个算法的复杂度是多少 views³constraint²
     /// 核心布局方法
     func layout(views: [UIView]) {
         if hasUnsetConstraintsOf(views) {
