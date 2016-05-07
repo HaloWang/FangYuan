@@ -48,12 +48,13 @@ public extension UIView {
 // MARK: - Chainable Method
 
 public extension UIView {
+    
+    // TODO: 还有一个严重的问题：『变化』
 
     // MARK: X
 
     /// 设定某个 UIView 左边距离其 superview 左边的距离，相当于 x
     func fy_left(left: CGFloat) -> Self {
-        setNeedsLayout()
         usingFangYuan = true
         rulerX.a = left
         DependencyManager.popDependencyTo(self, direction: .RightLeft, value: left)
@@ -62,7 +63,6 @@ public extension UIView {
 
     /// 设定某个 UIView 的宽度，相当于 width
     func fy_width(width: CGFloat) -> Self {
-        setNeedsLayout()
         usingFangYuan = true
         rulerX.b = width
         return self
@@ -70,7 +70,6 @@ public extension UIView {
 
     /// 设定某个 UIView 右边距离其 superview 右边的距离
     func fy_right(right: CGFloat) -> Self {
-        setNeedsLayout()
         usingFangYuan = true
         rulerX.c = right
         DependencyManager.popDependencyTo(self, direction: .LeftRigt, value: right)
@@ -81,7 +80,6 @@ public extension UIView {
 
     /// 设定某个 UIView 顶部距离其 superview 顶部的距离，相当于 y
     func fy_top(top: CGFloat) -> Self {
-        setNeedsLayout()
         usingFangYuan = true
         rulerY.a = top
         DependencyManager.popDependencyTo(self, direction: .BottomTop, value: top)
@@ -90,7 +88,6 @@ public extension UIView {
 
     /// 设定某个 UIView 的高度，相当于 height
     func fy_height(height: CGFloat) -> Self {
-        setNeedsLayout()
         usingFangYuan = true
         rulerY.b = height
         return self
@@ -98,7 +95,6 @@ public extension UIView {
 
     /// 设定某个 UIView 底部距离其 superview 底部的距离
     func fy_bottom(bottom: CGFloat) -> Self {
-        setNeedsLayout()
         usingFangYuan = true
         rulerY.c = bottom
         DependencyManager.popDependencyTo(self, direction: .TopBottom, value: bottom)
@@ -199,9 +195,6 @@ extension UIView {
     
     func _swizzle_imp_for_layoutSubviews() {
         _swizzle_imp_for_layoutSubviews()
-        guard usingFangYuanInfo.subviewUsingFangYuan else {
-            return
-        }
         DependencyManager.layout(self)
     }
     
@@ -283,9 +276,6 @@ extension UIButton {
     
     override func _swizzle_imp_for_layoutSubviews() {
         _swizzle_imp_for_layoutSubviews()
-        guard usingFangYuanInfo.subviewUsingFangYuan else {
-            return
-        }
         DependencyManager.layout(self)
     }
 }

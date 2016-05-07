@@ -31,20 +31,70 @@ class DependencyManager {
     }
 }
 
-// MARK: - Private Methods
+// MARK: - Public Methods
 extension DependencyManager {
-    func removeDuplicateDependencyOf(view:UIView, at direction:Dependency.Direction) {
-        _ = dependencies.map { dep in
-            if dep.to == view && dep.direction == direction {
-                dependencies.remove(dep)
-            }
-        }
+    
+    /**
+     推入约束
+     
+     - parameter from:      约束依赖视图
+     - parameter direction: 约束方向
+     */
+    class func pushDependencyFrom(from:UIView, direction:Dependency.Direction) {
+        singleton.dependencyHolder = Dependency(from: from, to: nil, direction: direction)
     }
     
-    func removeUselessDependency() {
-        _ = dependencies.map { dep in
-            if dep.to == nil && dep.from == nil {
-                dependencies.remove(dep)
+    /**
+     拉取约束
+     
+     - parameter to:        约束目标
+     - parameter direction: 约束方向
+     - parameter value:     约束固定值
+     */
+    class func popDependencyTo(to:UIView, direction:Dependency.Direction, value:CGFloat) {
+        singleton.removeUselessDep()
+        singleton.removeDuplicateDependencyOf(to, at: direction)
+        // TODO: 未实现
+        singleton.removeAndWarningCyclingDependency()
+        guard let holder = singleton.dependencyHolder else {
+            return
+        }
+        
+        holder.to = to
+        holder.value = value
+        
+        singleton.dependencies.insert(holder)
+        singleton.dependencyHolder = nil
+    }
+    
+    class func layout(view:UIView) {
+        let fangYuanInfo = view.usingFangYuanInfo
+        guard fangYuanInfo.subviewUsingFangYuan else {
+            return
+        }
+        singleton.layout(view)
+    }
+}
+
+// MARK: - Private Methods
+
+// MARK: Layout
+private extension DependencyManager {
+    
+    func layout(view: UIView) {
+        if hasUnsetDependenciesOf(view) {
+            let usingFangYuanSubviews = view.usingFangYuanInfo.usingFangYuanSubviews
+            repeat {
+                _ = usingFangYuanSubviews.map { subview in
+                    if allDependenciesLoaddedOf(subview) {
+                        subview.layoutWithFangYuan()
+                        loadDependenciesOf(subview)
+                    }
+                }
+            } while hasUnsetDependenciesOf(view)
+        } else {
+            _ = view.usingFangYuanInfo.usingFangYuanSubviews.map { subview in
+                subview.layoutWithFangYuan()
             }
         }
     }
@@ -58,7 +108,7 @@ extension DependencyManager {
         return true
     }
     
-    func hasUnSetDependenciesOf(view:UIView) -> Bool {
+    func hasUnsetDependenciesOf(view:UIView) -> Bool {
         
         let info = view.usingFangYuanInfo
         
@@ -80,46 +130,6 @@ extension DependencyManager {
             }
         }
         
-        return false
-    }
-    
-    // TODO: 时间复杂度？deps × deps ?
-    // TODO: 布局实际上也像 node.js 那样是一个高并发的东西？
-    func removeAndWarningCyclingDependency() {
-        
-    }
-    
-    func removeUselessDep() {
-        let dependenciesArray = dependencies.filter { dep in
-            return dep.to != nil && dep.from != nil
-        }
-        dependencies = Set(dependenciesArray)
-    }
-    
-    func layout(view: UIView) {
-        if hasUnSetDependenciesOf(view) {
-            let usingFangYuanSubviews = view.usingFangYuanInfo.usingFangYuanSubviews
-            repeat {
-                _ = usingFangYuanSubviews.map { subview in
-                    if allDependenciesLoaddedOf(subview) {
-                        subview.layoutWithFangYuan()
-                        loadDependenciesOf(subview)
-                    }
-                }
-            } while hasUnSetDependenciesOf(view)
-        } else {
-            _ = view.usingFangYuanInfo.usingFangYuanSubviews.map { subview in
-                subview.layoutWithFangYuan()
-            }
-        }
-    }
-
-    func layouting(view: UIView) -> Bool {
-        for dep in dependencies {
-            if dep.from.superview == view {
-                return true
-            }
-        }
         return false
     }
     
@@ -148,45 +158,30 @@ extension DependencyManager {
             dependency.hasSet = true
         }
     }
-
+    
 }
 
-// MARK: - Public Methods
-extension DependencyManager {
+// MARK: Assistant
+private extension DependencyManager {
     
-    class func layout(view:UIView) {
-        singleton.removeUselessDep()
-        singleton.layout(view)
-    }
-    
-    /**
-     推入约束
-     
-     - parameter from:      约束依赖视图
-     - parameter direction: 约束方向
-     */
-    class func pushDependencyFrom(from:UIView, direction:Dependency.Direction) {
-        singleton.dependencyHolder = Dependency(from: from, to: nil, direction: direction)
-    }
-    
-    /**
-     拉取约束
-     
-     - parameter to:        约束目标
-     - parameter direction: 约束方向
-     - parameter value:     约束固定值
-     */
-    class func popDependencyTo(to:UIView, direction:Dependency.Direction, value:CGFloat) {
-        singleton.removeUselessDependency()
-        singleton.removeDuplicateDependencyOf(to, at: direction)
-        guard let holder = singleton.dependencyHolder else {
-            return
+    func removeDuplicateDependencyOf(view:UIView, at direction:Dependency.Direction) {
+        _ = dependencies.map { dep in
+            if dep.to == view && dep.direction == direction {
+                dependencies.remove(dep)
+            }
         }
+    }
+    
+    // TODO: 时间复杂度？deps × deps ?
+    // TODO: 布局实际上也像 node.js 那样是一个高并发的东西？
+    func removeAndWarningCyclingDependency() {
         
-        holder.to = to
-        holder.value = value
-        
-        singleton.dependencies.insert(holder)
-        singleton.dependencyHolder = nil
+    }
+    
+    func removeUselessDep() {
+        let dependenciesArray = dependencies.filter { dep in
+            return dep.to != nil && dep.from != nil
+        }
+        dependencies = Set(dependenciesArray)
     }
 }
