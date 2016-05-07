@@ -11,18 +11,18 @@ import UIKit
 // MARK: - Init & Properties
 /// 约束依赖管理者
 class DependencyManager {
-    
+
     /// 单例
     static let singleton = DependencyManager()
     private init() {}
-    
+
     // TODO: Set vs Array (performance) ?
     /// 全部约束
     var dependencies = Set<Dependency>()
-    
+
     /// 刚刚压入的约束
     var dependencyHolder: Dependency?
-    
+
     /// 未设定约束相关信息
     var unsetDependencyInfo : (has: Bool, unsetDependencies: [Dependency]) {
         let unsetDeps = dependencies.filter { dep in
@@ -34,7 +34,7 @@ class DependencyManager {
 
 // MARK: - Public Methods
 extension DependencyManager {
-    
+
     /**
      从某个视图得到约束
      
@@ -44,7 +44,10 @@ extension DependencyManager {
     class func getDependencyFrom(from:UIView, direction:Dependency.Direction) {
         singleton.dependencyHolder = Dependency(from: from, to: nil, direction: direction)
     }
-    
+
+    // TODO: setDependency 是生成『渲染队列』的最佳时机了吧
+    // TODO: 这个『渲染队列』还可以抽象成一个专门计算高度的类方法？
+
     /**
      设定约束到某个视图上
      
@@ -60,22 +63,22 @@ extension DependencyManager {
         guard let holder = singleton.dependencyHolder else {
             return
         }
-        
+
         holder.to = to
         holder.value = value
-        
+
         singleton.dependencies.insert(holder)
         singleton.dependencyHolder = nil
     }
-    
+
     class func layout(view:UIView) {
-        
+
         let info = view.usingFangYuanInfo
-        
+
         guard info.hasUsingFangYuanSubview else {
             return
         }
-        
+
         singleton.layout(info.usingFangYuanSubviews)
     }
 }
@@ -84,8 +87,9 @@ extension DependencyManager {
 
 // MARK: Layout
 private extension DependencyManager {
-    
+
     // TODO: allDependenciesLoaddedOf 不是每次都要遍历的，可以提前生成一个渲染序列，这个渲染序列的副产品就是检查是否有依赖循环
+    // TODO: 这个算法的复杂度事多少😂
     /// 核心布局方法
     func layout(views: [UIView]) {
         if hasUnsetDependenciesOf(views) {
@@ -103,15 +107,15 @@ private extension DependencyManager {
             }
         }
     }
-    
+
     func hasUnsetDependenciesOf(views:[UIView]) -> Bool {
-        
+
         let dependencyInfo = unsetDependencyInfo
-        
+
         guard dependencyInfo.has else {
             return false
         }
-        
+
         for view in views {
             for dep in dependencyInfo.unsetDependencies {
                 if dep.to == view {
@@ -119,10 +123,10 @@ private extension DependencyManager {
                 }
             }
         }
-        
+
         return false
     }
-    
+
     func allDependenciesLoaddedOf(view:UIView) -> Bool {
         for dep in dependencies {
             if dep.to == view && !dep.hasSet {
@@ -131,14 +135,14 @@ private extension DependencyManager {
         }
         return true
     }
-    
+
     func loadDependenciesOf(view: UIView) {
-        
+
         // 抽取所有需要设定的约束
         let _dependenciesShowP = dependencies.filter { dependency in
             dependency.from == view
         }
-        
+
         // 设定这些约束
         _ = _dependenciesShowP.map { dependency in
             let _from = dependency.from
@@ -157,12 +161,12 @@ private extension DependencyManager {
             dependency.hasSet = true
         }
     }
-    
+
 }
 
 // MARK: Assistant
 private extension DependencyManager {
-    
+
     // TODO: 这里是不是可以用上 Set ?
     func removeDuplicateDependencyOf(view:UIView, at direction:Dependency.Direction) {
         _ = dependencies.map { dep in
@@ -171,13 +175,13 @@ private extension DependencyManager {
             }
         }
     }
-    
+
     // TODO: 时间复杂度？deps × deps ?
     // TODO: 布局实际上也像 node.js 那样是一个高并发的东西？
     func removeAndWarningCyclingDependency() {
-        
+
     }
-    
+
     func removeUselessDep() {
         let dependenciesArray = dependencies.filter { dep in
             return dep.to != nil && dep.from != nil

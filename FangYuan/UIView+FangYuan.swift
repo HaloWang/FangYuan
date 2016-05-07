@@ -48,7 +48,7 @@ public extension UIView {
 // MARK: - Chainable Method
 
 public extension UIView {
-    
+
     // TODO: 还有一个严重的问题：『变化』
 
     // MARK: X
@@ -105,12 +105,11 @@ public extension UIView {
 
     /// 设定某个 UIView 四个边距离其父视图相对四边的距离
     func fy_edge(edge: UIEdgeInsets) -> Self {
-        fy_top(edge.top).fy_bottom(edge.bottom).fy_left(edge.left).fy_right(edge.right)
-        return self
+        return fy_top(edge.top).fy_bottom(edge.bottom).fy_left(edge.left).fy_right(edge.right)
     }
-    
+
     // MARK: Animation
-    
+
     /// 触发动画
     func toAnimation() {
         DependencyManager.layout(self)

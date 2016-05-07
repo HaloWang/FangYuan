@@ -15,6 +15,7 @@ import CoreGraphics
 /// 尺
 ///
 /// 作为 X 轴或 Y 轴的约束
+
 class Ruler {
 
     /// 段
@@ -88,7 +89,8 @@ class Ruler {
 }
 
 // MARK: - CustomStringConvertible
-extension Ruler : CustomStringConvertible {
+
+extension Ruler: CustomStringConvertible {
     var description: String {
         return "\(a ?? nil) | \(b ?? nil) | \(c ?? nil)"
     }

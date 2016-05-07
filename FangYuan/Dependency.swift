@@ -13,10 +13,10 @@ func ==(lhs: Dependency, rhs: Dependency) -> Bool {
 }
 
 /// 约束依赖
-class Dependency : Hashable {
-    
+class Dependency: Hashable {
+
     let hashValue: Int
-    
+
     static var DependencyHash = 0
 
     /// 约束来源于那个视图
@@ -52,7 +52,7 @@ class Dependency : Hashable {
     }
 }
 
-extension Dependency : CustomStringConvertible {
+extension Dependency: CustomStringConvertible {
     var description: String {
         return "\nDependency:\n✅direction: \(direction) \n⏬from: \(from) \n⏫to: \(to)\nℹ️Value: \(value)\nℹ️Setted: \(hasSet)"
     }

@@ -9,21 +9,23 @@
 import Foundation
 
 // MARK: - Using FangYuan
+
 extension UIView {
-    
-    /// 该 UIView 使用方圆的信息，通过一次 filter 和元组返回了是否在使用方圆和使用方圆的 subview
-    var usingFangYuanInfo : (hasUsingFangYuanSubview: Bool, usingFangYuanSubviews: [UIView]) {
-        let _usingFangYuanSubviews = subviews.filter { (subview) -> Bool in
+
+    /// 该 UIView.subviews 使用方圆的信息，通过一次 filter 和元组返回了是否在使用方圆和使用方圆的 subview
+    var usingFangYuanInfo: (hasUsingFangYuanSubview:Bool, usingFangYuanSubviews:[UIView]) {
+        let _usingFangYuanSubviews = subviews.filter {
+            (subview) -> Bool in
             return subview.usingFangYuan
         }
         return (_usingFangYuanSubviews.count != 0, _usingFangYuanSubviews)
     }
-    
+
     // TODO: 这个算法还是应该被 UT 一下
     // TODO: 大量的 if (!=) = 会不会有问题？
     /// 在约束已经求解完全的情况下进行 frame 的设置
     func layoutWithFangYuan() {
-        
+
         //  X
         let newX = rulerX.a
         if newX != nil {
@@ -44,7 +46,7 @@ extension UIView {
                 frame.size.width = newWidth
             }
         }
-        
+
         //  Y
         let newY = rulerY.a
         if newY != nil {
@@ -69,25 +71,26 @@ extension UIView {
 }
 
 // MARK: - Associated Object
+
 extension UIView {
-    
+
     // Note the use of static var in a private nested struct—this pattern creates the static associated object key we need but doesn’t muck up the global namespace.
     // From http://nshipster.com/swift-objc-runtime/
-    
+
     struct AssociatedKeys {
         static var RulerX: Any?
         static var RulerY: Any?
         static var kUsingFangYuan: Any?
-        static var AO : Any?
+        static var AO: Any?
     }
-    
+
     class AssociateObject {
         lazy var rulerX = Ruler()
         lazy var rulerY = Ruler()
         var usingFangYuan = false
     }
-    
-    var ao : AssociateObject {
+
+    var ao: AssociateObject {
         if let _ao = objc_getAssociatedObject(self, &AssociatedKeys.AO) {
             return _ao as! AssociateObject
         }
@@ -95,17 +98,17 @@ extension UIView {
         objc_setAssociatedObject(self, &AssociatedKeys.AO, _ao, .OBJC_ASSOCIATION_RETAIN)
         return _ao
     }
-    
+
     /// X 轴标尺
     var rulerX: Ruler {
         return ao.rulerX
     }
-    
+
     /// Y 轴表尺
     var rulerY: Ruler {
         return ao.rulerY
     }
-    
+
     /// 该 View 是否在使用 FangYuan
     var usingFangYuan: Bool {
         get {
@@ -118,28 +121,29 @@ extension UIView {
 }
 
 // MARK: - UIView Swizzling
+
 extension UIView {
-    
+
     struct once {
         static var token: dispatch_once_t = 0
     }
-    
+
     // We can not override +load in Swift
     override public class func initialize() {
         dispatch_once(&once.token) {
             _swizzle_layoutSubviews()
         }
     }
-    
+
     /// 交换实现
     class func _swizzle_layoutSubviews() {
         let originalSelector = #selector(layoutSubviews)
         let swizzledSelector = #selector(_swizzle_imp_for_layoutSubviews)
-        let originalMethod   = class_getInstanceMethod(self, originalSelector)
-        let swizzledMethod   = class_getInstanceMethod(self, swizzledSelector)
+        let originalMethod = class_getInstanceMethod(self, originalSelector)
+        let swizzledMethod = class_getInstanceMethod(self, swizzledSelector)
         method_exchangeImplementations(originalMethod, swizzledMethod)
     }
-    
+
     func _swizzle_imp_for_layoutSubviews() {
         _swizzle_imp_for_layoutSubviews()
         DependencyManager.layout(self)
@@ -148,26 +152,27 @@ extension UIView {
 }
 
 // MARK: - UIButton Swizzling
+
 extension UIButton {
-    
+
     struct uibutton_once {
         static var token: dispatch_once_t = 0
     }
-    
+
     override public class func initialize() {
         dispatch_once(&uibutton_once.token) {
             _swizzle_layoutSubviews()
         }
     }
-    
+
     override class func _swizzle_layoutSubviews() {
         let originalSelector = #selector(layoutSubviews)
         let swizzledSelector = #selector(_swizzle_imp_for_layoutSubviews)
-        let originalMethod   = class_getInstanceMethod(self, originalSelector)
-        let swizzledMethod   = class_getInstanceMethod(self, swizzledSelector)
+        let originalMethod = class_getInstanceMethod(self, originalSelector)
+        let swizzledMethod = class_getInstanceMethod(self, swizzledSelector)
         method_exchangeImplementations(originalMethod, swizzledMethod)
     }
-    
+
     override func _swizzle_imp_for_layoutSubviews() {
         _swizzle_imp_for_layoutSubviews()
         DependencyManager.layout(self)
