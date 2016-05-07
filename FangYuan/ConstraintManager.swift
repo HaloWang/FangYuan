@@ -10,6 +10,8 @@ import UIKit
 
 // MARK: - Init & Properties
 /// 约束依赖管理者
+///
+/// 可能做着做着就成了 `AsyncDisplayKit` 那样抽取布局树，异步计算布局的东西了
 class ConstraintManager {
 
     /// 单例
@@ -18,6 +20,7 @@ class ConstraintManager {
 
     // TODO: Set vs Array (performance) ?
     // TODO: 看吧，到底用不用遍历全部约束？甚至从来没有一个 Constraint.hasSet -> false 的情况发生！
+    // TODO: 可以把这个集合变成多叉树，以便更有针对性的进行 map/filter
     /// 全部约束
     var constraints = Set<Constraint>()
 
@@ -90,7 +93,7 @@ extension ConstraintManager {
 private extension ConstraintManager {
 
     // TODO: hasSetconstraintsOf 不是每次都要遍历的，可以提前生成一个渲染序列，这个渲染序列的副产品就是检查是否有依赖循环
-    // TODO: 这个算法的复杂度事多少😂
+    // TODO: 这个算法的复杂度是多少
     /// 核心布局方法
     func layout(views: [UIView]) {
         if hasUnsetConstraintsOf(views) {
@@ -142,6 +145,7 @@ private extension ConstraintManager {
     func setconstraintsOf(view: UIView) {
 
         // 抽取所有需要设定的约束
+        // TODO: 这才是关键所在！，每次你抽取的是全部约束
         let _constraintsShowP = constraints.filter { constraint in
             constraint.from == view
         }
