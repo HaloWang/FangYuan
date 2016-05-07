@@ -36,23 +36,23 @@ class DependencyManager {
 extension DependencyManager {
     
     /**
-     推入约束
+     从某个视图得到约束
      
      - parameter from:      约束依赖视图
      - parameter direction: 约束方向
      */
-    class func pushDependencyFrom(from:UIView, direction:Dependency.Direction) {
+    class func getDependencyFrom(from:UIView, direction:Dependency.Direction) {
         singleton.dependencyHolder = Dependency(from: from, to: nil, direction: direction)
     }
     
     /**
-     拉取约束
+     设定约束到某个视图上
      
      - parameter to:        约束目标
      - parameter direction: 约束方向
      - parameter value:     约束固定值
      */
-    class func popDependencyTo(to:UIView, direction:Dependency.Direction, value:CGFloat) {
+    class func setDependencyTo(to:UIView, direction:Dependency.Direction, value:CGFloat) {
         singleton.removeUselessDep()
         singleton.removeDuplicateDependencyOf(to, at: direction)
         // TODO: 未实现
