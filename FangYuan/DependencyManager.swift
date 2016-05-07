@@ -22,44 +22,18 @@ class DependencyManager {
     /// 刚刚压入的约束
     var dependencyHolder: Dependency?
     
-    /// 未设定的约束
-    var unsetDependencies : [Dependency] {
-        return dependencies.filter { dep in
+    /// 未设定约束相关信息
+    var unsetDependencyInfo : (has: Bool, unsetDependencies: [Dependency]) {
+        let unsetDeps = dependencies.filter { dep in
             !dep.hasSet
         }
-    }
-    
-    /// 有未设定的约束
-    var hasUnsetDependency : Bool {
-        for dep in dependencies {
-            if !dep.hasSet {
-                return true
-            }
-        }
-        return false
-    }
-    
-    var hasUnSetDependencies: Bool {
-        return dependencies.filter { dependency in
-            dependency.hasSet == false
-            }.count != 0
-    }
-    
-    var unsetDeps : [Dependency] {
-        return dependencies.filter {
-            !$0.hasSet
-        }
-    }
-    
-    var hasDependencies: Bool {
-        let _has = dependencies.count != 0
-        return _has
+        return (unsetDeps.count != 0, unsetDeps)
     }
 }
 
 // MARK: - Private Methods
 extension DependencyManager {
-    func removeDuplicateDependencyOf(view:UIView, at direction:Dependency.Direction) -> Void {
+    func removeDuplicateDependencyOf(view:UIView, at direction:Dependency.Direction) {
         _ = dependencies.map { dep in
             if dep.to == view && dep.direction == direction {
                 dependencies.remove(dep)
@@ -67,8 +41,8 @@ extension DependencyManager {
         }
     }
     
-    func removeUselessDependency() -> Void {
-        dependencies.map { dep in
+    func removeUselessDependency() {
+        _ = dependencies.map { dep in
             if dep.to == nil && dep.from == nil {
                 dependencies.remove(dep)
             }
@@ -85,16 +59,21 @@ extension DependencyManager {
     }
     
     func hasUnSetDependenciesOf(view:UIView) -> Bool {
-        guard view.subviewUsingFangYuan else {
-            return false
-        }
-    
-        guard hasUnsetDependency else {
+        
+        let info = view.usingFangYuanInfo
+        
+        guard info.subviewUsingFangYuan else {
             return false
         }
         
-        for subview in view.usingFangYuanSubviews {
-            for dep in unsetDependencies {
+        let result = unsetDependencyInfo
+    
+        guard result.has else {
+            return false
+        }
+        
+        for subview in info.usingFangYuanSubviews {
+            for dep in result.unsetDependencies {
                 if dep.to == subview {
                     return true
                 }
@@ -102,6 +81,12 @@ extension DependencyManager {
         }
         
         return false
+    }
+    
+    // TODO: 时间复杂度？deps × deps ?
+    // TODO: 布局实际上也像 node.js 那样是一个高并发的东西？
+    func removeAndWarningCyclingDependency() {
+        
     }
     
     func removeUselessDep() {
@@ -112,17 +97,18 @@ extension DependencyManager {
     }
     
     func layout(view: UIView) {
-        if hasUnSetDependencies(view) {
+        if hasUnSetDependenciesOf(view) {
+            let usingFangYuanSubviews = view.usingFangYuanInfo.usingFangYuanSubviews
             repeat {
-                _ = view.usingFangYuanSubviews.map { subview in
+                _ = usingFangYuanSubviews.map { subview in
                     if allDependenciesLoaddedOf(subview) {
                         subview.layoutWithFangYuan()
                         loadDependenciesOf(subview)
                     }
                 }
-            } while hasUnSetDependencies(view)
+            } while hasUnSetDependenciesOf(view)
         } else {
-            _ = view.usingFangYuanSubviews.map { subview in
+            _ = view.usingFangYuanInfo.usingFangYuanSubviews.map { subview in
                 subview.layoutWithFangYuan()
             }
         }
@@ -134,30 +120,6 @@ extension DependencyManager {
                 return true
             }
         }
-        return false
-    }
-    
-    func hasUnSetDependencies(view: UIView) -> Bool {
-        
-        //  正在设定某 view.subviews
-        guard view.subviewUsingFangYuan else {
-            return false
-        }
-        
-        //  还有未设定的约束
-        let needSetDeps = unsetDeps
-        guard needSetDeps.count != 0 else {
-            return false
-        }
-        
-        for usingFangYuanSubview in view.usingFangYuanSubviews {
-            for dep in needSetDeps {
-                if dep.to == usingFangYuanSubview {
-                    return true
-                }
-            }
-        }
-        
         return false
     }
     
@@ -186,6 +148,7 @@ extension DependencyManager {
             dependency.hasSet = true
         }
     }
+
 }
 
 // MARK: - Public Methods

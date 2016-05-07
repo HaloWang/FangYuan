@@ -112,20 +112,25 @@ public extension UIView {
         fy_top(edge.top).fy_bottom(edge.bottom).fy_left(edge.left).fy_right(edge.right)
         return self
     }
+    
+    // MARK: Animation
+    
+    /// 触发动画
+    func toAnimation() {
+        DependencyManager.layout(self)
+    }
 }
 
-// MARK: - _privte Associated Object
+// MARK: - Associated Object
 
-// TODO: 或许方圆可以变成一个协议？FangAble？😁然后为 CALayer 提供？PS: 主要是觉得这个文件所含有的内容越来越少了
+// TODO: 或许方圆可以变成一个协议？FangYuanAble？然后为 CALayer 提供？
 
 extension UIView {
-
-    // TODO: 这里也可以做成 JSPatch 那样，使用某个 object 作为 <##>
 
     // Note the use of static var in a private nested struct—this pattern creates the static associated object key we need but doesn’t muck up the global namespace.
     // From http://nshipster.com/swift-objc-runtime/
 
-    private struct AssociatedKeys {
+    struct AssociatedKeys {
         static var RulerX: Any?
         static var RulerY: Any?
         static var kUsingFangYuan: Any?
@@ -139,7 +144,6 @@ extension UIView {
     }
     
     var ao : AssociateObject {
-        //  终于不用写两次 `objc_getAssociatedObject` 啦：😁 @see UIView+WebCacheOperation.m
         if let _ao = objc_getAssociatedObject(self, &AssociatedKeys.AO) {
             return _ao as! AssociateObject
         }
@@ -157,8 +161,7 @@ extension UIView {
     var rulerY: Ruler {
         return ao.rulerY
     }
-
-    // TODO: 并发遍历？
+    
     /// 该 View 是否在使用 FangYuan
     var usingFangYuan: Bool {
         get {
@@ -174,11 +177,11 @@ extension UIView {
 // MARK: - Using FangYuan
 extension UIView {
     
-    private struct once {
+    struct once {
         static var token: dispatch_once_t = 0
     }
     
-    /// 不允许调用 load 方法了
+    // We can not override +load in Swift
     override public class func initialize() {
         dispatch_once(&once.token) {
             _swizzle_layoutSubviews()
@@ -196,33 +199,24 @@ extension UIView {
     
     func _swizzle_imp_for_layoutSubviews() {
         _swizzle_imp_for_layoutSubviews()
-        guard subviewUsingFangYuan else {
+        guard usingFangYuanInfo.subviewUsingFangYuan else {
             return
         }
         DependencyManager.layout(self)
     }
-
-    // TODO: 性能优化
-    var subviewUsingFangYuan : Bool {
-        for subview in subviews {
-            if subview.usingFangYuan {
-                return true
-            }
-        }
-        return false
-    }
-
-    /// 使用 FangYuan 的 subview
-    var usingFangYuanSubviews : [UIView] {
-        return subviews.filter { subview in
+    
+    var usingFangYuanInfo : (subviewUsingFangYuan: Bool, usingFangYuanSubviews: [UIView]) {
+        let _usingFangYuanSubviews = subviews.filter { (subview) -> Bool in
             return subview.usingFangYuan
         }
+        return (_usingFangYuanSubviews.count != 0, _usingFangYuanSubviews)
     }
 
     // TODO: 这个算法还是应该被 UT 一下
     // TODO: 大量的 if (!=) = 会不会有问题？
     /// 在约束已经求解完全的情况下进行 frame 的设置
     func layoutWithFangYuan() {
+
         //  X
         let newX = rulerX.a
         if newX != nil {
@@ -269,7 +263,7 @@ extension UIView {
 
 extension UIButton {
     
-    private struct uibutton_once {
+    struct uibutton_once {
         static var token: dispatch_once_t = 0
     }
     
@@ -289,7 +283,7 @@ extension UIButton {
     
     override func _swizzle_imp_for_layoutSubviews() {
         _swizzle_imp_for_layoutSubviews()
-        guard subviewUsingFangYuan else {
+        guard usingFangYuanInfo.subviewUsingFangYuan else {
             return
         }
         DependencyManager.layout(self)
