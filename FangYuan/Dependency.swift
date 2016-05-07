@@ -8,8 +8,14 @@
 
 import UIKit
 
+func ==(lhs: Dependency, rhs: Dependency) -> Bool {
+    return lhs.hashValue == rhs.hashValue
+}
+
 /// 约束依赖
 class Dependency : Hashable {
+    
+    let hashValue: Int
     
     static var DependencyHash = 0
 
@@ -35,8 +41,6 @@ class Dependency : Hashable {
         case RightLeft
         case TopBottom
     }
-    
-    var hashValue: Int
 
     init(from: UIView?, to: UIView?, direction: Dependency.Direction, value: CGFloat = 0) {
         Dependency.DependencyHash += 1
@@ -46,11 +50,6 @@ class Dependency : Hashable {
         self.direction = direction
         self.value = value
     }
-    
-}
-
-func ==(lhs: Dependency, rhs: Dependency) -> Bool {
-    return lhs.hashValue == rhs.hashValue
 }
 
 extension Dependency : CustomStringConvertible {

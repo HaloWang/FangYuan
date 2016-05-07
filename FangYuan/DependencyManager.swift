@@ -16,6 +16,7 @@ class DependencyManager {
     static let singleton = DependencyManager()
     private init() {}
     
+    // TODO: Set vs Array (performance) ?
     /// 全部约束
     var dependencies = Set<Dependency>()
     
@@ -68,11 +69,14 @@ extension DependencyManager {
     }
     
     class func layout(view:UIView) {
-        let fangYuanInfo = view.usingFangYuanInfo
-        guard fangYuanInfo.subviewUsingFangYuan else {
+        
+        let info = view.usingFangYuanInfo
+        
+        guard info.hasUsingFangYuanSubview else {
             return
         }
-        singleton.layout(view)
+        
+        singleton.layout(info.usingFangYuanSubviews)
     }
 }
 
@@ -81,22 +85,42 @@ extension DependencyManager {
 // MARK: Layout
 private extension DependencyManager {
     
-    func layout(view: UIView) {
-        if hasUnsetDependenciesOf(view) {
-            let usingFangYuanSubviews = view.usingFangYuanInfo.usingFangYuanSubviews
+    // TODO: allDependenciesLoaddedOf 不是每次都要遍历的，可以提前生成一个渲染序列，这个渲染序列的副产品就是检查是否有依赖循环
+    /// 核心布局方法
+    func layout(views: [UIView]) {
+        if hasUnsetDependenciesOf(views) {
             repeat {
-                _ = usingFangYuanSubviews.map { subview in
+                _ = views.map { subview in
                     if allDependenciesLoaddedOf(subview) {
                         subview.layoutWithFangYuan()
                         loadDependenciesOf(subview)
                     }
                 }
-            } while hasUnsetDependenciesOf(view)
+            } while hasUnsetDependenciesOf(views)
         } else {
-            _ = view.usingFangYuanInfo.usingFangYuanSubviews.map { subview in
+            _ = views.map { subview in
                 subview.layoutWithFangYuan()
             }
         }
+    }
+    
+    func hasUnsetDependenciesOf(views:[UIView]) -> Bool {
+        
+        let dependencyInfo = unsetDependencyInfo
+        
+        guard dependencyInfo.has else {
+            return false
+        }
+        
+        for view in views {
+            for dep in dependencyInfo.unsetDependencies {
+                if dep.to == view {
+                    return true
+                }
+            }
+        }
+        
+        return false
     }
     
     func allDependenciesLoaddedOf(view:UIView) -> Bool {
@@ -106,31 +130,6 @@ private extension DependencyManager {
             }
         }
         return true
-    }
-    
-    func hasUnsetDependenciesOf(view:UIView) -> Bool {
-        
-        let info = view.usingFangYuanInfo
-        
-        guard info.subviewUsingFangYuan else {
-            return false
-        }
-        
-        let result = unsetDependencyInfo
-    
-        guard result.has else {
-            return false
-        }
-        
-        for subview in info.usingFangYuanSubviews {
-            for dep in result.unsetDependencies {
-                if dep.to == subview {
-                    return true
-                }
-            }
-        }
-        
-        return false
     }
     
     func loadDependenciesOf(view: UIView) {
