@@ -8,6 +8,8 @@
 
 //  该文件构建了一个 FIFO 的 `Ruler`
 
+// TODO: 用 C 重构会不会显得更有逼格？
+
 import CoreGraphics
 
 /// 尺
