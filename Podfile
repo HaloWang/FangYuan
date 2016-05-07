@@ -4,9 +4,9 @@ use_frameworks!
 target 'FangYuanDemo' do
     pod 'FangYuan', :path=>"./FangYuan"
     pod 'Halo'
-    pod 'SnapKit'
     pod 'KMCGeigerCounter'
-    pod 'Reveal-iOS-SDK', :configurations => ["Debug"]
+#    pod 'SnapKit'
+#    pod 'Reveal-iOS-SDK', :configurations => ["Debug"]
 end
 
 target 'FangYuanTests' do
