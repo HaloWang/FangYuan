@@ -38,3 +38,6 @@ Pods/*
 Carthage/Build
 Podfile.lock
 FangYuanDemo.xcworkspace
+
+# idea
+.idea
