@@ -100,7 +100,6 @@ extension ConstraintManager {
         
         singleton.removeInvalidConstraint()
         singleton.removeDuplicateConstraintOf(to, at: direction)
-        // TODO: 未实现
         singleton.removeAndWarningCyclingConstraint()
 
         _constraint.to = to
@@ -222,7 +221,6 @@ private extension ConstraintManager {
     }
 
     // TODO: 时间复杂度？cons × cons ?
-    // TODO: 布局实际上也像 node.js 那样是一个高并发的东西？
     func removeAndWarningCyclingConstraint() {
         for toCons in constraints {
             for fromCons in constraints {
