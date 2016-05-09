@@ -1,6 +1,4 @@
-# 方圆
-
-⚠️
+# FangYuan 方圆
 
 [![Travis CI](https://travis-ci.org/HaloWang/FangYuan.svg?branch=master)](https://travis-ci.org/HaloWang/FangYuan)
 
@@ -36,17 +34,42 @@ pod 'FangYuanObjC'
 ```
 ## 使用方式
 
-你可以在 demo 中直接浏览相关代码
+『方圆』在 Swift 和 ObjC 中的语法仅有两点不同
 
-### UIViewController
+- ObjC 中链式代码的结尾需要添加 `;` 分号
+- ObjC 中链式代码返回值类型为 `UIView` 而非 `instancetype`
 
-⚠️
+所以下面的示范代码在 Swift / ObjC 环境下是通用的
 
-### UITableViewCell / UICollecionViewCell
+### 基本使用方式
 
-⚠️
+设定一个 `UIView` 距离其父视图的边距为 `10`
 
-ObjC 环境下的方圆也使用了上述代码，规则完全一样
+```
+view
+	.fy_top(10)
+	.fy_left(10)
+	.fy_right(10)
+	.fy_bottom(10)
+```
+或者
+
+```
+view.fy_edge(UIEdgeInsets(top: 10, left: 10, bottom: 10, right:10))
+```
+### 两个 UIView 间的关系
+
+设定一个 `UIView` 的底部距离另一个 `UIView` 的顶部的距离为 20
+
+```
+view
+	.fy_top(10)
+	.fy_left(10)
+	.fy_right(10)
+	.fy_bottom(anotherView.chainTop + 20)
+```
+
+### 你可以在 Demo 中查看更多的代码
 
 ## 方圆的优势
 
@@ -54,20 +77,38 @@ ObjC 环境下的方圆也使用了上述代码，规则完全一样
 - 和现有布局库没有命名冲突
 - 基于 `UIView.frame` 布局，比 `NSAutoLayout` 有更高的性能
 - 使用链式语法，代码美观简介
-- 『方圆』在 Swift 和 ObjC 中的语法仅有两点不同，转换思维成本底：
+- 『方圆』在 Swift 和 ObjC 中的语法仅有两点不同：
 	- ObjC 中链式代码的结尾需要添加 `;` 分号
 	- ObjC 中链式代码返回值类型为 `UIView` 而非 `instancetype`
 
 ## 方圆的劣势
 
-- 猜测式依赖 ⚠️
-- 暂时不支持宽度、高度自适应
+### 猜测式依赖
+
+`aView.fy_bottom()` 中只有传递 `anotherView.chainTop` 是有效的，传入其他的 `chainXXX` 值，是不会产生实际效果的
+
+同理
+
+方法		|	调用
+----------|-------
+fy_top		|	chainBottom
+fy_bottom	|	chainTop
+fy_left		|	chainRight
+fy_right		|	chainLeft
+
+### 暂时不支持宽度、高度自适应
+正在紧张的完成中✍️
 
 ## 要做的事情
 
-- 更多的 demo
-- 将字符串展示面积的计算方法融入『方圆』中
+- 优化性能
+	- 个别算法的复杂度可能是 `views³constraints²` 😂
+	- 用空间换时间
+	- 渲染树
+- 更多，更完善的 demo
+- 将字符串展示面积的计算方法融入『方圆』中，并且可以同时设定高度/宽度
 - 将高度和宽度同样作为依赖
+- 两个 `UIView` 之间可以是对齐关系
 - 『方圆』大量使用了 `map`, `filter` 等函数，这里面可能有需要性能优化的地方
 - 和其他布局库作对比的 demo
 - 为逻辑部分添加充分的 Unit Test
