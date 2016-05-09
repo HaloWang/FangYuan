@@ -13,6 +13,7 @@ import Foundation
 extension UIView {
 
     /// 该 UIView.subviews 使用方圆的信息，通过一次 filter 和元组返回了是否在使用方圆和使用方圆的 subview
+    // TODO: 这个属性还是非常值得优化一下的！可是如何制作一个弱引用数组呢？
     var usingFangYuanInfo: (hasUsingFangYuanSubview:Bool, usingFangYuanSubviews:[UIView]) {
         let _usingFangYuanSubviews = subviews.filter {
             (subview) -> Bool in
