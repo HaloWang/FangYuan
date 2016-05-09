@@ -33,44 +33,47 @@ class FYDDemoViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        //  按住 Alt + 点击方法名来查看方法说明
-
-        dv3
-            .fy_top(164)
-            .fy_left(100)
-            .fy_bottom(dv1.chainTop - 20)
-            .fy_right(dv2.chainLeft + 5)
-
-        dv1
-            .fy_bottom(0)
-            .fy_left(0)
-            .fy_right(0)
-            .fy_height(49)
-
-        dv0
-            .fy_top(50)
-            .fy_left(25)
-            .fy_width(50)
-            .fy_height(80)
-
-        dv2
-            .fy_right(0)
-            .fy_width(50)
-            .fy_height(100)
-            .fy_top(200)
-
-        dv4
-            .fy_top(100)
-            .fy_left(0)
-            .fy_right(0)
-            .fy_height(50)
-
+        
         for i in 0..<demoSubviews.count {
             let demoSubview = self.demoSubviews[i]
             demoSubview.text = "dv\(i)"
             demoSubview.textAlignment = .Center
             self.view.addSubview(demoSubview)
+        }
+
+        //  按住 Alt + 点击方法名来查看方法说明
+        
+        FangYuanDemo.BeginLayout {
+            
+            dv3
+                .fy_top(164)
+                .fy_left(100)
+                .fy_bottom(dv1.chainTop - 20)
+                .fy_right(dv2.chainLeft + 5)
+            
+            dv1
+                .fy_bottom(0)
+                .fy_left(0)
+                .fy_right(0)
+                .fy_height(49)
+            
+            dv0
+                .fy_top(50)
+                .fy_left(25)
+                .fy_width(50)
+                .fy_height(80)
+            
+            dv2
+                .fy_right(0)
+                .fy_width(50)
+                .fy_height(100)
+                .fy_top(200)
+            
+            dv4
+                .fy_top(100)
+                .fy_left(0)
+                .fy_right(0)
+                .fy_height(50)
         }
     }
 }

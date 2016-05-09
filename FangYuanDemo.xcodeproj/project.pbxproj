@@ -10,6 +10,7 @@
 		0932F1E21CB4F8F4009596F6 /* FYDDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0932F1E11CB4F8F4009596F6 /* FYDDemoViewController.swift */; };
 		0932F1E41CB4F90B009596F6 /* FYDDemoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0932F1E31CB4F90B009596F6 /* FYDDemoTableViewController.swift */; };
 		0932F1E61CB50205009596F6 /* FYDVSAutoLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0932F1E51CB50205009596F6 /* FYDVSAutoLayoutViewController.swift */; };
+		093F1B2D1CE0D91500D23D70 /* FYDemoHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093F1B2C1CE0D91500D23D70 /* FYDemoHelper.swift */; };
 		094105E21CD5296900EBF9BC /* FYDDemoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 094105E11CD5296900EBF9BC /* FYDDemoTableViewCell.swift */; };
 		096A97731CAFA84A00497C1E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 096A97721CAFA84A00497C1E /* AppDelegate.swift */; };
 		096A97751CAFA84A00497C1E /* FYDViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 096A97741CAFA84A00497C1E /* FYDViewController.swift */; };
@@ -29,6 +30,7 @@
 		0932F1E11CB4F8F4009596F6 /* FYDDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FYDDemoViewController.swift; sourceTree = "<group>"; };
 		0932F1E31CB4F90B009596F6 /* FYDDemoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FYDDemoTableViewController.swift; sourceTree = "<group>"; };
 		0932F1E51CB50205009596F6 /* FYDVSAutoLayoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FYDVSAutoLayoutViewController.swift; sourceTree = "<group>"; };
+		093F1B2C1CE0D91500D23D70 /* FYDemoHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FYDemoHelper.swift; sourceTree = "<group>"; };
 		094105E11CD5296900EBF9BC /* FYDDemoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FYDDemoTableViewCell.swift; sourceTree = "<group>"; };
 		096A976F1CAFA84900497C1E /* FangYuanDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FangYuanDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		096A97721CAFA84A00497C1E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				0932F1E31CB4F90B009596F6 /* FYDDemoTableViewController.swift */,
 				094105E11CD5296900EBF9BC /* FYDDemoTableViewCell.swift */,
 				0932F1E51CB50205009596F6 /* FYDVSAutoLayoutViewController.swift */,
+				093F1B2C1CE0D91500D23D70 /* FYDemoHelper.swift */,
 				096A97791CAFA84A00497C1E /* Assets.xcassets */,
 				096A977B1CAFA84A00497C1E /* LaunchScreen.storyboard */,
 				096A977E1CAFA84A00497C1E /* Info.plist */,
@@ -337,6 +340,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0932F1E41CB4F90B009596F6 /* FYDDemoTableViewController.swift in Sources */,
+				093F1B2D1CE0D91500D23D70 /* FYDemoHelper.swift in Sources */,
 				096A97751CAFA84A00497C1E /* FYDViewController.swift in Sources */,
 				096A97731CAFA84A00497C1E /* AppDelegate.swift in Sources */,
 				0932F1E61CB50205009596F6 /* FYDVSAutoLayoutViewController.swift in Sources */,
