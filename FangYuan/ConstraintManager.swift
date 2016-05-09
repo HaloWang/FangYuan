@@ -51,6 +51,7 @@ extension ConstraintManager {
 
     // TODO: setConstraint 是生成『渲染队列』的最佳时机了吧
     // TODO: 这个『渲染队列』还可以抽象成一个专门计算高度的类方法？
+    // TODO: from.superview 和 to.superview 不同的话怎么办？可是这是后可能还没有 superview 呢？
 
     /**
      设定约束到某个视图上
