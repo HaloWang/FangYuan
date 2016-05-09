@@ -191,7 +191,15 @@ private extension ConstraintManager {
     // TODO: 时间复杂度？cons × cons ?
     // TODO: 布局实际上也像 node.js 那样是一个高并发的东西？
     func removeAndWarningCyclingConstraint() {
-
+        for toCons in constraints {
+            for fromCons in constraints {
+                if toCons <=> fromCons {
+                    constraints.remove(toCons)
+                    constraints.remove(fromCons)
+                    print("⚠️", "there is a cycling constraint")
+                }
+            }
+        }
     }
 
     func removeInvalidConstraint() {

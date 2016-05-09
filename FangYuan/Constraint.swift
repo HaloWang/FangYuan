@@ -8,6 +8,13 @@
 
 import UIKit
 
+/// 判断两个约束是否产生了循环依赖
+// TODO: 可是关于方向的问题你有没有想明白？
+infix operator <=> {}
+func <=>(lhs: Constraint, rhs: Constraint) -> Bool {
+    return lhs.to == rhs.from && lhs.from == rhs.to
+}
+
 func ==(lhs: Constraint, rhs: Constraint) -> Bool {
     return lhs.hashValue == rhs.hashValue
 }
