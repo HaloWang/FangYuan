@@ -61,13 +61,14 @@ extension ConstraintManager {
      - parameter value:     约束固定值
      */
     class func setConstraintTo(to:UIView, direction: Constraint.Direction, value:CGFloat) {
+        guard let holder = singleton.constraintHolder else {
+            return
+        }
+        
         singleton.removeInvalidConstraint()
         singleton.removeDuplicateConstraintOf(to, at: direction)
         // TODO: 未实现
         singleton.removeAndWarningCyclingConstraint()
-        guard let holder = singleton.constraintHolder else {
-            return
-        }
 
         holder.to = to
         holder.value = value
