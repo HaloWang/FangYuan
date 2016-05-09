@@ -103,10 +103,11 @@ public extension UIView {
     
     /// 设定某个 UIView 四个边距离其父视图相对四边的距离
     func fy_edge(edge: UIEdgeInsets) -> Self {
-        return fy_top(edge.top)
-            .fy_left(edge.left)
-            .fy_bottom(edge.bottom)
-            .fy_right(edge.right)
+        fy_top(edge.top)
+        fy_left(edge.left)
+        fy_bottom(edge.bottom)
+        fy_right(edge.right)
+        return self
     }
 
     // MARK: Animation
