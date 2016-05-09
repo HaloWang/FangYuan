@@ -78,9 +78,6 @@ extension UIView {
     // From http://nshipster.com/swift-objc-runtime/
 
     struct AssociatedKeys {
-        static var RulerX: Any?
-        static var RulerY: Any?
-        static var kUsingFangYuan: Any?
         static var AO: Any?
     }
 
