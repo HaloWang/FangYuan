@@ -94,8 +94,11 @@ extension ConstraintManager {
 // MARK: Layout
 private extension ConstraintManager {
 
+    // TODO: 应该在这个方法中设置一个调试器
     // TODO: hassetConstraintsOf 不是每次都要遍历的，可以提前生成一个渲染序列，这个渲染序列的副产品就是检查是否有依赖循环
     // TODO: 这个算法的复杂度是多少 views³constraint²
+    // TODO: UITableView.addSubiew 后，调用 UITableView 的 layoutSubviews 并不会被触发？
+    
     /// 核心布局方法
     func layout(views: [UIView]) {
         if hasUnsetConstraintsOf(views) {
