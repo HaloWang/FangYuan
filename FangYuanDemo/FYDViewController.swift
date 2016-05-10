@@ -4,23 +4,14 @@ import FangYuan
 import Halo
 
 class FYDViewController: UIViewController {
-
-    let titles = [
-        "⚠️Unfinish 矩形拖拽",
-        "⚠️Unfinish 观察代码",
-        "Chain 调用",
-        "在 ViewController 中使用",
-        "在 Cell 中使用",
-        "⚠️Unfinish 对比 SnapKit"
-    ]
-
-    let vcs = [
-        FYDRectViewController.self,
-        FYDReactiveCodeViewController.self,
-        FYDChainViewController.self,
-        FYDDemoViewController.self,
-        FYDDemoTableViewController.self,
-        FYDVSAutoLayoutViewController.self
+    
+    let demoMaps: [Dictionary<String, UIViewController.Type>] = [
+        ["在 UIViewController 中使用" : FYDDemoViewController.self],
+        ["在 Cell 中使用" : FYDDemoTableViewController.self],
+        ["Chain 调用" : FYDChainViewController.self],
+        ["⚠️Unfinish 矩形拖拽" : FYDRectViewController.self],
+        ["⚠️Unfinish 观察代码" : FYDReactiveCodeViewController.self],
+        ["⚠️Unfinish 对比 SnapKit" : FYDVSAutoLayoutViewController.self],
     ]
 
     lazy var tableView = UITableView(frame: ScreenBounds, style: .Plain)
@@ -45,8 +36,8 @@ class FYDViewController: UIViewController {
 // MARK: - UITableViewDelegate
 extension FYDViewController : UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cls = vcs[indexPath.row] as! UIViewController.Type
-        push(cls.init().backgroundColor(White).title(titles[indexPath.row]))
+        let pair = demoMaps[indexPath.row].first!
+        push(pair.1.init().backgroundColor(White).title(pair.0))
     }
 }
 
@@ -54,11 +45,11 @@ extension FYDViewController : UITableViewDelegate {
 extension FYDViewController : UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueCell(UITableViewCell).selectionStyle(.None).accessoryType(.DisclosureIndicator)
-        cell.text(titles[indexPath.row])
+        cell.text(demoMaps[indexPath.row].keys.first!)
         return cell
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return titles.count
+        return demoMaps.count
     }
 }

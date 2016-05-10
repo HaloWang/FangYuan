@@ -38,37 +38,41 @@ class FYDChainViewController: UIViewController {
                 .backgroundColor(RGB(200, 255, 200))
                 .superView(view)
         }
+        
+        FangYuanDemo.BeginLayout { 
+            
+            chainBottomView
+                .fy_top(baseView.chainBottom + 100)
+                .fy_left(50)
+                .fy_right(50)
+                .fy_height(100)
+            
+            chainLeftView
+                //            .fy_top(250)
+                //            .fy_right(baseView.chainLeft + 25)
+                //            .fy_left(5)
+                //            .fy_bottom(250)
+                .fy_edge(UIEdgeInsets(top: 250, left: 5, bottom: 250, right: baseView.chainLeft + 25))
+            
+            baseView
+                .fy_top(250 + NavigationBarHeight)
+                .fy_left(140)
+                .fy_right(140)
+                .fy_height(50)
+            
+            chainTopView
+                .fy_top(100)
+                .fy_right(100)
+                .fy_left(100)
+                .fy_bottom(baseView.chainTop + 100)
+            
+            chainRightView
+                .fy_top(100)
+                .fy_right(10)
+                .fy_left(baseView.chainRight + 50)
+                .fy_bottom(baseView.chainTop)
+        }
 
-        chainBottomView
-            .fy_top(baseView.chainBottom + 100)
-            .fy_left(50)
-            .fy_right(50)
-            .fy_height(100)
-        
-        chainLeftView
-//            .fy_top(250)
-//            .fy_right(baseView.chainLeft + 25)
-//            .fy_left(5)
-//            .fy_bottom(250)
-            .fy_edge(UIEdgeInsets(top: 250, left: 5, bottom: 250, right: baseView.chainLeft + 25))
-        
-        baseView
-            .fy_top(250 + NavigationBarHeight)
-            .fy_left(140)
-            .fy_right(140)
-            .fy_height(50)
-        
-        chainTopView
-            .fy_top(100)
-            .fy_right(100)
-            .fy_left(100)
-            .fy_bottom(baseView.chainTop + 100)
-        
-        chainRightView
-            .fy_top(100)
-            .fy_right(10)
-            .fy_left(baseView.chainRight + 50)
-            .fy_bottom(baseView.chainTop)
         
     }
 }
