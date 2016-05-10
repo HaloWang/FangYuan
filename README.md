@@ -97,7 +97,8 @@ fy_left		|	chainRight
 fy_right		|	chainLeft
 
 ### 暂时不支持宽度、高度自适应
-正在紧张的完成中✍️
+
+正在紧张的完成中
 
 ## 要做的事情
 
