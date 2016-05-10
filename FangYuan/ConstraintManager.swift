@@ -132,7 +132,7 @@ private extension ConstraintManager {
                 layoutingViews.forEach { view in
                     if hasSetConstraintsOf(view) {
                         view.layoutWithFangYuan()
-                        setConstraintsOf(view)
+                        setConstraintsFrom(view)
                         layoutingViews.remove(view)
                     }
                 }
@@ -153,10 +153,8 @@ private extension ConstraintManager {
         // TODO: 外层遍历遍历谁会更快？或者两个一起遍历？
 
         for view in views {
-            for con in constraints {
-                if con.to == view {
-                    return true
-                }
+            if !hasSetConstraintsOf(view) {
+                return true
             }
         }
 
@@ -172,7 +170,7 @@ private extension ConstraintManager {
         return true
     }
 
-    func setConstraintsOf(view: UIView) {
+    func setConstraintsFrom(view: UIView) {
         constraints.forEach { constraint in
             if constraint.from == view {
                 let _from = constraint.from
