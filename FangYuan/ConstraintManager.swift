@@ -9,6 +9,7 @@
 import UIKit
 
 // MARK: - Init & Properties
+
 /// 约束依赖管理者
 ///
 /// 可能做着做着就成了 `AsyncDisplayKit` 那样抽取布局树，异步计算布局的东西了
@@ -18,9 +19,6 @@ class ConstraintManager {
     static let singleton = ConstraintManager()
     private init() {}
 
-    // TODO: Set vs Array (performance) ?
-    // TODO: 看吧，到底用不用遍历全部约束？甚至从来没有一个 Constraint.hasSet -> false 的情况发生！
-    // TODO: 可以把这个集合变成多叉树，以便更有针对性的进行 map/filter
     /// 全部约束
     var constraints = Set<Constraint>()
     
@@ -58,11 +56,7 @@ class ConstraintManager {
     }
     
     var holder = ConstraintHolder()
-
-    /// 未设定约束相关信息
-    var unsetConstraintInfo: (has: Bool, constraints: [Constraint]) {
-        return (constraints.count != 0, Array(constraints))
-    }
+    
 }
 
 // MARK: - Public Methods
@@ -135,7 +129,6 @@ private extension ConstraintManager {
         if hasUnsetConstraintsOf(views) {
             var layoutingViews = Set(views)
             repeat {
-                print("✅ Layouting")
                 _ = layoutingViews.map { view in
                     if hasSetConstraintsOf(view) {
                         view.layoutWithFangYuan()
@@ -153,14 +146,12 @@ private extension ConstraintManager {
 
     func hasUnsetConstraintsOf(views:[UIView]) -> Bool {
 
-        let unsetInfo = unsetConstraintInfo
-
-        guard unsetInfo.has else {
+        guard constraints.count != 0 else {
             return false
         }
 
         for view in views {
-            for con in unsetInfo.constraints {
+            for con in constraints {
                 if con.to == view {
                     return true
                 }
@@ -182,7 +173,6 @@ private extension ConstraintManager {
     func setConstraintsOf(view: UIView) {
 
         // 抽取所有需要设定的约束
-        // TODO: 这才是关键所在！，每次你抽取的是全部约束
         let _constraintsShowP = constraints.filter { constraint in
             constraint.from == view
         }
@@ -212,7 +202,6 @@ private extension ConstraintManager {
 // MARK: Assistant
 private extension ConstraintManager {
 
-    // TODO: 这里是不是可以用上 Set ?
     func removeDuplicateConstraintOf(view:UIView, at direction: Constraint.Direction) {
         _ = constraints.map { con in
             if con.to == view && con.direction == direction {
@@ -221,7 +210,6 @@ private extension ConstraintManager {
         }
     }
 
-    // TODO: 时间复杂度？cons × cons ?
     func removeAndWarningCyclingConstraint() {
         for toCons in constraints {
             for fromCons in constraints {
