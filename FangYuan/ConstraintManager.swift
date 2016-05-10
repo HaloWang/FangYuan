@@ -129,7 +129,7 @@ private extension ConstraintManager {
         if hasUnsetConstraintsOf(views) {
             var layoutingViews = Set(views)
             repeat {
-                _ = layoutingViews.map { view in
+                layoutingViews.forEach { view in
                     if hasSetConstraintsOf(view) {
                         view.layoutWithFangYuan()
                         setConstraintsOf(view)
@@ -138,7 +138,7 @@ private extension ConstraintManager {
                 }
             } while hasUnsetConstraintsOf(views)
         } else {
-            _ = views.map { view in
+            views.forEach { view in
                 view.layoutWithFangYuan()
             }
         }
@@ -171,39 +171,33 @@ private extension ConstraintManager {
     }
 
     func setConstraintsOf(view: UIView) {
-
-        // 抽取所有需要设定的约束
-        let constraintNeedToSet = constraints.filter { constraint in
-            constraint.from == view
-        }
-
-        // 设定这些约束
-        // TODO: 命名意义不明
-        _ = constraintNeedToSet.map { constraint in
-            let _from = constraint.from
-            let _to = constraint.to
-            let _value = constraint.value
-            switch constraint.direction {
-            case .BottomTop:
-                _to.rulerY.a = _from.frame.origin.y + _from.frame.height + _value
-            case .TopBottom:
-                _to.rulerY.c = _from.superview!.frame.height - _from.frame.origin.y + _value
-            case .RightLeft:
-                _to.rulerX.a = _from.frame.origin.x + _from.frame.width + _value
-            case .LeftRigt:
-                _to.rulerX.c = _from.superview!.frame.width - _from.frame.origin.x + _value
+        constraints.forEach { constraint in
+            if constraint.from == view {
+                let _from = constraint.from
+                let _to = constraint.to
+                let _value = constraint.value
+                switch constraint.direction {
+                case .BottomTop:
+                    _to.rulerY.a = _from.frame.origin.y + _from.frame.height + _value
+                case .TopBottom:
+                    _to.rulerY.c = _from.superview!.frame.height - _from.frame.origin.y + _value
+                case .RightLeft:
+                    _to.rulerX.a = _from.frame.origin.x + _from.frame.width + _value
+                case .LeftRigt:
+                    _to.rulerX.c = _from.superview!.frame.width - _from.frame.origin.x + _value
+                }
+                constraints.remove(constraint)
             }
-            constraints.remove(constraint)
         }
     }
-
+    
 }
 
 // MARK: Assistant
 private extension ConstraintManager {
 
     func removeDuplicateConstraintOf(view:UIView, at direction: Constraint.Direction) {
-        _ = constraints.map { con in
+        constraints.forEach { con in
             if con.to == view && con.direction == direction {
                 constraints.remove(con)
             }
