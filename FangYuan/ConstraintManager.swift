@@ -129,7 +129,7 @@ extension ConstraintManager {
 private extension ConstraintManager {
 
     // TODO: 应该在这个方法中设置一个调试器
-    // TODO: hassetConstraintsOf 不是每次都要遍历的，可以提前生成一个渲染序列，这个渲染序列的副产品就是检查是否有依赖循环
+    // TODO: hasSetConstraintsOf 不是每次都要遍历的，可以提前生成一个渲染序列，这个渲染序列的副产品就是检查是否有依赖循环
     // TODO: 这个算法的复杂度是多少 views³constraint²
     // TODO: UITableView.addSubiew 后，调用 UITableView 的 layoutSubviews 并不会被触发？
     
@@ -140,7 +140,7 @@ private extension ConstraintManager {
             repeat {
                 print("✅ Layouting")
                 _ = layoutingViews.map { view in
-                    if hassetConstraintsOf(view) {
+                    if hasSetConstraintsOf(view) {
                         view.layoutWithFangYuan()
                         setConstraintsOf(view)
                         layoutingViews.remove(view)
@@ -173,7 +173,7 @@ private extension ConstraintManager {
         return false
     }
 
-    func hassetConstraintsOf(view:UIView) -> Bool {
+    func hasSetConstraintsOf(view:UIView) -> Bool {
         for con in constraints {
             if con.to == view && !con.hasSet {
                 return false;
