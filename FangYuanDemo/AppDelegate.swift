@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject:AnyObject]?) -> Bool {
 
         window = UIWindow(frame: ScreenBounds)
-        window?.rootViewController = FYDViewController().title("FangYuan - 方圆").navigationed
+        window?.rootViewController = FYDListViewController().title("方圆").navigationed
         window?.makeKeyAndVisible()
 
         return true

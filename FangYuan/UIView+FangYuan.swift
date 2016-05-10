@@ -47,6 +47,8 @@ public extension UIView {
 
 // MARK: - Chainable Method
 
+// TODO: 如何在调用完下面的方法后让 superview 刷新？
+
 public extension UIView {
     
     // MARK: X
@@ -116,6 +118,9 @@ public extension UIView {
     ///
     /// 只有当 view.superview 不为空时，该方法才有效
     func toAnimation() {
+        
+        // TODO: 这个方法还有更好的写法吗？
+        
         guard let superview = superview else {
             return
         }

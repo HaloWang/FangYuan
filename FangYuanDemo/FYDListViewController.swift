@@ -3,7 +3,7 @@ import UIKit
 import FangYuan
 import Halo
 
-class FYDViewController: UIViewController {
+class FYDListViewController: UIViewController {
     
     let demoMaps: [Dictionary<String, UIViewController.Type>] = [
         ["在 UIViewController 中使用" : FYDDemoViewController.self],
@@ -30,7 +30,7 @@ class FYDViewController: UIViewController {
 }
 
 // MARK: - UITableViewDelegate
-extension FYDViewController : UITableViewDelegate {
+extension FYDListViewController : UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let pair = demoMaps[indexPath.row].first!
         push(pair.1.init().backgroundColor(White).title(pair.0))
@@ -38,7 +38,7 @@ extension FYDViewController : UITableViewDelegate {
 }
 
 // MARK: - UITableViewDataSource
-extension FYDViewController : UITableViewDataSource {
+extension FYDListViewController : UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueCell(UITableViewCell).selectionStyle(.None).accessoryType(.DisclosureIndicator)
         cell.text(demoMaps[indexPath.row].keys.first!)
