@@ -94,6 +94,8 @@ extension ConstraintManager {
      - parameter value:     约束固定值
      */
     class func setConstraintTo(to:UIView, direction: Constraint.Direction, value:CGFloat) {
+        
+        //  如果对应方向上没有 holder，则认为 fy_XXX() 的参数中没有调用 chainXXX，直接返回，不进行后续操作
         guard let _constraint = singleton.holder.constraintAt(direction) else {
             return
         }

@@ -24,8 +24,8 @@ class FYDAnimationViewController: UIViewController {
         
         button
             .superView(view)
-            .backgroundColor(HEX("55ee55"))
-            .title("Animate~")
+            .backgroundColor(HEX("44cc44"))
+            .title("Animation")
             .titleColor(White)
             .target(self, upInsideAction: #selector(FYDAnimationViewController.animate))
         
