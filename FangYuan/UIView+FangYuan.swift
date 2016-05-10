@@ -113,7 +113,12 @@ public extension UIView {
     // MARK: Animation
 
     /// 触发动画
+    ///
+    /// 只有当 view.superview 不为空时，该方法才有效
     func toAnimation() {
-        ConstraintManager.layout(self)
+        guard let superview = superview else {
+            return
+        }
+        ConstraintManager.layout(superview)
     }
 }

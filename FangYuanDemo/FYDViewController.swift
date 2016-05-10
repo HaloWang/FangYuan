@@ -7,30 +7,26 @@ class FYDViewController: UIViewController {
     
     let demoMaps: [Dictionary<String, UIViewController.Type>] = [
         ["在 UIViewController 中使用" : FYDDemoViewController.self],
-        ["在 Cell 中使用" : FYDDemoTableViewController.self],
-        ["Chain 调用" : FYDChainViewController.self],
+        ["chainTop/Bottom/Left/Right 属性调用" : FYDChainViewController.self],
+        ["在 UITableViewCell 中使用" : FYDDemoTableViewController.self],
+        ["Animation" : FYDAnimationViewController.self],
         ["⚠️Unfinish 矩形拖拽" : FYDRectViewController.self],
         ["⚠️Unfinish 观察代码" : FYDReactiveCodeViewController.self],
         ["⚠️Unfinish 对比 SnapKit" : FYDVSAutoLayoutViewController.self],
     ]
 
     lazy var tableView = UITableView(frame: ScreenBounds, style: .Plain)
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         backgroundColor(White)
-
         tableView
             .registerCellClass(UITableViewCell)
             .dataSourceAndDelegate(self)
             .tableFooterViewAdded()
             .superView(view)
             .fy_edge(UIEdgeInsetsZero)
-
-        tableView.tag = 111
-
     }
-
 }
 
 // MARK: - UITableViewDelegate
