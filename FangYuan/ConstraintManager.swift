@@ -119,10 +119,10 @@ extension ConstraintManager {
 // MARK: Layout
 private extension ConstraintManager {
 
-    // TODO: 应该在这个方法中设置一个调试器
-    // TODO: hasSetConstraintsOf 不是每次都要遍历的，可以提前生成一个渲染序列，这个渲染序列的副产品就是检查是否有依赖循环
-    // TODO: 这个算法的复杂度是多少 views³constraint²
     // TODO: UITableView.addSubiew 后，调用 UITableView 的 layoutSubviews 并不会被触发？
+    // TODO: ⚠️ 你这个计算模型真的合理吗？根据 Model 动态设定 fy_() 的时候，能保证不产生问题吗？
+    // TODO: 1、做更复杂的 UITableViewCell 验证一下
+    // TODO: 2、把布局模型再思考一遍
     
     /// 核心布局方法
     func layout(views: [UIView]) {
@@ -149,6 +149,8 @@ private extension ConstraintManager {
         guard constraints.count != 0 else {
             return false
         }
+        
+        // TODO: 外层遍历遍历谁会更快？或者两个一起遍历？
 
         for view in views {
             for con in constraints {
