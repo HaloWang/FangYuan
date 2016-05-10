@@ -19,6 +19,8 @@ class FYDDemoTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        selectionStyle = .None
+        
         addSubview(avatarImageView)
         addSubview(timeLabel)
         addSubview(messageTextView)
@@ -30,7 +32,7 @@ class FYDDemoTableViewCell: UITableViewCell {
         avatarImageView.backgroundColor    = UIColor(red: 1, green: 0.5, blue: 0.6, alpha: 1)
         avatarImageView.layer.cornerRadius = 18
         
-        nickNameLabel.backgroundColor      = UIColor.whiteColor()
+        nickNameLabel.backgroundColor      = UIColor(red: 1, green: 0.8, blue: 0.4, alpha: 0.8)
         nickNameLabel.font                 = UIFont.systemFontOfSize(10)
         
         timeLabel.backgroundColor          = UIColor(red: 0.6, green: 0.5, blue: 1, alpha: 1)
@@ -38,10 +40,7 @@ class FYDDemoTableViewCell: UITableViewCell {
         messageTextView.backgroundColor    = UIColor(red: 0.8, green: 1, blue: 0.9, alpha: 1)
         messageTextView.scrollEnabled      = false
         
-        likeButton.backgroundColor         = UIColor.whiteColor()
-        likeButton.layer.cornerRadius      = 3
-        likeButton.layer.borderWidth       = 0.5
-        likeButton.layer.borderColor       = UIColor.lightGrayColor().CGColor
+        likeButton.backgroundColor         = UIColor(red: 0.2, green: 0.6, blue: 1, alpha: 0.8)
         
         FangYuanDemo.BeginLayout {
             
@@ -49,9 +48,9 @@ class FYDDemoTableViewCell: UITableViewCell {
             //  昵称的左边于头像的右边距离为 5
             nickNameLabel
                 .fy_left(avatarImageView.chainRight + 5)
-                .fy_top(2)
+                .fy_top(4)
                 .fy_right(15)
-                .fy_height(10)
+                .fy_height(13)
             
             let _timeLabelHeight = CGFloat(20)
             //  时间的左边于头像的右边距离为 5
@@ -67,7 +66,7 @@ class FYDDemoTableViewCell: UITableViewCell {
                 .fy_left(avatarImageView.chainRight + 5)
                 .fy_top(timeLabel.chainBottom + 5)
                 .fy_right(15)
-                .fy_bottom(likeButton.chainTop + 10)
+                .fy_bottom(likeButton.chainTop + 6)
             
             //  距离父视图 (Cell) 右边的距离为 15
             //  距离父视图底部的距离为 2.5
@@ -75,7 +74,7 @@ class FYDDemoTableViewCell: UITableViewCell {
                 .fy_right(15)
                 .fy_width(60)
                 .fy_height(20)
-                .fy_bottom(2.5)
+                .fy_bottom(4)
             
             //  头像的位置相对固定
             avatarImageView

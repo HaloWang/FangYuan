@@ -138,6 +138,7 @@ private extension ConstraintManager {
         if hasUnsetConstraintsOf(views) {
             var layoutingViews = Set(views)
             repeat {
+                print("✅ Layouting")
                 _ = layoutingViews.map { view in
                     if hassetConstraintsOf(view) {
                         view.layoutWithFangYuan()
