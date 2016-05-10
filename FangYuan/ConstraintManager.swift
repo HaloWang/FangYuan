@@ -173,13 +173,13 @@ private extension ConstraintManager {
     func setConstraintsOf(view: UIView) {
 
         // 抽取所有需要设定的约束
-        let _constraintsShowP = constraints.filter { constraint in
+        let constraintNeedToSet = constraints.filter { constraint in
             constraint.from == view
         }
 
         // 设定这些约束
         // TODO: 命名意义不明
-        _ = _constraintsShowP.map { constraint in
+        _ = constraintNeedToSet.map { constraint in
             let _from = constraint.from
             let _to = constraint.to
             let _value = constraint.value
