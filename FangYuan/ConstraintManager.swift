@@ -61,10 +61,7 @@ class ConstraintManager {
 
     /// 未设定约束相关信息
     var unsetConstraintInfo: (has: Bool, constraints: [Constraint]) {
-        let unsetCons = constraints.filter { con in
-            !con.hasSet
-        }
-        return (unsetCons.count != 0, unsetCons)
+        return (constraints.count != 0, Array(constraints))
     }
 }
 
@@ -175,8 +172,8 @@ private extension ConstraintManager {
 
     func hasSetConstraintsOf(view:UIView) -> Bool {
         for con in constraints {
-            if con.to == view && !con.hasSet {
-                return false;
+            if con.to == view {
+                return false
             }
         }
         return true
@@ -206,7 +203,7 @@ private extension ConstraintManager {
             case .LeftRigt:
                 _to.rulerX.c = _from.superview!.frame.width - _from.frame.origin.x + _value
             }
-            constraint.hasSet = true
+            constraints.remove(constraint)
         }
     }
 

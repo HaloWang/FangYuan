@@ -40,9 +40,6 @@ class Constraint: Hashable {
     /// 该约束的数字量
     var value: CGFloat = 0
 
-    /// 该约束在当前 layoutSubviews 方法中是否已经求解完毕
-    var hasSet = false
-
     /// 约束方向
     enum Direction {
         case BottomTop
@@ -71,6 +68,6 @@ class Constraint: Hashable {
 
 extension Constraint: CustomStringConvertible {
     var description: String {
-        return "\nConstraint:\n✅direction: \(direction) \n⏬from: \(from) \n⏫to: \(to)\nℹ️Value: \(value)\nℹ️Setted: \(hasSet)"
+        return "\nConstraint:\n✅direction: \(direction) \n⏬from: \(from) \n⏫to: \(to)\nℹ️Value: \(value)"
     }
 }
