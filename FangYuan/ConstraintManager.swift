@@ -90,12 +90,13 @@ extension ConstraintManager {
         
         singleton.removeInvalidConstraint()
         singleton.removeDuplicateConstraintOf(to, at: direction)
-        singleton.removeAndWarningCyclingConstraint()
 
         _constraint.to = to
         _constraint.value = value
-
         singleton.constraints.insert(_constraint)
+        
+        singleton.removeAndWarningCyclingConstraint()
+        
         singleton.holder.set(nil, at: direction)
     }
 
@@ -197,10 +198,14 @@ private extension ConstraintManager {
         constraints.forEach { con in
             if con.to == view && con.direction == direction {
                 constraints.remove(con)
+                //  按照程序逻辑，一个 view 最多同时只能在一个方向上拥有一个约束
+                return
             }
         }
     }
 
+    // TODO: 这个方法还没有被测试过
+    // TODO: 算法过于复杂
     func removeAndWarningCyclingConstraint() {
         for toCons in constraints {
             for fromCons in constraints {
@@ -208,15 +213,18 @@ private extension ConstraintManager {
                     constraints.remove(toCons)
                     constraints.remove(fromCons)
                     print("⚠️", "there is a cycling constraint")
+                    //  每次添加一个约束，最多只能产生一个循环约束
+                    return
                 }
             }
         }
     }
 
     func removeInvalidConstraint() {
-        let _constraints = constraints.filter { con in
-            return con.to != nil && con.from != nil
+        constraints.forEach { cons in
+            if cons.from == nil || cons.to == nil {
+                constraints.remove(cons)
+            }
         }
-        constraints = Set(_constraints)
     }
 }
