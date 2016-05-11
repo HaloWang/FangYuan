@@ -14,13 +14,13 @@ import UIKit
 ///
 /// 可能做着做着就成了 `AsyncDisplayKit` 那样抽取布局树，异步计算布局的东西了
 class ConstraintManager {
-
-    /// 单例
-    static let singleton = ConstraintManager()
+    
     private init() {}
-
-    /// 全部约束
+    static let singleton = ConstraintManager()
+    
     var constraints = Set<Constraint>()
+    
+    var holder = ConstraintHolder()
     
     class ConstraintHolder {
         var topBottom: Constraint?
@@ -54,9 +54,6 @@ class ConstraintManager {
             }
         }
     }
-    
-    var holder = ConstraintHolder()
-    
 }
 
 // MARK: - Public Methods
