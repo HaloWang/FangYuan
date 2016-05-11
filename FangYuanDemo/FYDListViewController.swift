@@ -9,10 +9,10 @@ class FYDListViewController: UIViewController {
         ["在 UIViewController 中使用" : FYDDemoViewController.self],
         ["chainTop/Bottom/Left/Right 属性调用" : FYDChainViewController.self],
         ["在 UITableViewCell 中使用" : FYDDemoTableViewController.self],
+        ["在复杂的 UITableViewCell 中使用" : FYDComplexTableViewController.self],
         ["Animation" : FYDAnimationViewController.self],
         ["⚠️Unfinish 矩形拖拽" : FYDRectViewController.self],
         ["⚠️Unfinish 观察代码" : FYDReactiveCodeViewController.self],
-        ["⚠️Unfinish 对比 SnapKit" : FYDVSAutoLayoutViewController.self],
     ]
 
     lazy var tableView = UITableView(frame: ScreenBounds, style: .Plain)
