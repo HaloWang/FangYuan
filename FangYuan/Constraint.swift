@@ -63,6 +63,7 @@ class Constraint: Hashable {
         self.direction = direction
         self.value = value
         Constraint.hashStore += 1
+        // TODO: Int.max ?
     }
 }
 
