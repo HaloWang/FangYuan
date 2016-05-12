@@ -13,31 +13,37 @@ class FYDComplexTableViewController: UIViewController {
     
     let tableView = UITableView(frame: ScreenBounds, style: .Plain)
     
-    var data : [Item] {
-        return FYDComplexDataSource.data
-    }
+    var data = [Item]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        data = FYDComplexDataSource.requestData()
+        
         tableView
             .dataSourceAndDelegate(self)
             .registerCellClass(FYDComplexTableViewCell)
             .superView(view)
+        
+        tableView.rowHeight = 300
     }
     
 }
 
 // MARK: - UITableViewDelegate
 extension FYDComplexTableViewController : UITableViewDelegate {
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 44
-    }
+//    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+//        return 300
+//    }
 }
 
 // MARK: - UITableViewDataSource
 extension FYDComplexTableViewController : UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueCell(FYDComplexTableViewCell).selectionStyle(.None)
+        let cell = tableView
+            .dequeueCell(FYDComplexTableViewCell)
+//            .selectionStyle(.None)
+//        cell.setWith(data[indexPath.row])
         return cell
     }
     

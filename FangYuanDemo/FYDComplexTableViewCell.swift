@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Halo
+import FangYuan
 
 class FYDComplexTableViewCell: UITableViewCell {
     
@@ -17,6 +19,35 @@ class FYDComplexTableViewCell: UITableViewCell {
     let deleteButton    = UIButton()
     let likeButton      = UIButton()
     var imageCollectionView : UICollectionView!
+    
+    func setWith(item:Item) {
+        
+    }
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        nickNameLabel.superView(self).backgroundColor(Red.alpha(0.3))
+        deleteButton.superView(self).backgroundColor(Green.alpha(0.3))
+        
+        // TODO: ⚠️ BUG FOUND!
+        
+        nickNameLabel
+            .fy_top(5)
+            .fy_left(5)
+            .fy_height(25)
+            .fy_right(deleteButton.chainLeft)
+        
+        deleteButton
+            .fy_right(5)
+            .fy_top(5)
+            .fy_height(25)
+            .fy_width(50)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func awakeFromNib() {
         super.awakeFromNib()

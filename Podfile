@@ -6,7 +6,7 @@ target 'FangYuanDemo' do
     pod 'Halo'
     pod 'KMCGeigerCounter'
 #    pod 'SnapKit'
-#    pod 'Reveal-iOS-SDK', :configurations => ["Debug"]
+    pod 'Reveal-iOS-SDK', :configurations => ["Debug"]
 end
 
 target 'FangYuanTests' do
