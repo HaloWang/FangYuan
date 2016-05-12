@@ -88,6 +88,9 @@ extension ConstraintManager {
             return
         }
         
+        // TODO: 更详细的断言
+        assert(to != _constraint.from, "你不能让一个设置一个来源于 View 自己的约束：\(to) \(direction) \(value)")
+        
         singleton.removeInvalidConstraint()
         singleton.removeDuplicateConstraintOf(to, at: direction)
 
