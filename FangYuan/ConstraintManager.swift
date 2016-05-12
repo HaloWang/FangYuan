@@ -129,15 +129,21 @@ private extension ConstraintManager {
     func layout(views: [UIView]) {
         if hasUnsetConstraintsOf(views) {
             var layoutingViews = Set(views)
+            //  未设定的约束中，发现有用来约束 view 的约束
+            var shouldRepeat : Bool
             repeat {
+                shouldRepeat = false
                 layoutingViews.forEach { view in
-                    if hasSetConstraintsOf(view) {
+                    if hasSetConstrainTo(view) {
                         view.layoutWithFangYuan()
                         setConstraintsFrom(view)
+                        //  在被遍历的数组中移除该 view
                         layoutingViews.remove(view)
+                    } else {
+                        shouldRepeat = true
                     }
                 }
-            } while hasUnsetConstraintsOf(views)
+            } while shouldRepeat
         } else {
             views.forEach { view in
                 view.layoutWithFangYuan()
@@ -154,7 +160,7 @@ private extension ConstraintManager {
         // TODO: 外层遍历遍历谁会更快？或者两个一起遍历？
 
         for view in views {
-            if !hasSetConstraintsOf(view) {
+            if !hasSetConstrainTo(view) {
                 return true
             }
         }
@@ -162,7 +168,8 @@ private extension ConstraintManager {
         return false
     }
 
-    func hasSetConstraintsOf(view:UIView) -> Bool {
+    /// 未设定的约束中，已经没有用来约束 view 的约束了
+    func hasSetConstrainTo(view:UIView) -> Bool {
         for con in constraints {
             if con.to == view {
                 return false
@@ -171,6 +178,7 @@ private extension ConstraintManager {
         return true
     }
 
+    /// 确定了该 UIView.frame 后，装载 Constraint 至 to.ruler.section 中
     func setConstraintsFrom(view: UIView) {
         constraints.forEach { constraint in
             if constraint.from == view {

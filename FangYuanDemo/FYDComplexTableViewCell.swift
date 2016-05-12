@@ -30,8 +30,6 @@ class FYDComplexTableViewCell: UITableViewCell {
         nickNameLabel.superView(self).backgroundColor(Red.alpha(0.3))
         deleteButton.superView(self).backgroundColor(Green.alpha(0.3))
         
-        // TODO: ⚠️ BUG FOUND!
-        
         nickNameLabel
             .fy_top(5)
             .fy_left(5)
