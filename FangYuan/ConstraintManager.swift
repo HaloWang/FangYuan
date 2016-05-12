@@ -18,6 +18,7 @@ class ConstraintManager {
     private init() {}
     static let singleton = ConstraintManager()
     
+    // TODO: 根据正在布局的 UIView 对 constraints 按组遍历
     var constraints = Set<Constraint>()
     
     var holder = ConstraintHolder()
@@ -88,7 +89,6 @@ extension ConstraintManager {
             return
         }
         
-        singleton.removeInvalidConstraint()
         singleton.removeDuplicateConstraintOf(to, at: direction)
 
         _constraint.to = to
@@ -101,7 +101,7 @@ extension ConstraintManager {
     }
 
     class func layout(view:UIView) {
-
+        
         let info = view.usingFangYuanInfo
 
         guard info.hasUsingFangYuanSubview else {
@@ -205,11 +205,11 @@ private extension ConstraintManager {
 // TODO: 下面的这些辅助函数是在每次设定约束的时候调用的，所以不必每次遍历全部约束，仅仅针对某个约束检查就行了
 private extension ConstraintManager {
 
+    /// 按照程序逻辑，一个 view 最多同时只能在一个方向上拥有一个约束
     func removeDuplicateConstraintOf(view:UIView, at direction: Constraint.Direction) {
         constraints.forEach { con in
             if con.to == view && con.direction == direction {
                 constraints.remove(con)
-                //  按照程序逻辑，一个 view 最多同时只能在一个方向上拥有一个约束
                 return
             }
         }
@@ -227,14 +227,6 @@ private extension ConstraintManager {
                     //  每次添加一个约束，最多只能产生一个循环约束
                     return
                 }
-            }
-        }
-    }
-
-    func removeInvalidConstraint() {
-        constraints.forEach { cons in
-            if cons.from == nil || cons.to == nil {
-                constraints.remove(cons)
             }
         }
     }

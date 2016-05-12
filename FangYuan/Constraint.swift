@@ -12,6 +12,8 @@ import UIKit
 
 infix operator <=> {}
 /// 判断两个约束是否产生了循环依赖
+
+// TODO: 这个方法应该拆分的，也许是两个方向上的约束？那 LayoutWithFangYuan 是不是也需要拆分成两个方向上的？
 func <=>(lhs: Constraint, rhs: Constraint) -> Bool {
     return lhs.to == rhs.from && lhs.from == rhs.to
 }
