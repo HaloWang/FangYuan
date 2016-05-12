@@ -88,9 +88,6 @@ extension ConstraintManager {
             return
         }
         
-        // TODO: 更详细的断言
-        assert(to != _constraint.from, "你不能让一个设置一个来源于 View 自己的约束：\(to) \(direction) \(value)")
-        
         singleton.removeInvalidConstraint()
         singleton.removeDuplicateConstraintOf(to, at: direction)
 
@@ -127,28 +124,30 @@ private extension ConstraintManager {
     
     /// 核心布局方法
     func layout(views: [UIView]) {
-        if hasUnsetConstraintsOf(views) {
-            var layoutingViews = Set(views)
-            //  未设定的约束中，发现有用来约束 view 的约束
-            var shouldRepeat : Bool
-            repeat {
-                shouldRepeat = false
-                layoutingViews.forEach { view in
-                    if hasSetConstrainTo(view) {
-                        view.layoutWithFangYuan()
-                        setConstraintsFrom(view)
-                        //  在被遍历的数组中移除该 view
-                        layoutingViews.remove(view)
-                    } else {
-                        shouldRepeat = true
-                    }
-                }
-            } while shouldRepeat
-        } else {
+        
+        guard hasUnsetConstraintsOf(views) else {
             views.forEach { view in
                 view.layoutWithFangYuan()
             }
+            return
         }
+        
+        var layoutingViews = Set(views)
+        //  未设定的约束中，发现有用来约束 view 的约束
+        var shouldRepeat : Bool
+        repeat {
+            shouldRepeat = false
+            layoutingViews.forEach { view in
+                if hasSetConstrainTo(view) {
+                    view.layoutWithFangYuan()
+                    setConstraintsFrom(view)
+                    //  在被遍历的数组中移除该 view
+                    layoutingViews.remove(view)
+                } else {
+                    shouldRepeat = true
+                }
+            }
+        } while shouldRepeat
     }
 
     func hasUnsetConstraintsOf(views:[UIView]) -> Bool {
@@ -203,6 +202,7 @@ private extension ConstraintManager {
 }
 
 // MARK: Assistant
+// TODO: 下面的这些辅助函数是在每次设定约束的时候调用的，所以不必每次遍历全部约束，仅仅针对某个约束检查就行了
 private extension ConstraintManager {
 
     func removeDuplicateConstraintOf(view:UIView, at direction: Constraint.Direction) {
