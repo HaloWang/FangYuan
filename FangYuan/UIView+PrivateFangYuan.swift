@@ -12,12 +12,13 @@ import Foundation
 
 extension UIView {
 
-    /// 该 UIView.subviews 使用方圆的信息，通过一次 filter 和元组返回了是否在使用方圆和使用方圆的 subview
     // TODO: 能不能让 ConstraintManager 记录 usingFangYuan 的信息？
     // TODO: 这个属性还是非常值得优化一下的！可是如何制作一个弱引用数组呢？
     // TODO: 所有的 UIView 都会被加上一个关联对象，并且每次调用 getter, 简直不能忍！
     // TODO: 应该简化这个属性了
     // TODO: 并发遍历可能真的是个很重要的属性
+    
+    /// 该 UIView.subviews 使用方圆的信息，通过一次 filter 和元组返回了是否在使用方圆和使用方圆的 subview
     var usingFangYuanInfo: (hasUsingFangYuanSubview:Bool, usingFangYuanSubviews:[UIView]) {
         let _usingFangYuanSubviews = subviews.filter {
             (subview) -> Bool in

@@ -64,8 +64,14 @@ class Constraint: Hashable {
         self.to = to
         self.direction = direction
         self.value = value
-        Constraint.hashStore += 1
-        // TODO: Int.max ?
+        Constraint.checkAndUpdateHashStore()
+    }
+    
+    class func checkAndUpdateHashStore() {
+        if hashStore == Int.max {
+            hashStore = 0
+        }
+        hashStore += 1
     }
 }
 

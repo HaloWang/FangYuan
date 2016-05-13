@@ -73,7 +73,6 @@ extension ConstraintManager {
 
     // TODO: setConstraint 是生成『渲染队列』的最佳时机了吧
     // TODO: 这个『渲染队列』还可以抽象成一个专门计算高度的类方法？
-    // TODO: from.superview 和 to.superview 不同的话怎么办？可是这是后可能还没有 superview 呢？
 
     /**
      设定约束到某个视图上
@@ -168,6 +167,7 @@ private extension ConstraintManager {
     func hasSetConstrainTo(view:UIView) -> Bool {
         for con in constraints {
             if con.to == view {
+                assert(con.to.superview == con.from.superview, "A constraint.to and from must has same superview")
                 return false
             }
         }
@@ -199,7 +199,6 @@ private extension ConstraintManager {
 }
 
 // MARK: Assistant
-// TODO: 下面的这些辅助函数是在每次设定约束的时候调用的，所以不必每次遍历全部约束，仅仅针对某个约束检查就行了
 private extension ConstraintManager {
 
     /// 按照程序逻辑，一个 view 最多同时只能在一个方向上拥有一个约束
@@ -214,9 +213,9 @@ private extension ConstraintManager {
     
     // TODO: 这个方法还没有被测试过
     func checkCyclingConstraintWith(constraint:Constraint) {
-        for cons in constraints {
-            if cons <=> constraint {
-                assert(false, "there is a cycling constraint of view:\(cons.to) and view:\(cons.from)")
+        constraints.forEach { con in
+            if con <=> constraint {
+                assert(false, "there is a cycling constraint of view:\(con.to) and view:\(con.from)")
                 return;
             }
         }
