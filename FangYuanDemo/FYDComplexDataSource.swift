@@ -14,9 +14,9 @@ class FYDComplexDataSource {
     
     class func requestData() -> [Item] {
         var items = [Item]()
-        for i in 0...99 {
+        for _ in 0...99 {
             let item = Item()
-            item.isMine = i == 0
+            item.isMine = (arc4random() % 2 == 0)
             items.append(item)
         }
         return items

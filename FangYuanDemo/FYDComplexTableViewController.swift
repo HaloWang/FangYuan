@@ -24,17 +24,12 @@ class FYDComplexTableViewController: UIViewController {
             .dataSourceAndDelegate(self)
             .registerCellClass(FYDComplexTableViewCell)
             .superView(view)
-        
-        tableView.rowHeight = 300
     }
     
 }
 
 // MARK: - UITableViewDelegate
 extension FYDComplexTableViewController : UITableViewDelegate {
-//    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-//        return 300
-//    }
 }
 
 // MARK: - UITableViewDataSource
@@ -42,8 +37,8 @@ extension FYDComplexTableViewController : UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView
             .dequeueCell(FYDComplexTableViewCell)
-//            .selectionStyle(.None)
-//        cell.setWith(data[indexPath.row])
+            .selectionStyle(.None)
+        cell.setWith(data[indexPath.row])
         return cell
     }
     

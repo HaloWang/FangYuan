@@ -21,7 +21,11 @@ class FYDComplexTableViewCell: UITableViewCell {
     var imageCollectionView : UICollectionView!
     
     func setWith(item:Item) {
-        
+        // TODO: 真的是在且仅在下一次 `layoutSubviews` 生效吗？那为什么上一个 tableView 动态高度为什么是可以的呢？
+        // TODO: 当初 hasSet 属性不就是为了做这件事情吗？
+        // TODO: 能不能让开发者想的更少呢？
+        deleteButton.fy_width(item.isMine ? 100 : 0)
+        nickNameLabel.fy_right(deleteButton.chainLeft)
     }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -34,28 +38,17 @@ class FYDComplexTableViewCell: UITableViewCell {
             .fy_top(5)
             .fy_left(5)
             .fy_height(25)
-            .fy_right(deleteButton.chainLeft)
+//            .fy_right(deleteButton.chainLeft)
         
         deleteButton
             .fy_right(5)
             .fy_top(5)
             .fy_height(25)
-            .fy_width(50)
+//            .fy_width(50)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 
 }
