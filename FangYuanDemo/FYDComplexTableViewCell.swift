@@ -31,6 +31,7 @@ class FYDComplexTableViewCell: UITableViewCell {
         nickNameLabel.fy_right(deleteButton.chainLeft)
     }
     
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         

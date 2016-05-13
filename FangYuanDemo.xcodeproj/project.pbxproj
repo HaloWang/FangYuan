@@ -21,6 +21,7 @@
 		09BB85971CE2CC5D00AF4D15 /* FYDComplexTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09BB85961CE2CC5D00AF4D15 /* FYDComplexTableViewController.swift */; };
 		09BB859A1CE2CC8C00AF4D15 /* FYDComplexTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09BB85991CE2CC8C00AF4D15 /* FYDComplexTableViewCell.swift */; };
 		09BB859C1CE2CD0F00AF4D15 /* FYDComplexDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09BB859B1CE2CD0F00AF4D15 /* FYDComplexDataSource.swift */; };
+		09DC5AD41CE5DB6800E2982B /* FYDCodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09DC5AD31CE5DB6800E2982B /* FYDCodeTableViewCell.swift */; };
 		09E4F6551CE20843002F54E4 /* FYDAnimationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E4F6541CE20843002F54E4 /* FYDAnimationViewController.swift */; };
 		09F2EB6B1CD50AC800E4EA17 /* FYDChainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F2EB6A1CD50AC800E4EA17 /* FYDChainViewController.swift */; };
 		09F439111CD0BA400058029F /* FYDRectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F439101CD0BA400058029F /* FYDRectViewController.swift */; };
@@ -48,6 +49,7 @@
 		09BB85961CE2CC5D00AF4D15 /* FYDComplexTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FYDComplexTableViewController.swift; sourceTree = "<group>"; };
 		09BB85991CE2CC8C00AF4D15 /* FYDComplexTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FYDComplexTableViewCell.swift; sourceTree = "<group>"; };
 		09BB859B1CE2CD0F00AF4D15 /* FYDComplexDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FYDComplexDataSource.swift; sourceTree = "<group>"; };
+		09DC5AD31CE5DB6800E2982B /* FYDCodeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FYDCodeTableViewCell.swift; sourceTree = "<group>"; };
 		09E4F6541CE20843002F54E4 /* FYDAnimationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FYDAnimationViewController.swift; sourceTree = "<group>"; };
 		09F2EB6A1CD50AC800E4EA17 /* FYDChainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FYDChainViewController.swift; sourceTree = "<group>"; };
 		09F439101CD0BA400058029F /* FYDRectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FYDRectViewController.swift; sourceTree = "<group>"; };
@@ -104,11 +106,11 @@
 				096A97721CAFA84A00497C1E /* AppDelegate.swift */,
 				096A97741CAFA84A00497C1E /* FYDListViewController.swift */,
 				09BB85931CE2CBF100AF4D15 /* ViewController */,
+				09DC5AD21CE5DB4100E2982B /* Basic */,
 				09BB85941CE2CC0900AF4D15 /* Chain */,
 				09BB85921CE2CBBC00AF4D15 /* SimpleTableView */,
 				09BB85951CE2CC2000AF4D15 /* Animation */,
 				09BB85981CE2CC6D00AF4D15 /* ComplexTableView */,
-				09F439101CD0BA400058029F /* FYDRectViewController.swift */,
 				0996DCF21CB9478A00612218 /* FYDReactiveCodeViewController.swift */,
 				093F1B2C1CE0D91500D23D70 /* FYDemoHelper.swift */,
 				096A97791CAFA84A00497C1E /* Assets.xcassets */,
@@ -169,6 +171,15 @@
 				09BB859B1CE2CD0F00AF4D15 /* FYDComplexDataSource.swift */,
 			);
 			name = ComplexTableView;
+			sourceTree = "<group>";
+		};
+		09DC5AD21CE5DB4100E2982B /* Basic */ = {
+			isa = PBXGroup;
+			children = (
+				09F439101CD0BA400058029F /* FYDRectViewController.swift */,
+				09DC5AD31CE5DB6800E2982B /* FYDCodeTableViewCell.swift */,
+			);
+			name = Basic;
 			sourceTree = "<group>";
 		};
 		313878728971CDDDE5EC20C4 /* Pods */ = {
@@ -398,6 +409,7 @@
 				0996DCF31CB9478A00612218 /* FYDReactiveCodeViewController.swift in Sources */,
 				09BB85971CE2CC5D00AF4D15 /* FYDComplexTableViewController.swift in Sources */,
 				09F439111CD0BA400058029F /* FYDRectViewController.swift in Sources */,
+				09DC5AD41CE5DB6800E2982B /* FYDCodeTableViewCell.swift in Sources */,
 				094105E21CD5296900EBF9BC /* FYDDemoTableViewCell.swift in Sources */,
 				0932F1E21CB4F8F4009596F6 /* FYDDemoViewController.swift in Sources */,
 				09BB859A1CE2CC8C00AF4D15 /* FYDComplexTableViewCell.swift in Sources */,

@@ -8,11 +8,10 @@ class FYDListViewController: UIViewController {
     let demoMaps: [Dictionary<String, UIViewController.Type>] = [
         ["在 UIViewController 中使用" : FYDDemoViewController.self],
         ["chainTop/Bottom/Left/Right 属性调用" : FYDChainViewController.self],
+        ["动画" : FYDAnimationViewController.self],
         ["在 UITableViewCell 中使用" : FYDDemoTableViewController.self],
-        ["在复杂的 UITableViewCell 中使用" : FYDComplexTableViewController.self],
-        ["Animation" : FYDAnimationViewController.self],
         ["⚠️Unfinish 矩形拖拽" : FYDRectViewController.self],
-        ["⚠️Unfinish 观察代码" : FYDReactiveCodeViewController.self],
+        ["⚠️Unfinish 在复杂的 UITableViewCell 中使用" : FYDComplexTableViewController.self],
     ]
 
     lazy var tableView = UITableView(frame: ScreenBounds, style: .Plain)
