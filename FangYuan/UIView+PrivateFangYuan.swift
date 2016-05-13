@@ -30,6 +30,13 @@ extension UIView {
     // TODO: 约束不全的话，怎么办，不能直接 Crash 吧！
     /// 在约束已经求解完全的情况下进行 frame 的设置
     func layoutWithFangYuan() {
+        
+        assert(rulerX.full, "\(self) \n ruler on X is not fully defined!")
+        assert(rulerY.full, "\(self) \n ruler on Y is not fully defined!")
+        
+        guard rulerX.full && rulerY.full else {
+            return
+        }
 
         //  X
         let newX = rulerX.a

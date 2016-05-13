@@ -27,6 +27,11 @@ class Ruler {
 
     /// 最后一次设定的约束
     var last: Ruler.Section?
+    
+    /// 约束是否定义完全
+    var full : Bool {
+        return (a != nil && b != nil) || (a != nil && c != nil) || (b != nil && c != nil)
+    }
 
     /// 第一段
     ///
