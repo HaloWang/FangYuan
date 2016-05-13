@@ -90,13 +90,10 @@ extension ConstraintManager {
         }
         
         singleton.removeDuplicateConstraintOf(to, at: direction)
-
         _constraint.to = to
         _constraint.value = value
+        singleton.checkCyclingConstraintWith(_constraint)
         singleton.constraints.insert(_constraint)
-        
-        singleton.removeAndWarningCyclingConstraint()
-        
         singleton.holder.set(nil, at: direction)
     }
 
@@ -214,19 +211,13 @@ private extension ConstraintManager {
             }
         }
     }
-
+    
     // TODO: 这个方法还没有被测试过
-    // TODO: 算法过于复杂
-    func removeAndWarningCyclingConstraint() {
-        for toCons in constraints {
-            for fromCons in constraints {
-                if toCons <=> fromCons {
-                    constraints.remove(toCons)
-                    constraints.remove(fromCons)
-                    print("⚠️", "there is a cycling constraint")
-                    //  每次添加一个约束，最多只能产生一个循环约束
-                    return
-                }
+    func checkCyclingConstraintWith(constraint:Constraint) {
+        for cons in constraints {
+            if cons <=> constraint {
+                assert(false, "there is a cycling constraint of view:\(cons.to) and view:\(cons.from)")
+                return;
             }
         }
     }
