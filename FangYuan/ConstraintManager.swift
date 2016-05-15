@@ -121,6 +121,8 @@ private extension ConstraintManager {
     /// 核心布局方法
     func layout(views: [UIView]) {
         
+        assert(views.filter { !$0.usingFangYuan }.count == 0, "A UIView doesn't call fy_XXX() should not layout using FangYuan")
+        
         guard hasUnsetConstraintsOf(views) else {
             views.forEach { view in
                 view.layoutWithFangYuan()
@@ -215,7 +217,7 @@ private extension ConstraintManager {
     func checkCyclingConstraintWith(constraint:Constraint) {
         constraints.forEach { con in
             if con <=> constraint {
-                assert(false, "there is a cycling constraint of view:\(con.to) and view:\(con.from)")
+                assert(false, "there is a cycling constraint between view:\(con.to) and view:\(con.from)")
                 return;
             }
         }
