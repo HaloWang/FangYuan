@@ -18,7 +18,7 @@ class FYDComplexTableViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        data = FYDComplexDataSource.requestData()
+        data = FYDComplexDataSource.randomData
         
         tableView
             .dataSourceAndDelegate(self)
@@ -26,6 +26,10 @@ class FYDComplexTableViewController: UIViewController {
             .superView(view)
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+    }
 }
 
 // MARK: - UITableViewDelegate

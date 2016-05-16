@@ -29,7 +29,7 @@ class ConstraintManager {
         var leftRight: Constraint?
         var rightLeft: Constraint?
         
-        func constraintAt(direction: Constraint.Direction) -> Constraint? {
+        func popConstraintAt(direction: Constraint.Direction) -> Constraint? {
             switch direction {
             case .TopBottom:
                 return topBottom
@@ -42,7 +42,7 @@ class ConstraintManager {
             }
         }
         
-        func set(constraint:Constraint?, at direction:Constraint.Direction) {
+        func push(constraint:Constraint?, at direction:Constraint.Direction) {
             switch direction {
             case .TopBottom:
                 topBottom = constraint
@@ -52,6 +52,19 @@ class ConstraintManager {
                 leftRight = constraint
             case .RightLeft:
                 rightLeft = constraint
+            }
+        }
+        
+        func clearConstraintAt(direction: Constraint.Direction) {
+            switch direction {
+            case .TopBottom:
+                topBottom = nil
+            case .BottomTop:
+                bottomTop = nil
+            case .LeftRigt:
+                leftRight = nil
+            case .RightLeft:
+                rightLeft = nil
             }
         }
     }
@@ -66,9 +79,9 @@ extension ConstraintManager {
      - parameter from:      约束依赖视图
      - parameter direction: 约束方向
      */
-    class func getConstraintFrom(from:UIView, direction: Constraint.Direction) {
+    class func pushConstraintFrom(from:UIView, direction: Constraint.Direction) {
         let newConstraint = Constraint(from: from, to: nil, direction: direction)
-        singleton.holder.set(newConstraint, at: direction)
+        singleton.holder.push(newConstraint, at: direction)
     }
 
     // TODO: setConstraint 是生成『渲染队列』的最佳时机了吧
@@ -81,10 +94,10 @@ extension ConstraintManager {
      - parameter direction: 约束方向
      - parameter value:     约束固定值
      */
-    class func setConstraintTo(to:UIView, direction: Constraint.Direction, value:CGFloat) {
+    class func popConstraintTo(to:UIView, direction: Constraint.Direction, value:CGFloat) {
         
         //  如果对应方向上没有 holder，则认为 fy_XXX() 的参数中没有调用 chainXXX，直接返回，不进行后续操作
-        guard let _constraint = singleton.holder.constraintAt(direction) else {
+        guard let _constraint = singleton.holder.popConstraintAt(direction) else {
             return
         }
         
@@ -93,7 +106,7 @@ extension ConstraintManager {
         _constraint.value = value
         singleton.checkCyclingConstraintWith(_constraint)
         singleton.constraints.insert(_constraint)
-        singleton.holder.set(nil, at: direction)
+        singleton.holder.clearConstraintAt(direction)
     }
 
     class func layout(view:UIView) {
