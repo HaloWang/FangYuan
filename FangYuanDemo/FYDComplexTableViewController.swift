@@ -34,15 +34,26 @@ class FYDComplexTableViewController: UIViewController {
 
 // MARK: - UITableViewDelegate
 extension FYDComplexTableViewController : UITableViewDelegate {
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        let item = data[indexPath.row]
+        return FYDComplexTableViewCell.layoutAndComputeDisplayHeight(item, layoutCell: nil)
+    }
+    
+    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 150
+    }
 }
 
 // MARK: - UITableViewDataSource
 extension FYDComplexTableViewController : UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
         let cell = tableView
             .dequeueCell(FYDComplexTableViewCell)
             .selectionStyle(.None)
-        cell.setWith(data[indexPath.row])
+        
+        cell.set(data[indexPath.row])
+        
         return cell
     }
     

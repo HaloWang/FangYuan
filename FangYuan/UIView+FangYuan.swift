@@ -100,6 +100,24 @@ public extension UIView {
         ConstraintManager.popConstraintTo(self, direction: .TopBottom, value: bottom)
         return self
     }
+    
+    func fy_size(size:CGSize) -> Self {
+        fy_width(size.width)
+        fy_height(size.height)
+        return self
+    }
+    
+    func fy_origin(origin:CGPoint) -> Self {
+        fy_top(origin.y)
+        fy_left(origin.x)
+        return self
+    }
+    
+    func fy_frame(frame:CGRect) -> Self {
+        fy_origin(frame.origin)
+        fy_size(frame.size)
+        return self
+    }
 
     // MARK: Edge
     
