@@ -56,16 +56,7 @@ class ConstraintManager {
         }
         
         func clearConstraintAt(direction: Constraint.Direction) {
-            switch direction {
-            case .TopBottom:
-                topBottom = nil
-            case .BottomTop:
-                bottomTop = nil
-            case .LeftRigt:
-                leftRight = nil
-            case .RightLeft:
-                rightLeft = nil
-            }
+            push(nil, at: direction)
         }
     }
 }
@@ -133,8 +124,6 @@ private extension ConstraintManager {
     
     /// 核心布局方法
     func layout(views: [UIView]) {
-        
-        assert(views.filter { !$0.usingFangYuan }.count == 0, "A UIView doesn't call fy_XXX() should not layout using FangYuan")
         
         guard hasUnsetConstraintsOf(views) else {
             views.forEach { view in
