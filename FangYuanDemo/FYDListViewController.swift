@@ -39,9 +39,11 @@ extension FYDListViewController : UITableViewDelegate {
 // MARK: - UITableViewDataSource
 extension FYDListViewController : UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueCell(UITableViewCell).selectionStyle(.None).accessoryType(.DisclosureIndicator)
-        cell.text(demoMaps[indexPath.row].keys.first!)
-        return cell
+        return tableView
+            .dequeueCell(UITableViewCell)
+            .selectionStyle(.None)
+            .accessoryType(.DisclosureIndicator)
+            .text(demoMaps[indexPath.row].keys.first!)
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
