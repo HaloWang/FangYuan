@@ -87,12 +87,14 @@ extension ConstraintManager {
      */
     class func popConstraintTo(to:UIView, direction: Constraint.Direction, value:CGFloat) {
         
+        //  这个方法应该被优先调用，可能出现 fy_XXX(a) 替换 fy_XXX(chainXXX) 的情况
+        singleton.removeDuplicateConstraintOf(to, at: direction)
+        
         //  如果对应方向上没有 holder，则认为 fy_XXX() 的参数中没有调用 chainXXX，直接返回，不进行后续操作
         guard let _constraint = singleton.holder.popConstraintAt(direction) else {
             return
         }
         
-        singleton.removeDuplicateConstraintOf(to, at: direction)
         _constraint.to = to
         _constraint.value = value
         singleton.checkCyclingConstraintWith(_constraint)
