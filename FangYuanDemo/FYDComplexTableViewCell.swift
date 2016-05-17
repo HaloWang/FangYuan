@@ -44,6 +44,7 @@ class FYDComplexTableViewCell: UITableViewCell {
             .scrollEnabled(false)
             .superView(self)
             .backgroundColor(Yellow.alpha(0.3))
+            .textContainerInset(UIEdgeInsetsZero)
         
         avatarImageView
             .fy_frame(CGRect(x: 5, y: 5, width: 40, height: 40))
@@ -70,17 +71,26 @@ class FYDComplexTableViewCell: UITableViewCell {
         // TODO: 能不能让开发者想的更少呢？
         //  或者你也可以使用 _FYDComplexTableViewCell 中的代码来设定约束
         messageTextView.text = item.message
+        nickNameLabel.text   = item.nickName
         
         deleteButton.fy_width(item.isMine ? 100 : 0)
         nickNameLabel.fy_right(deleteButton.chainLeft + 3)
-        messageTextView.fy_height(50)
         
+        // TODO: 这个方法走了两次，没有必要的！
         FYDComplexTableViewCell.layoutAndComputeDisplayHeight(item, layoutCell: self)
     }
     
     class func layoutAndComputeDisplayHeight(item:Item, layoutCell cell:FYDComplexTableViewCell?) -> CGFloat {
         
         let hasCellToLayout = cell != nil
+        
+        //  布局函数
+        func layoutCellIfNeeded(@noescape block:(cell:FYDComplexTableViewCell)->Void) {
+            guard hasCellToLayout else {
+                return
+            }
+            block(cell: cell!)
+        }
         
         var displayHeight : CGFloat = 0
         
@@ -90,7 +100,7 @@ class FYDComplexTableViewCell: UITableViewCell {
         
         //  Layout TextView
         var messageDisplayHeight : CGFloat
-        if !item.message.isAllSpace {
+        if item.message.length != 0 {
             messageDisplayHeight = (item.message as NSString).boundingRectWithSize(CGSize(width: ScreenWidth - 5.double, height:CGFloat(MAXFLOAT)), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFontOfSize(12)], context: nil).size.height
             
             displayHeight += messageDisplayHeight
@@ -98,9 +108,9 @@ class FYDComplexTableViewCell: UITableViewCell {
         } else {
             messageDisplayHeight = 0
         }
-        
-        if hasCellToLayout {
-            cell!.messageTextView.fy_height(messageDisplayHeight)
+
+        layoutCellIfNeeded { (cell) in
+            cell.messageTextView.fy_height(messageDisplayHeight)
         }
         
         displayHeight += 5
