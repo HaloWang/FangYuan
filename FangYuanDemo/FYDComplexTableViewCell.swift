@@ -46,22 +46,26 @@ class FYDComplexTableViewCell: UITableViewCell {
             .backgroundColor(Yellow.alpha(0.3))
             .textContainerInset(UIEdgeInsetsZero)
         
-        avatarImageView
-            .fy_frame(CGRect(x: 5, y: 5, width: 40, height: 40))
+        FangYuanDemo.BeginLayout {
+            
+            avatarImageView
+                .fy_frame(CGRect(x: 5, y: 5, width: 40, height: 40))
+            
+            messageTextView
+                .fy_origin(CGPoint(x: 5, y: avatarImageView.chainBottom + 3))
+                .fy_right(5)
+            
+            nickNameLabel
+                .fy_top(5)
+                .fy_left(avatarImageView.chainRight + 3)
+                .fy_height(35)
+            
+            deleteButton
+                .fy_right(5)
+                .fy_top(5)
+                .fy_height(25)
+        }
         
-        messageTextView
-            .fy_origin(CGPoint(x: 5, y: avatarImageView.chainBottom + 3))
-            .fy_right(5)
-        
-        nickNameLabel
-            .fy_top(5)
-            .fy_left(avatarImageView.chainRight + 3)
-            .fy_height(35)
-        
-        deleteButton
-            .fy_right(5)
-            .fy_top(5)
-            .fy_height(25)
     }
     
     func set(item:Item) {

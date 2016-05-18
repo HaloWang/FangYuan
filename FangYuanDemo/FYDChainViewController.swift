@@ -48,11 +48,11 @@ class FYDChainViewController: UIViewController {
                 .fy_height(100)
             
             chainLeftView
+                .fy_edge(UIEdgeInsets(top: 250, left: 5, bottom: 250, right: baseView.chainLeft + 25))
                 //            .fy_top(250)
                 //            .fy_right(baseView.chainLeft + 25)
                 //            .fy_left(5)
                 //            .fy_bottom(250)
-                .fy_edge(UIEdgeInsets(top: 250, left: 5, bottom: 250, right: baseView.chainLeft + 25))
             
             baseView
                 .fy_top(250 + NavigationBarHeight)

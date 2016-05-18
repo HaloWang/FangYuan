@@ -27,37 +27,39 @@ class FYDRectViewController: UIViewController {
             .registerCellClass(FYDCodeTableViewCell)
             .superView(view)
         
-        codeList
-            .fy_left(0)
-            .fy_right(0)
-            .fy_bottom(0)
-            .fy_height(FYDCodeTableViewCell.displayHeight * 7)
-
         rectView
             .superView(view)
             .backgroundColor(UIColor(red: 1, green: 0.8, blue: 0.8, alpha: 1))
             .text("rectView")
             .textAlignment(.Center)
-        
         rectView.frame = CGRect(x: 50, y: 200, width: 200, height: 200)
         
         bottomRightPan
             .superView(rectView)
             .backgroundColor(UIColor(red: 1, green: 0.7, blue: 0.1, alpha: 1))
-        bottomRightPan
-            .fy_bottom(-10)
-            .fy_height(20)
-            .fy_right(-10)
-            .fy_width(20)
-        
         topLeftPan
             .superView(rectView)
             .backgroundColor(UIColor(red: 1, green: 0.7, blue: 0.1, alpha: 1))
-        topLeftPan
-            .fy_top(-10)
-            .fy_height(20)
-            .fy_left(-10)
-            .fy_width(20)
+        
+        FangYuanDemo.BeginLayout {
+            codeList
+                .fy_left(0)
+                .fy_right(0)
+                .fy_bottom(0)
+                .fy_height(FYDCodeTableViewCell.displayHeight * 7)
+            
+            bottomRightPan
+                .fy_bottom(-10)
+                .fy_height(20)
+                .fy_right(-10)
+                .fy_width(20)
+            
+            topLeftPan
+                .fy_top(-10)
+                .fy_height(20)
+                .fy_left(-10)
+                .fy_width(20)
+        }
     }
 
     func pan(sender: UIPanGestureRecognizer) {
