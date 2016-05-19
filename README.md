@@ -90,11 +90,11 @@ view
 同理
 
 方法		|	调用
-----------|-------
+---		|	---
 fy_top		|	chainBottom
 fy_bottom	|	chainTop
 fy_left		|	chainRight
-fy_right		|	chainLeft
+fy_right	|	chainLeft
 
 ### 暂时不支持宽度、高度自适应
 
@@ -102,18 +102,15 @@ fy_right		|	chainLeft
 
 ## 要做的事情
 
-- 优化性能
-	- 个别算法的复杂度可能是 `views³constraints²` 😂
-	- 用空间换时间
-	- 渲染树
 - 更多，更完善的 demo
 - 将字符串展示面积的计算方法融入『方圆』中，并且可以同时设定高度/宽度
 - 将高度和宽度同样作为依赖
 - 两个 `UIView` 之间可以是对齐关系
-- 『方圆』大量使用了 `map`, `filter` 等函数，这里面可能有需要性能优化的地方
 - 和其他布局库作对比的 demo
 - 为逻辑部分添加充分的 Unit Test
-- 将 ObjC 和 Swift 版本的方圆放到一个库中，并尽量重用代码
+- 优化性能
+	- 布局树的抽象
+	- 关联对象性能
 
 ## 写在最后
 
