@@ -1,0 +1,27 @@
+PODS:
+  - FangYuan (0.0.1)
+  - Halo (0.0.8):
+    - Halo/Foundation (= 0.0.8)
+  - Halo/Foundation (0.0.8)
+  - KMCGeigerCounter (0.2.2)
+  - Reveal-iOS-SDK (1.6.2)
+
+DEPENDENCIES:
+  - FangYuan (from `./FangYuan`)
+  - Halo
+  - KMCGeigerCounter
+  - Reveal-iOS-SDK
+
+EXTERNAL SOURCES:
+  FangYuan:
+    :path: ./FangYuan
+
+SPEC CHECKSUMS:
+  FangYuan: 683390d03dbc101168e6a5aeca9a4ab3f7f0e33b
+  Halo: 02517143d361875fca608695a157abf6fa721b37
+  KMCGeigerCounter: f8cc3c4aa19fc6f8cec168fb03b364b84c118a7a
+  Reveal-iOS-SDK: e2250b3c155bcfac53ae223ddc1f76d08f206c33
+
+PODFILE CHECKSUM: 79f2dfdb1e658948e926355fec454fa9eabe5cab
+
+COCOAPODS: 1.0.0
