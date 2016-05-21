@@ -97,7 +97,7 @@ extension ConstraintManager {
         
         _constraint.to = to
         _constraint.value = value
-        singleton.checkCyclingConstraintWith(_constraint)
+        checkCyclingConstraintWith(_constraint)
         singleton.constraints.insert(_constraint)
         singleton.holder.clearConstraintAt(direction)
     }
@@ -217,13 +217,24 @@ private extension ConstraintManager {
         }
     }
     
-    // TODO: 这个方法还没有被测试过
-    func checkCyclingConstraintWith(constraint:Constraint) {
-        constraints.forEach { con in
-            if con <=> constraint {
-                assert(false, "there is a cycling constraint between view:\(con.to) and view:\(con.from)")
-                return;
+    class func checkCyclingConstraintWith(constraint:Constraint) {
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0)) {
+            singleton.constraints.forEach { con in
+                if con <=> constraint {
+                    assert(false, "\n⚠️FangYuan: There is a constraint circulation between\n\(con.to)\n🔄\n\(con.from)\n")
+                    return;
+                }
             }
         }
     }
+}
+
+// TODO: 可是关于方向的问题你有没有想明白？
+
+infix operator <=> {}
+/// 判断两个约束是否产生了循环依赖
+
+// TODO: 这个方法应该拆分的，也许是两个方向上的约束？那 LayoutWithFangYuan 是不是也需要拆分成两个方向上的？
+func <=>(lhs: Constraint, rhs: Constraint) -> Bool {
+    return lhs.to == rhs.from && lhs.from == rhs.to
 }
