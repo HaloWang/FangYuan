@@ -52,7 +52,7 @@ extension FYDComplexTableViewController : UITableViewDataSource {
             .dequeueCell(FYDComplexTableViewCell)
             .selectionStyle(.None)
         
-        cell.set(data[indexPath.row])
+        cell.set(item: data[indexPath.row])
         
         return cell
     }

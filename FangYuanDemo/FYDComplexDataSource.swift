@@ -16,7 +16,7 @@ class FYDComplexDataSource {
         var items = [Item]()
         for _ in 0 ..< (Int(arc4random()) % 50) + 50 {
             let item       = Item()
-            item.nickName  = "昵称"
+            item.nickName  = Array(count: (Int(arc4random()) % 3) + 1, repeatedValue: "昵称").reduce("") { $0 + $1 }
             item.message   = Array(count: (Int(arc4random()) % 40) + 1, repeatedValue: "动态内容").reduce("") { $0 + $1 }
             item.avatar    = ""
             item.imageURLs = Array(count: (Int(arc4random()) % 10), repeatedValue: "")

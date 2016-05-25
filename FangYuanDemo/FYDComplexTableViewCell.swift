@@ -11,13 +11,16 @@ import Halo
 import FangYuan
 
 class FYDComplexTableViewCell: UITableViewCell {
-    
-    let avatarImageView = UIImageView()
-    let nickNameLabel   = UILabel()
-    let messageTextView = UITextView()
-    let commentsList    = UITableView(frame: CGRectZero, style: .Plain)
-    let deleteButton    = UIButton()
-    let likeButton      = UIButton()
+
+    lazy var avatarImageView = UIImageView()
+    /// 昵称
+    lazy var nickNameLabel   = UILabel()
+    /// 动态
+    lazy var messageTextView = UITextView()
+    lazy var userBadgeImageView = UIImageView()
+    lazy var commentsList    = UITableView(frame: CGRectZero, style: .Plain)
+    lazy var deleteButton    = UIButton()
+    lazy var likeButton      = UIButton()
     var imageCollectionView : UICollectionView!
     
     required init?(coder aDecoder: NSCoder) {
@@ -34,6 +37,10 @@ class FYDComplexTableViewCell: UITableViewCell {
         nickNameLabel
             .superView(self)
             .backgroundColor(Red.alpha(0.3))
+        
+        userBadgeImageView
+            .superView(self)
+            .backgroundColor(Blue.alpha(0.3))
         
         deleteButton
             .superView(self)
@@ -64,11 +71,19 @@ class FYDComplexTableViewCell: UITableViewCell {
                 .fy_right(5)
                 .fy_top(5)
                 .fy_height(25)
+            
+            // TODO: BUG/unintuitive
+            // How to implement reactive layout?
+            // "LayoutOrder" can fix this
+            // "WeakReferenseArray" is needed
+            userBadgeImageView
+                .fy_left(nickNameLabel.chainRight + 5)
+                .fy_top(5)
+                .fy_size(35.size)
         }
-        
     }
     
-    func set(item:Item) {
+    func set(item item:Item) {
         
         // TODO: 真的是在且仅在下一次 `layoutSubviews` 生效吗？那为什么上一个 tableView 动态高度为什么是可以的呢？
         // TODO: 当初 hasSet 属性不就是为了做这件事情吗？
@@ -78,7 +93,10 @@ class FYDComplexTableViewCell: UITableViewCell {
         nickNameLabel.text   = item.nickName
         
         deleteButton.fy_width(item.isMine ? 100 : 0)
-        nickNameLabel.fy_right(deleteButton.chainLeft + 3)
+        
+        //  设定 nickNameLabel 的宽度，建议计算字符串展示面积的时候，缓存一下计算出来的面积
+        let maxCGFloat = CGFloat(MAXFLOAT)
+        nickNameLabel.fy_width((item.nickName as NSString).boundingRectWithSize(maxCGFloat.size, options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName:nickNameLabel.font], context: nil).size.width)
         
         // TODO: 这个方法走了两次，没有必要的！
         FYDComplexTableViewCell.layoutAndComputeDisplayHeight(item, layoutCell: self)
