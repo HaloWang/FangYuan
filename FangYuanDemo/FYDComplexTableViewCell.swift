@@ -142,7 +142,9 @@ class FYDComplexTableViewCell: UITableViewCell {
             imageCollectionView.hidden = true
         }
         
-        imageCollectionView.reloadData()
+        if item.imageURLs.count > 1 {
+            imageCollectionView.reloadData()
+        }
         
         // TODO: 这个方法走了两次，没有必要的！
         layoutHorizontally()
@@ -212,11 +214,19 @@ class FYDComplexTableViewCell: UITableViewCell {
         displayHeight += imagesDisplayHeight
 
         layoutCellIfNeeded { (cell) in
-            cell.messageTextView.fy_height(messageDisplayHeight)
-            cell.imageCollectionView.fy_top(cell.messageTextView.chainBottom + 5)
-            cell.singleImageView.fy_top(cell.messageTextView.chainBottom + 5)
-            cell.imageCollectionView.fy_height(imagesDisplayHeight)
-            cell.singleImageView.fy_height(imagesDisplayHeight)
+            if !cell.messageTextView.hidden {
+                cell.messageTextView.fy_height(messageDisplayHeight)
+            }
+            
+            if !cell.singleImageView.hidden {
+                cell.singleImageView.fy_top(cell.messageTextView.chainBottom + 5)
+                cell.singleImageView.fy_height(imagesDisplayHeight)
+            }
+            
+            if !cell.imageCollectionView.hidden {
+                cell.imageCollectionView.fy_top(cell.messageTextView.chainBottom + 5)
+                cell.imageCollectionView.fy_height(imagesDisplayHeight)
+            }
         }
         
         displayHeight += 5
