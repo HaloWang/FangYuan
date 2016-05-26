@@ -36,7 +36,7 @@ class FYDComplexTableViewController: UIViewController {
 extension FYDComplexTableViewController : UITableViewDelegate {
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         let item = data[indexPath.row]
-        return FYDComplexTableViewCell.layoutAndComputeDisplayHeight(item, layoutCell: nil)
+        return FYDComplexTableViewCell.layoutVerticallyAndComputeDisplayHeight(item, layoutCell: nil)
     }
     
     func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {

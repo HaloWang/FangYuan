@@ -24,11 +24,22 @@ class FYDComplexDataSource {
             item.nickName  = randomString(3, repeatString: "昵称")
             item.message   = randomString(40 , repeatString: "动态内容")
             item.avatar    = ""
-            item.imageURLs = Array(count: (Int(arc4random()) % 10), repeatedValue: "")
             item.isMine    = (arc4random() % 4 == 0)
             
             for _ in 0..<Int(arc4random()) % 5 {
                 item.comments.append(randomString(10, repeatString: "评论内容"))
+            }
+
+            let hasImage = Int(arc4random()) % 3 == 0
+            if hasImage {
+                switch Int(arc4random()) % 10 {
+                case 0...5:
+                    item.imageURLs = Array(count: 1, repeatedValue: "")
+                case 6...8:
+                    item.imageURLs = Array(count: 2, repeatedValue: "")
+                default:
+                    item.imageURLs = Array(count: (Int(arc4random()) % 8 + 3), repeatedValue: "")
+                }
             }
             
             items.append(item)
