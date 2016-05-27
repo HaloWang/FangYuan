@@ -25,11 +25,6 @@ class FYDComplexTableViewController: UIViewController {
             .registerCellClass(FYDComplexTableViewCell)
             .superView(view)
     }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
-    }
 }
 
 // MARK: - UITableViewDelegate

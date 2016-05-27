@@ -33,7 +33,6 @@ class FYDComplexTableViewCell: UITableViewCell {
     lazy var commentsList    = UITableView(frame: CGRectZero, style: .Plain)
     lazy var deleteButton    = UIButton()
     lazy var likeButton      = UIButton()
-    
     lazy var singleImageView = UIImageView()
     var imageCollectionView : UICollectionView!
     
@@ -154,8 +153,15 @@ class FYDComplexTableViewCell: UITableViewCell {
     func layoutHorizontally() {
         deleteButton.fy_width(item.isMine ? 100 : 0)
         //  设定 nickNameLabel 的宽度，建议计算字符串展示面积的时候，缓存一下计算出来的面积
-        let maxCGFloat = CGFloat(MAXFLOAT)
-        nickNameLabel.fy_width((item.nickName as NSString).boundingRectWithSize(maxCGFloat.size, options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName:nickNameLabel.font], context: nil).size.width)
+        var nickNameDisplayWidth : CGFloat
+        if let cachedWidth = item.nickNameDisplayWidthCache {
+            nickNameDisplayWidth = cachedWidth
+        } else {
+            let maxCGFloat = CGFloat(MAXFLOAT)
+            nickNameDisplayWidth = (item.nickName as NSString).boundingRectWithSize(maxCGFloat.size, options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName:nickNameLabel.font], context: nil).size.width
+            item.nickNameDisplayWidthCache = nickNameDisplayWidth
+        }
+        nickNameLabel.fy_width(nickNameDisplayWidth)
         userBadgeImageView.fy_left(nickNameLabel.chainRight + 5)
     }
     
@@ -191,8 +197,12 @@ class FYDComplexTableViewCell: UITableViewCell {
         //  Layout TextView
         var messageDisplayHeight : CGFloat
         if item.message.length != 0 {
-            messageDisplayHeight = (item.message as NSString).boundingRectWithSize(CGSize(width: ScreenWidth - 5.double, height:CGFloat(MAXFLOAT)), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFontOfSize(12)], context: nil).size.height
-            
+            if let cachedHeight = item.messageDisplayHeightCache {
+                messageDisplayHeight = cachedHeight
+            } else {
+                messageDisplayHeight = (item.message as NSString).boundingRectWithSize(CGSize(width: ScreenWidth - 5.double, height:CGFloat(MAXFLOAT)), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFontOfSize(12)], context: nil).size.height
+                item.messageDisplayHeightCache = messageDisplayHeight
+            }
             displayHeight += messageDisplayHeight
             displayHeight += 3
         } else {
@@ -214,19 +224,14 @@ class FYDComplexTableViewCell: UITableViewCell {
         displayHeight += imagesDisplayHeight
 
         layoutCellIfNeeded { (cell) in
-            if !cell.messageTextView.hidden {
-                cell.messageTextView.fy_height(messageDisplayHeight)
-            }
+            cell.messageTextView.fy_height(messageDisplayHeight)
             
-            if !cell.singleImageView.hidden {
-                cell.singleImageView.fy_top(cell.messageTextView.chainBottom + 5)
-                cell.singleImageView.fy_height(imagesDisplayHeight)
-            }
+            cell.singleImageView.fy_top(cell.messageTextView.chainBottom + 5)
+            cell.singleImageView.fy_height(imagesDisplayHeight)
             
-            if !cell.imageCollectionView.hidden {
-                cell.imageCollectionView.fy_top(cell.messageTextView.chainBottom + 5)
-                cell.imageCollectionView.fy_height(imagesDisplayHeight)
-            }
+            cell.imageCollectionView.fy_top(cell.messageTextView.chainBottom + 5)
+            cell.imageCollectionView.fy_height(imagesDisplayHeight)
+
         }
         
         displayHeight += 5

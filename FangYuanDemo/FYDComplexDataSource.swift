@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 class FYDComplexDataSource {
     static let data : [Item] = [
@@ -50,7 +51,9 @@ class FYDComplexDataSource {
 
 class Item {
     var nickName  = ""
+    var nickNameDisplayWidthCache : CGFloat?
     var message   = ""
+    var messageDisplayHeightCache : CGFloat?
     var avatar    = ""
     var comments  = [String]()
     var imageURLs = [String]()
