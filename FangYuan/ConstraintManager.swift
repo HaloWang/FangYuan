@@ -136,7 +136,7 @@ private extension ConstraintManager {
         
         var layoutingViews = Set(views)
         //  未设定的约束中，发现有用来约束 view 的约束
-        var shouldRepeat : Bool
+        var shouldRepeat: Bool
         repeat {
             shouldRepeat = false
             layoutingViews.forEach { view in
@@ -238,3 +238,49 @@ infix operator <=> {}
 func <=>(lhs: Constraint, rhs: Constraint) -> Bool {
     return lhs.to == rhs.from && lhs.from == rhs.to
 }
+
+//func ==<V:UIView>(lhs: Weak<V>, rhs: Weak<V>) -> Bool {
+//    return lhs.hashValue == rhs.hashValue
+//}
+//
+//struct Weak<V:UIView>: Hashable {
+//    
+//    weak var view: V?
+//    
+//    init (_ view: V?) {
+//        self.view = view
+//    }
+//    
+//    var hashValue: Int {
+//        guard let view = view else {
+//            return 0
+//        }
+//        return view.hashValue
+//    }
+//}
+//
+//typealias WeakView = Weak<UIView>
+//
+//extension UIView {
+//    var weak: Weak<UIView> {
+//        return Weak(self)
+//    }
+//}
+
+//extension ConstraintManager {
+//    
+//    func managing(view:UIView) -> Bool {
+//        return managingViews.contains(view.weak)
+//    }
+//    
+//    func manage(view:UIView) {
+//        managingViews.insert(view.weak)
+//    }
+//    
+//    func cleanManagingViews() {
+//        managingViews = Set(managingViews.filter {
+//            $0.view != nil
+//            })
+//    }
+//}
+

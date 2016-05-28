@@ -52,84 +52,106 @@ public extension UIView {
 public extension UIView {
     
     // MARK: X
-
+    
     /// 设定某个 UIView 左边距离其 superview 左边的距离，相当于 x
     func fy_left(left: CGFloat) -> Self {
-        usingFangYuan = true
+        basicSetting()
         rulerX.a = left
         ConstraintManager.popConstraintTo(self, direction: .RightLeft, value: left)
         return self
     }
-
+    
     /// 设定某个 UIView 的宽度，相当于 width
     func fy_width(width: CGFloat) -> Self {
-        usingFangYuan = true
+        basicSetting()
         rulerX.b = width
         return self
     }
-
+    
     /// 设定某个 UIView 右边距离其 superview 右边的距离
     func fy_right(right: CGFloat) -> Self {
-        usingFangYuan = true
+        basicSetting()
         rulerX.c = right
         ConstraintManager.popConstraintTo(self, direction: .LeftRigt, value: right)
         return self
     }
-
+    
     // MARK: Y
-
+    
     /// 设定某个 UIView 顶部距离其 superview 顶部的距离，相当于 y
     func fy_top(top: CGFloat) -> Self {
-        usingFangYuan = true
+        basicSetting()
         rulerY.a = top
         ConstraintManager.popConstraintTo(self, direction: .BottomTop, value: top)
         return self
     }
-
+    
     /// 设定某个 UIView 的高度，相当于 height
     func fy_height(height: CGFloat) -> Self {
-        usingFangYuan = true
+        basicSetting()
         rulerY.b = height
         return self
     }
-
+    
     /// 设定某个 UIView 底部距离其 superview 底部的距离
     func fy_bottom(bottom: CGFloat) -> Self {
-        usingFangYuan = true
+        basicSetting()
         rulerY.c = bottom
         ConstraintManager.popConstraintTo(self, direction: .TopBottom, value: bottom)
         return self
     }
     
-    func fy_size(size:CGSize) -> Self {
-        fy_width(size.width)
-        fy_height(size.height)
-        return self
-    }
-    
-    func fy_origin(origin:CGPoint) -> Self {
-        fy_top(origin.y)
-        fy_left(origin.x)
-        return self
-    }
-    
-    func fy_frame(frame:CGRect) -> Self {
-        fy_origin(frame.origin)
-        fy_size(frame.size)
-        return self
-    }
-
     // MARK: Edge
     
     /// 设定某个 UIView 四个边距离其父视图相对四边的距离
     func fy_edge(edge: UIEdgeInsets) -> Self {
-        fy_top(edge.top)
-        fy_left(edge.left)
-        fy_bottom(edge.bottom)
-        fy_right(edge.right)
+        basicSetting()
+        rulerY.a = edge.top
+        ConstraintManager.popConstraintTo(self, direction: .BottomTop, value: edge.top)
+        rulerY.c = edge.bottom
+        ConstraintManager.popConstraintTo(self, direction: .TopBottom, value: edge.bottom)
+        rulerX.a = edge.left
+        ConstraintManager.popConstraintTo(self, direction: .RightLeft, value: edge.left)
+        rulerX.c = edge.right
+        ConstraintManager.popConstraintTo(self, direction: .LeftRigt, value: edge.right)
         return self
     }
-
+    
+    func fy_xRange(left:CGFloat, right:CGFloat) -> Self {
+        basicSetting()
+        rulerX.a = left
+        ConstraintManager.popConstraintTo(self, direction: .RightLeft, value: left)
+        rulerX.c = right
+        ConstraintManager.popConstraintTo(self, direction: .LeftRigt, value: right)
+        return self
+    }
+    
+    func fy_size(size:CGSize) -> Self {
+        basicSetting()
+        rulerX.b = size.width
+        rulerY.b = size.height
+        return self
+    }
+    
+    func fy_origin(origin:CGPoint) -> Self {
+        basicSetting()
+        rulerY.a = origin.y
+        ConstraintManager.popConstraintTo(self, direction: .BottomTop, value: origin.y)
+        rulerX.a = origin.x
+        ConstraintManager.popConstraintTo(self, direction: .RightLeft, value: origin.x)
+        return self
+    }
+    
+    func fy_frame(frame:CGRect) -> Self {
+        basicSetting()
+        rulerY.a = frame.origin.y
+        ConstraintManager.popConstraintTo(self, direction: .BottomTop, value: frame.origin.y)
+        rulerX.a = frame.origin.x
+        ConstraintManager.popConstraintTo(self, direction: .RightLeft, value: frame.origin.x)
+        fy_size(frame.size)
+        return self
+    }
+    
     // MARK: Animation
 
     /// 触发动画
