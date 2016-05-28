@@ -71,17 +71,14 @@ view
 
 ### 你可以在 Demo 中查看更多的代码
 
-## 方圆的优势
+## 方圆的特点
 
-- 使用简单
-- 和现有布局库没有命名冲突
+- 使用简单，和现有布局库没有命名和使用上的冲突（但是不可以混用）
 - 基于 `UIView.frame` 布局，比 `NSAutoLayout` 有更高的性能
 - 使用链式语法，代码美观简介
 - 『方圆』在 Swift 和 ObjC 中的语法仅有两点不同：
 	- ObjC 中链式代码的结尾需要添加 `;` 分号
 	- ObjC 中链式代码返回值类型为 `UIView` 而非 `instancetype`
-
-## 方圆的劣势
 
 ### 猜测式依赖
 
@@ -95,10 +92,6 @@ fy_top		|	chainBottom
 fy_bottom	|	chainTop
 fy_left		|	chainRight
 fy_right	|	chainLeft
-
-### 暂时不支持宽度、高度自适应
-
-正在紧张的完成中
 
 ## 要做的事情
 
