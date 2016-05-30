@@ -56,8 +56,7 @@ public extension UIView {
     /// 设定某个 UIView 左边距离其 superview 左边的距离，相当于 x
     func fy_left(left: CGFloat) -> Self {
         basicSetting()
-        rulerX.a = left
-        ConstraintManager.popConstraintTo(self, direction: .RightLeft, value: left)
+        popConstraintAt(.RightLeft, value: left)
         return self
     }
     
@@ -71,8 +70,7 @@ public extension UIView {
     /// 设定某个 UIView 右边距离其 superview 右边的距离
     func fy_right(right: CGFloat) -> Self {
         basicSetting()
-        rulerX.c = right
-        ConstraintManager.popConstraintTo(self, direction: .LeftRigt, value: right)
+        popConstraintAt(.LeftRigt, value: right)
         return self
     }
     
@@ -81,8 +79,7 @@ public extension UIView {
     /// 设定某个 UIView 顶部距离其 superview 顶部的距离，相当于 y
     func fy_top(top: CGFloat) -> Self {
         basicSetting()
-        rulerY.a = top
-        ConstraintManager.popConstraintTo(self, direction: .BottomTop, value: top)
+        popConstraintAt(.BottomTop, value: top)
         return self
     }
     
@@ -96,8 +93,7 @@ public extension UIView {
     /// 设定某个 UIView 底部距离其 superview 底部的距离
     func fy_bottom(bottom: CGFloat) -> Self {
         basicSetting()
-        rulerY.c = bottom
-        ConstraintManager.popConstraintTo(self, direction: .TopBottom, value: bottom)
+        popConstraintAt(.TopBottom, value: bottom)
         return self
     }
     
@@ -106,23 +102,17 @@ public extension UIView {
     /// 设定某个 UIView 四个边距离其父视图相对四边的距离
     func fy_edge(edge: UIEdgeInsets) -> Self {
         basicSetting()
-        rulerY.a = edge.top
-        ConstraintManager.popConstraintTo(self, direction: .BottomTop, value: edge.top)
-        rulerY.c = edge.bottom
-        ConstraintManager.popConstraintTo(self, direction: .TopBottom, value: edge.bottom)
-        rulerX.a = edge.left
-        ConstraintManager.popConstraintTo(self, direction: .RightLeft, value: edge.left)
-        rulerX.c = edge.right
-        ConstraintManager.popConstraintTo(self, direction: .LeftRigt, value: edge.right)
+        popConstraintAt(.BottomTop, value: edge.top)
+        popConstraintAt(.TopBottom, value: edge.bottom)
+        popConstraintAt(.RightLeft, value: edge.left)
+        popConstraintAt(.LeftRigt, value: edge.right)
         return self
     }
     
     func fy_xRange(left:CGFloat, right:CGFloat) -> Self {
         basicSetting()
-        rulerX.a = left
-        ConstraintManager.popConstraintTo(self, direction: .RightLeft, value: left)
-        rulerX.c = right
-        ConstraintManager.popConstraintTo(self, direction: .LeftRigt, value: right)
+        popConstraintAt(.RightLeft, value: left)
+        popConstraintAt(.LeftRigt, value: right)
         return self
     }
     
@@ -135,19 +125,15 @@ public extension UIView {
     
     func fy_origin(origin:CGPoint) -> Self {
         basicSetting()
-        rulerY.a = origin.y
-        ConstraintManager.popConstraintTo(self, direction: .BottomTop, value: origin.y)
-        rulerX.a = origin.x
-        ConstraintManager.popConstraintTo(self, direction: .RightLeft, value: origin.x)
+        popConstraintAt(.BottomTop, value: origin.y)
+        popConstraintAt(.RightLeft, value: origin.x)
         return self
     }
     
     func fy_frame(frame:CGRect) -> Self {
         basicSetting()
-        rulerY.a = frame.origin.y
-        ConstraintManager.popConstraintTo(self, direction: .BottomTop, value: frame.origin.y)
-        rulerX.a = frame.origin.x
-        ConstraintManager.popConstraintTo(self, direction: .RightLeft, value: frame.origin.x)
+        popConstraintAt(.BottomTop, value: frame.origin.y)
+        popConstraintAt(.RightLeft, value: frame.origin.x)
         fy_size(frame.size)
         return self
     }
