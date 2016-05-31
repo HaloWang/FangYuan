@@ -23,6 +23,10 @@ class ConstraintManager {
     
     var holder = ConstraintHolder()
     
+    var viewTree = ViewTree()
+    
+    weak var layoutingView : UIView?
+    
     class ConstraintHolder {
         var topBottom: Constraint?
         var bottomTop: Constraint?
@@ -105,6 +109,8 @@ extension ConstraintManager {
     class func layout(view:UIView) {
         
         let info = view.usingFangYuanInfo
+        
+        singleton.layoutingView = view
 
         guard info.hasUsingFangYuanSubview else {
             return
@@ -120,9 +126,7 @@ extension ConstraintManager {
 private extension ConstraintManager {
 
     // TODO: UITableView.addSubiew 后，调用 UITableView 的 layoutSubviews 并不会被触发？
-    // TODO: ⚠️ 你这个计算模型真的合理吗？根据 Model 动态设定 fy_() 的时候，能保证不产生问题吗？
-    // TODO: 1、做更复杂的 UITableViewCell 验证一下
-    // TODO: 2、把布局模型再思考一遍
+    // TODO: 😇面对需要重新设定 UIView.constraint 的问题，可以再次套用一遍这个方法
     
     /// 核心布局方法
     func layout(views: [UIView]) {
@@ -134,6 +138,7 @@ private extension ConstraintManager {
             return
         }
         
+        var weakViews = [WeakView]()
         var layoutingViews = Set(views)
         //  未设定的约束中，发现有用来约束 view 的约束
         var shouldRepeat: Bool
@@ -144,12 +149,19 @@ private extension ConstraintManager {
                     view.layoutWithFangYuan()
                     setConstraintsFrom(view)
                     //  在被遍历的数组中移除该 view
+                    weakViews.append(WeakView(view))
                     layoutingViews.remove(view)
                 } else {
                     shouldRepeat = true
                 }
             }
         } while shouldRepeat
+        
+        //  UIView 的关系是树形结构，UIView.constraint 之间的约束关系也是树形结构！
+        //  N 叉树
+        //  所以这里就涉及到算法了！
+        
+        viewTree[WeakView(layoutingView!)] = weakViews
     }
 
     func hasUnsetConstraintsOf(views:[UIView]) -> Bool {
@@ -239,33 +251,34 @@ func <=>(lhs: Constraint, rhs: Constraint) -> Bool {
     return lhs.to == rhs.from && lhs.from == rhs.to
 }
 
-//func ==<V:UIView>(lhs: Weak<V>, rhs: Weak<V>) -> Bool {
-//    return lhs.hashValue == rhs.hashValue
-//}
-//
-//struct Weak<V:UIView>: Hashable {
-//    
-//    weak var view: V?
-//    
-//    init (_ view: V?) {
-//        self.view = view
-//    }
-//    
-//    var hashValue: Int {
-//        guard let view = view else {
-//            return 0
-//        }
-//        return view.hashValue
-//    }
-//}
-//
-//typealias WeakView = Weak<UIView>
-//
-//extension UIView {
-//    var weak: Weak<UIView> {
-//        return Weak(self)
-//    }
-//}
+func ==<V:UIView>(lhs: Weak<V>, rhs: Weak<V>) -> Bool {
+    return lhs.hashValue == rhs.hashValue
+}
+
+struct Weak<V:UIView>: Hashable {
+    
+    weak var view: V?
+    
+    init (_ view: V?) {
+        self.view = view
+    }
+    
+    var hashValue: Int {
+        guard let view = view else {
+            return 0
+        }
+        return view.hashValue
+    }
+}
+
+typealias WeakView = Weak<UIView>
+typealias ViewTree = [WeakView:[WeakView]]
+
+extension UIView {
+    var weak: Weak<UIView> {
+        return Weak(self)
+    }
+}
 
 //extension ConstraintManager {
 //    
