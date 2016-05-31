@@ -64,6 +64,37 @@ class Constraint: Hashable {
         }
         hashStore += 1
     }
+    
+    /// 在 cons 中的 con 变了的话，都有哪些 _cons 需要重设？
+    class func _dev_checkDeps(con:Constraint, cons:Set<Constraint>) {
+        cons.forEach {
+            $0
+        }
+    }
+    
+    /// 在 inCons 中的 cons 变了的话，都有哪些 _cons 需要重设？
+    class func _dev_checkDeps(cons:Set<Constraint>, inCons:Set<Constraint>) {
+        cons.forEach {
+            $0
+        }
+    }
+}
+
+///
+/// - Note: 我就是想面对同样的数据结构的时候不用再写一遍寻址方法了
+/// - TODO: Protocol 'Hashable' can only be used as a generic constraint because it has Self or associated type requirements. WTF?
+///
+protocol FangYuanIndexAble {
+    var to : UIView { get }
+    var from : UIView { get }
+}
+
+extension FangYuanIndexAble {
+    
+}
+
+extension SequenceType {
+    
 }
 
 extension Constraint: CustomStringConvertible {

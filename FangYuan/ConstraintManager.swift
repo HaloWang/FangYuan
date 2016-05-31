@@ -138,13 +138,17 @@ private extension ConstraintManager {
             return
         }
         
-        var cons = Set<Constraint>()
+        _ = Set<Constraint>()
         var layoutingViews = Set(views)
         //  未设定的约束中，发现有用来约束 view 的约束
-        if let weakViews = viewTree[WeakView(layoutingView!)] {
-            
+        // TODO: 能不能直接使用上层接口？可是直接使用上层接口的话，你还是需要知道当时设定的值是什么
+        if viewTree[WeakView(layoutingView!)] != nil {
+            // TODO: 找到所有需要重设的 Constraint
+            // TODO: 老一套
         } else {
-            
+            // TODO: 老一套
+            // TODO: 缓存
+            // TODO: ViewController disappear 时释放
         }
         var shouldRepeat: Bool
         repeat {
