@@ -138,9 +138,14 @@ private extension ConstraintManager {
             return
         }
         
-        var weakViews = [WeakView]()
+        var cons = Set<Constraint>()
         var layoutingViews = Set(views)
         //  未设定的约束中，发现有用来约束 view 的约束
+        if let weakViews = viewTree[WeakView(layoutingView!)] {
+            
+        } else {
+            
+        }
         var shouldRepeat: Bool
         repeat {
             shouldRepeat = false
@@ -149,7 +154,6 @@ private extension ConstraintManager {
                     view.layoutWithFangYuan()
                     setConstraintsFrom(view)
                     //  在被遍历的数组中移除该 view
-                    weakViews.append(WeakView(view))
                     layoutingViews.remove(view)
                 } else {
                     shouldRepeat = true
@@ -160,8 +164,6 @@ private extension ConstraintManager {
         //  UIView 的关系是树形结构，UIView.constraint 之间的约束关系也是树形结构！
         //  N 叉树
         //  所以这里就涉及到算法了！
-        
-        viewTree[WeakView(layoutingView!)] = weakViews
     }
 
     func hasUnsetConstraintsOf(views:[UIView]) -> Bool {
@@ -182,8 +184,9 @@ private extension ConstraintManager {
     }
 
     /// 未设定的约束中，已经没有用来约束 view 的约束了
-    func hasSetConstrainTo(view:UIView) -> Bool {
-        for con in constraints {
+    func hasSetConstrainTo(view:UIView, cons:Set<Constraint>? = nil) -> Bool {
+        let _constrains = cons ?? constraints
+        for con in _constrains {
             if con.to == view {
                 assert(con.to.superview == con.from.superview, "A constraint.to and from must has same superview")
                 return false
@@ -193,7 +196,8 @@ private extension ConstraintManager {
     }
 
     /// 确定了该 UIView.frame 后，装载 Constraint 至 to.ruler.section 中
-    func setConstraintsFrom(view: UIView) {
+    // TODO: 参数可变性还是一个问题！
+    func setConstraintsFrom(view: UIView, cons:Set<Constraint>? = nil) {
         constraints.forEach { constraint in
             if constraint.from == view {
                 let _from = constraint.from
@@ -229,6 +233,7 @@ private extension ConstraintManager {
         }
     }
     
+    // TODO: 这里的 assert 性能还可以提升一下（关于不同的编译模式）
     class func checkCyclingConstraintWith(constraint:Constraint) {
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0)) {
             singleton.constraints.forEach { con in
@@ -249,35 +254,6 @@ infix operator <=> {}
 // TODO: 这个方法应该拆分的，也许是两个方向上的约束？那 LayoutWithFangYuan 是不是也需要拆分成两个方向上的？
 func <=>(lhs: Constraint, rhs: Constraint) -> Bool {
     return lhs.to == rhs.from && lhs.from == rhs.to
-}
-
-func ==<V:UIView>(lhs: Weak<V>, rhs: Weak<V>) -> Bool {
-    return lhs.hashValue == rhs.hashValue
-}
-
-struct Weak<V:UIView>: Hashable {
-    
-    weak var view: V?
-    
-    init (_ view: V?) {
-        self.view = view
-    }
-    
-    var hashValue: Int {
-        guard let view = view else {
-            return 0
-        }
-        return view.hashValue
-    }
-}
-
-typealias WeakView = Weak<UIView>
-typealias ViewTree = [WeakView:[WeakView]]
-
-extension UIView {
-    var weak: Weak<UIView> {
-        return Weak(self)
-    }
 }
 
 //extension ConstraintManager {
