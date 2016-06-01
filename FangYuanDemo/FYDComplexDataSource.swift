@@ -9,8 +9,8 @@
 import Foundation
 import CoreGraphics
 
-func _fy_arc4random() -> Int {
-    return Int(arc4random_uniform(UInt32(Int.max)))
+func _fy_arc4random(v: Int) -> Int {
+    return Int(arc4random() % UInt32(v))
 }
 
 class FYDComplexDataSource {
@@ -20,7 +20,7 @@ class FYDComplexDataSource {
     static var randomData : [Item] {
         
         func randomString(maxRepeat:Int, repeatString:String) -> String {
-            return Array(count: (_fy_arc4random() % maxRepeat) + 1, repeatedValue: repeatString).reduce("") { $0 + $1 }
+            return Array(count: _fy_arc4random(maxRepeat) + 1, repeatedValue: repeatString).reduce("") { $0 + $1 }
         }
         
         var items = [Item]()
@@ -43,7 +43,7 @@ class FYDComplexDataSource {
                 case 6...8:
                     item.imageURLs = Array(count: 2, repeatedValue: "")
                 default:
-                    item.imageURLs = Array(count: (_fy_arc4random() % 8 + 3), repeatedValue: "")
+                    item.imageURLs = Array(count: (_fy_arc4random(8) + 3), repeatedValue: "")
                 }
             }
             
