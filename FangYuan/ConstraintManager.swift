@@ -85,6 +85,7 @@ extension ConstraintManager {
     ///
     /// - Important: 这里面已经产生了递归调用了：fy_XXX -> [This Method] -> fy_XXX -> [This Method] -> ...
     /// - TODO: 部分方法不应该遍历两次的！这里的性能还有提升空间
+    /// - TODO: horizontal 的意义并不明显啊
     class func resetRelatedConstraintFrom(view:UIView, isHorizontal horizontal:Bool) {
         singleton.settedConstraints.forEach { constraint in
             if let _from = constraint.from {
