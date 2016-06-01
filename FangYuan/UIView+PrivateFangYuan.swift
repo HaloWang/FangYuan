@@ -14,7 +14,6 @@ extension UIView {
     
     /// 该 UIView.subviews 使用方圆的信息，通过一次 filter 和元组返回了是否在使用方圆和使用方圆的 subview
     /// - Note: 已经对弱引用数组做了尝试，效果不理想，直接将每个 usingFangYuan = true 的 UIView 加到 Set 中，Set.contains 方法会非常消耗性能（大概在 30-40 个 Weak.view 之间遍历）
-    ///
     /// - Warning: Set.remove 在移除 `hashValue = 0` 的 Element 时好像很不奏效！
     /// - TODO: 但是，这种给每个 UIView 加属性，并且不断调用的方法还是很讨厌，将来一定想办法移除之
     var usingFangYuanInfo: (hasUsingFangYuanSubview:Bool, usingFangYuanSubviews:[UIView]) {
@@ -179,6 +178,7 @@ extension UIView {
 }
 
 // MARK: - UIButton Swizzling
+// TODO: 这个问题还是应该探究一下，为什么就要单独为 UIButton 写一个？
 
 extension UIButton {
 
