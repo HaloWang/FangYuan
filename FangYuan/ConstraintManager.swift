@@ -193,16 +193,7 @@ private extension ConstraintManager {
                     _to.rulerX.c = _from.superview!.frame.width - _from.frame.origin.x + _value
                 }
                 constraints.remove(constraint)
-                
-                settedConstraints.forEach { cons in
-                    if cons.to == nil {
-                        settedConstraints.remove(cons)
-                    } else if cons.to == constraint.to && cons.direction == constraint.direction {
-                        settedConstraints.remove(cons)
-                    }
-                }
-                
-                settedConstraints.insert(constraint)
+                setSettedConstraint(constraint)
             }
         }
     }
@@ -211,6 +202,21 @@ private extension ConstraintManager {
 
 // MARK: Assistant
 private extension ConstraintManager {
+    
+    func setSettedConstraint(constraint:Constraint) {
+        settedConstraints.forEach { cons in
+            if let _to = cons.to {
+                if _to == constraint.to && cons.direction == constraint.direction {
+                    //  移除重复的约束
+                    settedConstraints.remove(cons)
+                }
+            } else {
+                //  移除无效（to == nil）的约束
+                settedConstraints.remove(cons)
+            }
+        }
+        settedConstraints.insert(constraint)
+    }
 
     /// 按照程序逻辑，一个 view 最多同时只能在一个方向上拥有一个约束
     func removeDuplicateConstraintOf(view:UIView, at direction: Constraint.Direction) {
