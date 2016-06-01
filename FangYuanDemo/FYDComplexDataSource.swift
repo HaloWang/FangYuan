@@ -9,6 +9,10 @@
 import Foundation
 import CoreGraphics
 
+func _fy_arc4random() -> Int {
+    return Int(arc4random_uniform(UInt32(Int.max)))
+}
+
 class FYDComplexDataSource {
     static let data : [Item] = [
     ]
@@ -16,30 +20,30 @@ class FYDComplexDataSource {
     static var randomData : [Item] {
         
         func randomString(maxRepeat:Int, repeatString:String) -> String {
-            return Array(count: (Int(arc4random()) % maxRepeat) + 1, repeatedValue: repeatString).reduce("") { $0 + $1 }
+            return Array(count: (_fy_arc4random() % maxRepeat) + 1, repeatedValue: repeatString).reduce("") { $0 + $1 }
         }
         
         var items = [Item]()
-        for _ in 0 ..< (Int(arc4random()) % 50) + 50 {
+        for _ in 0 ..< arc4random() % 50 + 50 {
             let item       = Item()
             item.nickName  = randomString(3, repeatString: "昵称")
             item.message   = randomString(40 , repeatString: "动态内容")
             item.avatar    = ""
-            item.isMine    = (arc4random() % 4 == 0)
+            item.isMine    = arc4random() % 4 == 0
             
-            for _ in 0..<Int(arc4random()) % 5 {
+            for _ in 0 ..< arc4random() % 5 {
                 item.comments.append(randomString(10, repeatString: "评论内容"))
             }
 
-            let hasImage = Int(arc4random()) % 3 == 0
+            let hasImage = arc4random() % 3 == 0
             if hasImage {
-                switch Int(arc4random()) % 10 {
+                switch arc4random() % 10 {
                 case 0...5:
                     item.imageURLs = Array(count: 1, repeatedValue: "")
                 case 6...8:
                     item.imageURLs = Array(count: 2, repeatedValue: "")
                 default:
-                    item.imageURLs = Array(count: (Int(arc4random()) % 8 + 3), repeatedValue: "")
+                    item.imageURLs = Array(count: (_fy_arc4random() % 8 + 3), repeatedValue: "")
                 }
             }
             
