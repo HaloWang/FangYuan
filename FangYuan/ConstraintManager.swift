@@ -80,26 +80,30 @@ extension ConstraintManager {
     }
     
     /// 当某个依赖发生变化时，寻找相关的依赖，并重新根据存储的值赋值
+    /// 为了能保证『自动重置相关约束』，这个方法会在 `UIView.fy_XXX` 时从 `settedConstraints` 中检查相关的约束。
+    /// 并将其从新添加到 `constraints` 中
     ///
     /// - Important: 这里面已经产生了递归调用了：fy_XXX -> [This Method] -> fy_XXX -> [This Method] -> ...
     /// - TODO: 部分方法不应该遍历两次的！这里的性能还有提升空间
     class func resetRelatedConstraintFrom(view:UIView, isHorizontal horizontal:Bool) {
         singleton.settedConstraints.forEach { constraint in
-            if constraint.from == nil {
-                singleton.settedConstraints.remove(constraint)
-            } else if constraint.from == view{
-                if horizontal == constraint.direction.horizontal {
-                    switch constraint.direction {
-                    case .RightLeft:
-                        constraint.to.fy_left(view.chainRight + constraint.value)
-                    case .LeftRigt:
-                        constraint.to.fy_right(view.chainLeft + constraint.value)
-                    case .BottomTop:
-                        constraint.to.fy_top(view.chainBottom + constraint.value)
-                    case .TopBottom:
-                        constraint.to.fy_bottom(view.chainTop + constraint.value)
+            if let _from = constraint.from {
+                if _from == view {
+                    if horizontal == constraint.direction.horizontal {
+                        switch constraint.direction {
+                        case .RightLeft:
+                            constraint.to.fy_left(view.chainRight + constraint.value)
+                        case .LeftRigt:
+                            constraint.to.fy_right(view.chainLeft + constraint.value)
+                        case .BottomTop:
+                            constraint.to.fy_top(view.chainBottom + constraint.value)
+                        case .TopBottom:
+                            constraint.to.fy_bottom(view.chainTop + constraint.value)
+                        }
                     }
                 }
+            } else {
+                singleton.settedConstraints.remove(constraint)
             }
         }
     }
