@@ -47,6 +47,8 @@ public extension UIView {
 
 // MARK: - Chainable Method
 
+// TODO: 真的可以开一个线程，把大运算量的操作都扔到后台去，layoutSubviews 的时候在等待一下，但是得补一下『等待某个值为 true 才执行』这种需求了吧
+
 // TODO: 如何在调用完下面的方法后让 superview 刷新？
 
 public extension UIView {
