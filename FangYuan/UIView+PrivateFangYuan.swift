@@ -42,6 +42,10 @@ extension UIView {
         }
         ConstraintManager.popConstraintTo(self, direction: direction, value: value)
     }
+    
+    func resetRelatedConstraintHorizontal(horizontal:Bool) {
+        ConstraintManager.resetRelatedConstraintFrom(self, isHorizontal: horizontal)
+    }
 
     /// 在约束已经求解完全的情况下进行 frame 的设置
     func layoutWithFangYuan() {

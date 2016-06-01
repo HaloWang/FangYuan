@@ -8,10 +8,6 @@
 
 import UIKit
 
-//typealias WeakView = Weak<UIView>
-//typealias ViewTree = Dictionary<WeakView, [WeakView]?>
-//typealias ViewCons = Dictionary<WeakView, Set<Constraint>?>
-
 // MARK: - Init & Properties
 
 /// 约束依赖管理者
@@ -24,8 +20,10 @@ class ConstraintManager {
     
     var holder = ConstraintHolder()
     
-    var constraints = Set<Constraint>()
+    // TODO: 重要的还是做到按照 superview 分组遍历以提高性能
+    // TODO: 有没有集散型的并发遍历？
     
+    var constraints = Set<Constraint>()
     var settedConstraints = Set<Constraint>()
 }
 
@@ -82,9 +80,10 @@ extension ConstraintManager {
     }
     
     /// 当某个依赖发生变化时，寻找相关的依赖，并重新根据存储的值赋值
+    ///
     /// - Important: 这里面已经产生了递归调用了：fy_XXX -> [This Method] -> fy_XXX -> [This Method] -> ...
-    class func findSettedConstraintsAndResetRelatedConstraintsFrom(view:UIView, isHorizontal horizontal:Bool) {
-        print(singleton.settedConstraints.count)
+    /// - TODO: 部分方法不应该遍历两次的！这里的性能还有提升空间
+    class func resetRelatedConstraintFrom(view:UIView, isHorizontal horizontal:Bool) {
         singleton.settedConstraints.forEach { constraint in
             if constraint.from == nil {
                 singleton.settedConstraints.remove(constraint)

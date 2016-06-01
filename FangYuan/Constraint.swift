@@ -76,20 +76,6 @@ class Constraint: Hashable {
         }
         hashStore += 1
     }
-    
-    /// 在 cons 中的 con 变了的话，都有哪些 _cons 需要重设？
-    class func _dev_checkDeps(con:Constraint, cons:Set<Constraint>) {
-        cons.forEach {
-            $0
-        }
-    }
-    
-    /// 在 inCons 中的 cons 变了的话，都有哪些 _cons 需要重设？
-    class func _dev_checkDeps(cons:Set<Constraint>, inCons:Set<Constraint>) {
-        cons.forEach {
-            $0
-        }
-    }
 }
 
 class ConstraintHolder {

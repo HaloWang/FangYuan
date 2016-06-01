@@ -14,6 +14,11 @@ let HPadding = 5.f
 let VPadding = 3.f
 let AIVSize  = 40.size
 
+// TODO: 发现了布局时的 BUG
+// TODO: 为什么 UITextView.text 的调用那么耗时？有什么优化办法？
+// TODO: 什么时候能让 FangYuan 变成纯配置式 DSL？
+// 比如：textView.fy_rx_height(message.displayHeight)
+
 class FYDComplexTableViewCell: UITableViewCell {
     
     var singleImageMaxHeight : CGFloat {
@@ -93,9 +98,14 @@ class FYDComplexTableViewCell: UITableViewCell {
                 .fy_right(HPadding)
             
             imageCollectionView
-                .fy_left(HPadding).fy_right(HPadding)
+                .fy_left(HPadding)
+                .fy_right(HPadding)
+                .fy_top(messageTextView.chainBottom + 5)
             
-            singleImageView.fy_left(0).fy_right(0)
+            singleImageView
+                .fy_left(0)
+                .fy_right(0)
+                .fy_top(messageTextView.chainBottom + 5)
             
             nickNameLabel
                 .fy_top(HPadding)
@@ -106,12 +116,7 @@ class FYDComplexTableViewCell: UITableViewCell {
                 .fy_right(HPadding)
                 .fy_top(HPadding)
                 .fy_height(25)
-            
-            // TODO: BUG/unintuitive
-            // How to implement reactive layout?
-            // "LayoutOrder" can fix this
-            // "WeakReferenseArray" is needed
-            //  这里对 chainRight 的调用要存储起来
+
             userBadgeImageView
                 .fy_top(HPadding)
                 .fy_size(35.size)
@@ -226,13 +231,8 @@ class FYDComplexTableViewCell: UITableViewCell {
 
         layoutCellIfNeeded { (cell) in
             cell.messageTextView.fy_height(messageDisplayHeight)
-            
-            cell.singleImageView.fy_top(cell.messageTextView.chainBottom + 5)
             cell.singleImageView.fy_height(imagesDisplayHeight)
-            
-            cell.imageCollectionView.fy_top(cell.messageTextView.chainBottom + 5)
             cell.imageCollectionView.fy_height(imagesDisplayHeight)
-
         }
         
         displayHeight += 5
