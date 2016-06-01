@@ -56,6 +56,7 @@ public extension UIView {
     /// 设定某个 UIView 左边距离其 superview 左边的距离，相当于 x
     func fy_left(left: CGFloat) -> Self {
         basicSetting()
+        ConstraintManager.findSettedConstraintsAndResetRelatedConstraintsFrom(self, isHorizontal: true)
         popConstraintAt(.RightLeft, value: left)
         return self
     }
@@ -63,6 +64,7 @@ public extension UIView {
     /// 设定某个 UIView 的宽度，相当于 width
     func fy_width(width: CGFloat) -> Self {
         basicSetting()
+        ConstraintManager.findSettedConstraintsAndResetRelatedConstraintsFrom(self, isHorizontal: true)
         rulerX.b = width
         return self
     }
@@ -70,6 +72,7 @@ public extension UIView {
     /// 设定某个 UIView 右边距离其 superview 右边的距离
     func fy_right(right: CGFloat) -> Self {
         basicSetting()
+        ConstraintManager.findSettedConstraintsAndResetRelatedConstraintsFrom(self, isHorizontal: true)
         popConstraintAt(.LeftRigt, value: right)
         return self
     }
@@ -79,6 +82,7 @@ public extension UIView {
     /// 设定某个 UIView 顶部距离其 superview 顶部的距离，相当于 y
     func fy_top(top: CGFloat) -> Self {
         basicSetting()
+        ConstraintManager.findSettedConstraintsAndResetRelatedConstraintsFrom(self, isHorizontal: true)
         popConstraintAt(.BottomTop, value: top)
         return self
     }
@@ -86,6 +90,7 @@ public extension UIView {
     /// 设定某个 UIView 的高度，相当于 height
     func fy_height(height: CGFloat) -> Self {
         basicSetting()
+        ConstraintManager.findSettedConstraintsAndResetRelatedConstraintsFrom(self, isHorizontal: false)
         rulerY.b = height
         return self
     }
@@ -93,6 +98,7 @@ public extension UIView {
     /// 设定某个 UIView 底部距离其 superview 底部的距离
     func fy_bottom(bottom: CGFloat) -> Self {
         basicSetting()
+        ConstraintManager.findSettedConstraintsAndResetRelatedConstraintsFrom(self, isHorizontal: false)
         popConstraintAt(.TopBottom, value: bottom)
         return self
     }
@@ -102,6 +108,8 @@ public extension UIView {
     /// 设定某个 UIView 四个边距离其父视图相对四边的距离
     func fy_edge(edge: UIEdgeInsets) -> Self {
         basicSetting()
+        ConstraintManager.findSettedConstraintsAndResetRelatedConstraintsFrom(self, isHorizontal: true)
+        ConstraintManager.findSettedConstraintsAndResetRelatedConstraintsFrom(self, isHorizontal: false)
         popConstraintAt(.BottomTop, value: edge.top)
         popConstraintAt(.TopBottom, value: edge.bottom)
         popConstraintAt(.RightLeft, value: edge.left)
@@ -111,6 +119,7 @@ public extension UIView {
     
     func fy_xRange(left:CGFloat, right:CGFloat) -> Self {
         basicSetting()
+        ConstraintManager.findSettedConstraintsAndResetRelatedConstraintsFrom(self, isHorizontal: true)
         popConstraintAt(.RightLeft, value: left)
         popConstraintAt(.LeftRigt, value: right)
         return self
@@ -118,6 +127,8 @@ public extension UIView {
     
     func fy_size(size:CGSize) -> Self {
         basicSetting()
+        ConstraintManager.findSettedConstraintsAndResetRelatedConstraintsFrom(self, isHorizontal: true)
+        ConstraintManager.findSettedConstraintsAndResetRelatedConstraintsFrom(self, isHorizontal: false)
         rulerX.b = size.width
         rulerY.b = size.height
         return self
@@ -125,6 +136,8 @@ public extension UIView {
     
     func fy_origin(origin:CGPoint) -> Self {
         basicSetting()
+        ConstraintManager.findSettedConstraintsAndResetRelatedConstraintsFrom(self, isHorizontal: true)
+        ConstraintManager.findSettedConstraintsAndResetRelatedConstraintsFrom(self, isHorizontal: false)
         popConstraintAt(.BottomTop, value: origin.y)
         popConstraintAt(.RightLeft, value: origin.x)
         return self
@@ -132,6 +145,8 @@ public extension UIView {
     
     func fy_frame(frame:CGRect) -> Self {
         basicSetting()
+        ConstraintManager.findSettedConstraintsAndResetRelatedConstraintsFrom(self, isHorizontal: true)
+        ConstraintManager.findSettedConstraintsAndResetRelatedConstraintsFrom(self, isHorizontal: false)
         popConstraintAt(.BottomTop, value: frame.origin.y)
         popConstraintAt(.RightLeft, value: frame.origin.x)
         fy_size(frame.size)

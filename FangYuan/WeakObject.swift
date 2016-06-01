@@ -8,10 +8,6 @@
 
 import UIKit
 
-typealias WeakView = Weak<UIView>
-typealias ViewTree = Dictionary<WeakView, [WeakView]?>
-typealias ViewCons = Dictionary<WeakView, Set<Constraint>?>
-
 func ==<V:NSObject>(lhs: Weak<V>, rhs: Weak<V>) -> Bool {
     return lhs.hashValue == rhs.hashValue
 }

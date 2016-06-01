@@ -111,9 +111,11 @@ class FYDComplexTableViewCell: UITableViewCell {
             // How to implement reactive layout?
             // "LayoutOrder" can fix this
             // "WeakReferenseArray" is needed
+            //  这里对 chainRight 的调用要存储起来
             userBadgeImageView
                 .fy_top(HPadding)
                 .fy_size(35.size)
+                .fy_left(nickNameLabel.chainRight + 5)
         }
     }
     
@@ -162,7 +164,6 @@ class FYDComplexTableViewCell: UITableViewCell {
             item.nickNameDisplayWidthCache = nickNameDisplayWidth
         }
         nickNameLabel.fy_width(nickNameDisplayWidth)
-        userBadgeImageView.fy_left(nickNameLabel.chainRight + 5)
     }
     
     /**

@@ -8,6 +8,10 @@
 
 import UIKit
 
+typealias WeakView = Weak<UIView>
+typealias ViewTree = Dictionary<WeakView, [WeakView]?>
+typealias ViewCons = Dictionary<WeakView, Set<Constraint>?>
+
 // MARK: - Init & Properties
 
 /// 约束依赖管理者
@@ -17,52 +21,14 @@ class ConstraintManager {
     
     private init() {}
     static let singleton = ConstraintManager()
-    
-    // TODO: 根据正在布局的 UIView 对 constraints 按组遍历
-    var constraints = Set<Constraint>()
-    
     var holder = ConstraintHolder()
     
-    var viewTree = ViewTree()
+    var constraints = Set<Constraint>()
+    var settedConstraints = Set<Constraint>()
     
     weak var layoutingView : UIView?
-    
-    class ConstraintHolder {
-        var topBottom: Constraint?
-        var bottomTop: Constraint?
-        var leftRight: Constraint?
-        var rightLeft: Constraint?
-        
-        func popConstraintAt(direction: Constraint.Direction) -> Constraint? {
-            switch direction {
-            case .TopBottom:
-                return topBottom
-            case .BottomTop:
-                return bottomTop
-            case .LeftRigt:
-                return leftRight
-            case .RightLeft:
-                return rightLeft
-            }
-        }
-        
-        func push(constraint:Constraint?, at direction:Constraint.Direction) {
-            switch direction {
-            case .TopBottom:
-                topBottom = constraint
-            case .BottomTop:
-                bottomTop = constraint
-            case .LeftRigt:
-                leftRight = constraint
-            case .RightLeft:
-                rightLeft = constraint
-            }
-        }
-        
-        func clearConstraintAt(direction: Constraint.Direction) {
-            push(nil, at: direction)
-        }
-    }
+    var viewCons = ViewCons()
+    var viewTree = ViewTree()
 }
 
 // MARK: - Public Methods
@@ -109,14 +75,33 @@ extension ConstraintManager {
     class func layout(view:UIView) {
         
         let info = view.usingFangYuanInfo
-        
-        singleton.layoutingView = view
 
         guard info.hasUsingFangYuanSubview else {
             return
         }
 
+        singleton.layoutingView = view
         singleton.layout(info.usingFangYuanSubviews)
+        singleton.layoutingView = nil
+    }
+    
+    class func findSettedConstraintsAndResetRelatedConstraintsFrom(view:UIView, isHorizontal horizontal:Bool) {
+        singleton.constraints.forEach { constraint in
+            if constraint.from == view{
+                if horizontal == constraint.direction.horizontal {
+                    switch constraint.direction {
+                    case .RightLeft:
+                        constraint.to.fy_left(view.chainRight + constraint.value)
+                    case .LeftRigt:
+                        constraint.to.fy_right(view.chainLeft + constraint.value)
+                    case .BottomTop:
+                        constraint.to.fy_top(view.chainBottom + constraint.value)
+                    case .TopBottom:
+                        constraint.to.fy_bottom(view.chainTop + constraint.value)
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -131,6 +116,7 @@ private extension ConstraintManager {
     /// 核心布局方法
     func layout(views: [UIView]) {
         
+        // TODO: 真正的响应式布局以后再加上吧
         guard hasUnsetConstraintsOf(views) else {
             views.forEach { view in
                 view.layoutWithFangYuan()
@@ -218,6 +204,7 @@ private extension ConstraintManager {
                     _to.rulerX.c = _from.superview!.frame.width - _from.frame.origin.x + _value
                 }
                 constraints.remove(constraint)
+                settedConstraints.insert(constraint)
             }
         }
     }
@@ -248,16 +235,6 @@ private extension ConstraintManager {
             }
         }
     }
-}
-
-// TODO: 可是关于方向的问题你有没有想明白？
-
-infix operator <=> {}
-/// 判断两个约束是否产生了循环依赖
-
-// TODO: 这个方法应该拆分的，也许是两个方向上的约束？那 LayoutWithFangYuan 是不是也需要拆分成两个方向上的？
-func <=>(lhs: Constraint, rhs: Constraint) -> Bool {
-    return lhs.to == rhs.from && lhs.from == rhs.to
 }
 
 //extension ConstraintManager {

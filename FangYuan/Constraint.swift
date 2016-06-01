@@ -12,6 +12,14 @@ func ==(lhs: Constraint, rhs: Constraint) -> Bool {
     return lhs.hashValue == rhs.hashValue
 }
 
+infix operator <=> {}
+/// 判断两个约束是否产生了循环依赖
+
+// TODO: 这个方法应该拆分的，也许是两个方向上的约束？那 LayoutWithFangYuan 是不是也需要拆分成两个方向上的？
+func <=>(lhs: Constraint, rhs: Constraint) -> Bool {
+    return lhs.to == rhs.from && lhs.from == rhs.to
+}
+
 /// 约束依赖
 class Constraint: Hashable {
 
@@ -38,6 +46,10 @@ class Constraint: Hashable {
         case LeftRigt
         case RightLeft
         case TopBottom
+        
+        var horizontal : Bool {
+            return self == Constraint.Direction.LeftRigt || self == Constraint.Direction.RightLeft
+        }
     }
     
     /**
@@ -77,6 +89,43 @@ class Constraint: Hashable {
         cons.forEach {
             $0
         }
+    }
+}
+
+class ConstraintHolder {
+    var topBottom: Constraint?
+    var bottomTop: Constraint?
+    var leftRight: Constraint?
+    var rightLeft: Constraint?
+    
+    func popConstraintAt(direction: Constraint.Direction) -> Constraint? {
+        switch direction {
+        case .TopBottom:
+            return topBottom
+        case .BottomTop:
+            return bottomTop
+        case .LeftRigt:
+            return leftRight
+        case .RightLeft:
+            return rightLeft
+        }
+    }
+    
+    func push(constraint:Constraint?, at direction:Constraint.Direction) {
+        switch direction {
+        case .TopBottom:
+            topBottom = constraint
+        case .BottomTop:
+            bottomTop = constraint
+        case .LeftRigt:
+            leftRight = constraint
+        case .RightLeft:
+            rightLeft = constraint
+        }
+    }
+    
+    func clearConstraintAt(direction: Constraint.Direction) {
+        push(nil, at: direction)
     }
 }
 
