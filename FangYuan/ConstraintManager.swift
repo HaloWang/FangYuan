@@ -8,9 +8,9 @@
 
 import UIKit
 
-typealias WeakView = Weak<UIView>
-typealias ViewTree = Dictionary<WeakView, [WeakView]?>
-typealias ViewCons = Dictionary<WeakView, Set<Constraint>?>
+//typealias WeakView = Weak<UIView>
+//typealias ViewTree = Dictionary<WeakView, [WeakView]?>
+//typealias ViewCons = Dictionary<WeakView, Set<Constraint>?>
 
 // MARK: - Init & Properties
 
@@ -26,9 +26,9 @@ class ConstraintManager {
     var constraints = Set<Constraint>()
     var settedConstraints = Set<Constraint>()
     
-    weak var layoutingView : UIView?
-    var viewCons = ViewCons()
-    var viewTree = ViewTree()
+//    weak var layoutingView : UIView?
+//    var viewCons = ViewCons()
+//    var viewTree = ViewTree()
 }
 
 // MARK: - Public Methods
@@ -80,14 +80,17 @@ extension ConstraintManager {
             return
         }
 
-        singleton.layoutingView = view
         singleton.layout(info.usingFangYuanSubviews)
-        singleton.layoutingView = nil
     }
     
+    /// 当某个依赖发生变化时，寻找相关的依赖，并重新根据存储的值赋值
+    /// - Important: 这里面已经产生了递归调用了：fy_XXX -> [This Method] -> fy_XXX -> [This Method] -> ...
     class func findSettedConstraintsAndResetRelatedConstraintsFrom(view:UIView, isHorizontal horizontal:Bool) {
-        singleton.constraints.forEach { constraint in
-            if constraint.from == view{
+        print(singleton.settedConstraints.count)
+        singleton.settedConstraints.forEach { constraint in
+            if constraint.from == nil {
+                singleton.settedConstraints.remove(constraint)
+            } else if constraint.from == view{
                 if horizontal == constraint.direction.horizontal {
                     switch constraint.direction {
                     case .RightLeft:
@@ -116,7 +119,6 @@ private extension ConstraintManager {
     /// 核心布局方法
     func layout(views: [UIView]) {
         
-        // TODO: 真正的响应式布局以后再加上吧
         guard hasUnsetConstraintsOf(views) else {
             views.forEach { view in
                 view.layoutWithFangYuan()
@@ -124,18 +126,8 @@ private extension ConstraintManager {
             return
         }
         
-        _ = Set<Constraint>()
         var layoutingViews = Set(views)
         //  未设定的约束中，发现有用来约束 view 的约束
-        // TODO: 能不能直接使用上层接口？可是直接使用上层接口的话，你还是需要知道当时设定的值是什么
-        if viewTree[WeakView(layoutingView!)] != nil {
-            // TODO: 找到所有需要重设的 Constraint
-            // TODO: 老一套
-        } else {
-            // TODO: 老一套
-            // TODO: 缓存
-            // TODO: ViewController disappear 时释放
-        }
         var shouldRepeat: Bool
         repeat {
             shouldRepeat = false
@@ -150,10 +142,6 @@ private extension ConstraintManager {
                 }
             }
         } while shouldRepeat
-        
-        //  UIView 的关系是树形结构，UIView.constraint 之间的约束关系也是树形结构！
-        //  N 叉树
-        //  所以这里就涉及到算法了！
     }
 
     func hasUnsetConstraintsOf(views:[UIView]) -> Bool {
@@ -204,6 +192,15 @@ private extension ConstraintManager {
                     _to.rulerX.c = _from.superview!.frame.width - _from.frame.origin.x + _value
                 }
                 constraints.remove(constraint)
+                
+                settedConstraints.forEach { cons in
+                    if cons.to == nil {
+                        settedConstraints.remove(cons)
+                    } else if cons.to == constraint.to && cons.direction == constraint.direction {
+                        settedConstraints.remove(cons)
+                    }
+                }
+                
                 settedConstraints.insert(constraint)
             }
         }
@@ -236,21 +233,4 @@ private extension ConstraintManager {
         }
     }
 }
-
-//extension ConstraintManager {
-//    
-//    func managing(view:UIView) -> Bool {
-//        return managingViews.contains(view.weak)
-//    }
-//    
-//    func manage(view:UIView) {
-//        managingViews.insert(view.weak)
-//    }
-//    
-//    func cleanManagingViews() {
-//        managingViews = Set(managingViews.filter {
-//            $0.view != nil
-//            })
-//    }
-//}
 
