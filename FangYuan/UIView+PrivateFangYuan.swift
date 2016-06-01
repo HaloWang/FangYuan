@@ -105,8 +105,8 @@ extension UIView {
     // Note the use of static var in a private nested struct—this pattern creates the static associated object key we need but doesn’t muck up the global namespace.
     // From http://nshipster.com/swift-objc-runtime/
 
-    struct AssociatedKeys {
-        static var AO: Any?
+    struct _fy_associatedKeys {
+        static var ao: Any?
     }
 
     class AssociateObject {
@@ -116,11 +116,11 @@ extension UIView {
     }
 
     var ao: AssociateObject {
-        if let _ao = objc_getAssociatedObject(self, &AssociatedKeys.AO) {
+        if let _ao = objc_getAssociatedObject(self, &_fy_associatedKeys.ao) {
             return _ao as! AssociateObject
         }
         let _ao = AssociateObject()
-        objc_setAssociatedObject(self, &AssociatedKeys.AO, _ao, .OBJC_ASSOCIATION_RETAIN)
+        objc_setAssociatedObject(self, &_fy_associatedKeys.ao, _ao, .OBJC_ASSOCIATION_RETAIN)
         return _ao
     }
 
@@ -149,28 +149,26 @@ extension UIView {
 
 extension UIView {
 
-    struct once {
+    struct _fy_uiview_once {
         static var token: dispatch_once_t = 0
     }
 
-    // We can not override +load in Swift
     override public class func initialize() {
-        dispatch_once(&once.token) {
+        dispatch_once(&_fy_uiview_once.token) {
             _swizzle_layoutSubviews()
         }
     }
 
-    /// 交换实现
     class func _swizzle_layoutSubviews() {
         let originalSelector = #selector(layoutSubviews)
-        let swizzledSelector = #selector(_swizzle_imp_for_layoutSubviews)
+        let swizzledSelector = #selector(_swizzled_layoutSubviews)
         let originalMethod = class_getInstanceMethod(self, originalSelector)
         let swizzledMethod = class_getInstanceMethod(self, swizzledSelector)
         method_exchangeImplementations(originalMethod, swizzledMethod)
     }
 
-    func _swizzle_imp_for_layoutSubviews() {
-        _swizzle_imp_for_layoutSubviews()
+    func _swizzled_layoutSubviews() {
+        _swizzled_layoutSubviews()
         ConstraintManager.layout(self)
     }
 
@@ -180,12 +178,12 @@ extension UIView {
 
 extension UIButton {
 
-    struct uibutton_once {
+    struct _fy_uibutton_once {
         static var token: dispatch_once_t = 0
     }
 
     override public class func initialize() {
-        dispatch_once(&uibutton_once.token) {
+        dispatch_once(&_fy_uibutton_once.token) {
             _swizzle_layoutSubviews()
         }
     }
@@ -196,14 +194,14 @@ extension UIButton {
 
     override class func _swizzle_layoutSubviews() {
         let originalSelector = #selector(layoutSubviews)
-        let swizzledSelector = #selector(_swizzle_imp_for_layoutSubviews)
+        let swizzledSelector = #selector(_swizzled_layoutSubviews)
         let originalMethod = class_getInstanceMethod(self, originalSelector)
         let swizzledMethod = class_getInstanceMethod(self, swizzledSelector)
         method_exchangeImplementations(originalMethod, swizzledMethod)
     }
 
-    override func _swizzle_imp_for_layoutSubviews() {
-        _swizzle_imp_for_layoutSubviews()
+    override func _swizzled_layoutSubviews() {
+        _swizzled_layoutSubviews()
         ConstraintManager.layout(self)
     }
 }
