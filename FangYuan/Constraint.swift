@@ -129,23 +129,6 @@ class ConstraintHolder {
     }
 }
 
-///
-/// - Note: 我就是想面对同样的数据结构的时候不用再写一遍寻址方法了
-/// - TODO: Protocol 'Hashable' can only be used as a generic constraint because it has Self or associated type requirements. WTF?
-///
-protocol FangYuanIndexAble {
-    var to : UIView { get }
-    var from : UIView { get }
-}
-
-extension FangYuanIndexAble {
-    
-}
-
-extension SequenceType {
-    
-}
-
 extension Constraint: CustomStringConvertible {
     var description: String {
         return "\nConstraint:\n✅direction: \(direction) \n⏬from: \(from) \n⏫to: \(to)\nℹ️Value: \(value)"

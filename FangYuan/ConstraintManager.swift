@@ -21,14 +21,12 @@ class ConstraintManager {
     
     private init() {}
     static let singleton = ConstraintManager()
+    
     var holder = ConstraintHolder()
     
     var constraints = Set<Constraint>()
-    var settedConstraints = Set<Constraint>()
     
-//    weak var layoutingView : UIView?
-//    var viewCons = ViewCons()
-//    var viewTree = ViewTree()
+    var settedConstraints = Set<Constraint>()
 }
 
 // MARK: - Public Methods
