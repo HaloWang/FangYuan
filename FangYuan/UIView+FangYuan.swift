@@ -62,8 +62,8 @@ public extension UIView {
     /// - `viewA.fy_left(viewB.chainRight)`
     /// - `viewA.fy_left(viewB.chainRight + 15)`
     /// ### <font color="#dd6677">Invalid Usage:</font>
-    /// - `viewA.fy_left(viewB.chainTop)`
     /// - `viewA.fy_left(viewA.chainRight)`
+    /// - `viewA.fy_left(viewB.chainTop)`
     /// - `viewA.fy_left(viewB.chainRight * 2)`
     /// - `viewA.fy_left(viewB.chainRight + viewB.chainLeft)`
     /// - `viewA.fy_left(viewB.chainRight + viewC.chainRight)`
