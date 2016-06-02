@@ -13,6 +13,13 @@ import UIKit
 /// 约束依赖管理者
 ///
 /// 可能做着做着就成了 `AsyncDisplayKit` 那样抽取布局树，异步计算布局的东西了
+
+func invokeInHelperQueue(block:()->Void) {
+    dispatch_group_async(ConstraintManager.layoutGroup, ConstraintManager.layoutQueue) {
+        block()
+    }
+}
+
 class ConstraintManager {
     
     private init() {}
@@ -25,6 +32,10 @@ class ConstraintManager {
     
     var constraints = Set<Constraint>()
     var settedConstraints = Set<Constraint>()
+    
+    static let mainQueue = dispatch_get_main_queue()
+    static let layoutQueue = dispatch_queue_create("com.fangyuan.layout", DISPATCH_QUEUE_SERIAL)
+    static let layoutGroup = dispatch_group_create()
 }
 
 // MARK: - Public Methods
@@ -69,6 +80,8 @@ extension ConstraintManager {
     }
 
     class func layout(view:UIView) {
+        
+        dispatch_group_wait(layoutGroup, DISPATCH_TIME_FOREVER)
         
         let info = view.usingFangYuanInfo
 
@@ -137,6 +150,7 @@ private extension ConstraintManager {
             shouldRepeat = false
             layoutingViews.forEach { view in
                 if hasSetConstrainTo(view) {
+                    dispatch_group_wait(ConstraintManager.layoutGroup, DISPATCH_TIME_FOREVER)
                     view.layoutWithFangYuan()
                     setConstraintsFrom(view)
                     //  在被遍历的数组中移除该 view
@@ -180,23 +194,25 @@ private extension ConstraintManager {
     /// 确定了该 UIView.frame 后，装载 Constraint 至 to.ruler.section 中
     // TODO: 参数可变性还是一个问题！
     func setConstraintsFrom(view: UIView, cons:Set<Constraint>? = nil) {
-        constraints.forEach { constraint in
-            if constraint.from == view {
-                let _from = constraint.from
-                let _to = constraint.to
-                let _value = constraint.value
-                switch constraint.direction {
-                case .BottomTop:
-                    _to.rulerY.a = _from.frame.origin.y + _from.frame.height + _value
-                case .TopBottom:
-                    _to.rulerY.c = _from.superview!.frame.height - _from.frame.origin.y + _value
-                case .RightLeft:
-                    _to.rulerX.a = _from.frame.origin.x + _from.frame.width + _value
-                case .LeftRigt:
-                    _to.rulerX.c = _from.superview!.frame.width - _from.frame.origin.x + _value
+        invokeInHelperQueue {
+            self.constraints.forEach { constraint in
+                if constraint.from == view {
+                    let _from = constraint.from
+                    let _to = constraint.to
+                    let _value = constraint.value
+                    switch constraint.direction {
+                    case .BottomTop:
+                        _to.rulerY.a = _from.frame.origin.y + _from.frame.height + _value
+                    case .TopBottom:
+                        _to.rulerY.c = _from.superview!.frame.height - _from.frame.origin.y + _value
+                    case .RightLeft:
+                        _to.rulerX.a = _from.frame.origin.x + _from.frame.width + _value
+                    case .LeftRigt:
+                        _to.rulerX.c = _from.superview!.frame.width - _from.frame.origin.x + _value
+                    }
+                    self.constraints.remove(constraint)
+                    self.setSettedConstraint(constraint)
                 }
-                constraints.remove(constraint)
-                setSettedConstraint(constraint)
             }
         }
     }

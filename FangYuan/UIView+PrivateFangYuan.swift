@@ -24,8 +24,11 @@ extension UIView {
         return (_usingFangYuanSubviews.count != 0, _usingFangYuanSubviews)
     }
     
-    func basicSetting() {
+    func basicSetting(setting:()->Void) {
         usingFangYuan = true
+        invokeInHelperQueue {
+            setting()
+        }
     }
     
     func popConstraintAt(direction: Constraint.Direction, value: CGFloat) {
