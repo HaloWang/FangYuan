@@ -16,7 +16,7 @@ public extension UIView {
     ///
     /// someView.fy_right(self.chainLeft)
     var chainLeft: CGFloat {
-        invokeInHelperQueue {
+        fangyuan_async {
             ConstraintManager.pushConstraintFrom(self, direction: .LeftRigt)
         }
         return 0
@@ -26,7 +26,7 @@ public extension UIView {
     ///
     /// someView.fy_left(self.chainRight)
     var chainRight: CGFloat {
-        invokeInHelperQueue {
+        fangyuan_async {
             ConstraintManager.pushConstraintFrom(self, direction: .RightLeft)
         }
         return 0
@@ -36,7 +36,7 @@ public extension UIView {
     ///
     /// someView.fy_top(self.chainBottom)
     var chainBottom: CGFloat {
-        invokeInHelperQueue {
+        fangyuan_async {
             ConstraintManager.pushConstraintFrom(self, direction: .BottomTop)
         }
         return 0
@@ -46,7 +46,7 @@ public extension UIView {
     ///
     /// someView.fy_bottom(self.chainTop)
     var chainTop: CGFloat {
-        invokeInHelperQueue {
+        fangyuan_async {
             ConstraintManager.pushConstraintFrom(self, direction: .TopBottom)
         }
         return 0

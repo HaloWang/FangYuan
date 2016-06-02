@@ -14,12 +14,6 @@ import UIKit
 ///
 /// 可能做着做着就成了 `AsyncDisplayKit` 那样抽取布局树，异步计算布局的东西了
 
-func invokeInHelperQueue(block:()->Void) {
-    dispatch_group_async(ConstraintManager.layoutGroup, ConstraintManager.layoutQueue) {
-        block()
-    }
-}
-
 class ConstraintManager {
     
     private init() {}
@@ -32,10 +26,6 @@ class ConstraintManager {
     
     var constraints = Set<Constraint>()
     var settedConstraints = Set<Constraint>()
-    
-    static let mainQueue = dispatch_get_main_queue()
-    static let layoutQueue = dispatch_queue_create("com.fangyuan.layout", DISPATCH_QUEUE_SERIAL)
-    static let layoutGroup = dispatch_group_create()
 }
 
 // MARK: - Public Methods
@@ -80,14 +70,14 @@ extension ConstraintManager {
 
     class func layout(view:UIView) {
         
-        dispatch_group_wait(layoutGroup, DISPATCH_TIME_FOREVER)
         
         let info = view.usingFangYuanInfo
 
         guard info.hasUsingFangYuanSubview else {
             return
         }
-
+        
+        fangyuan_waitLayoutQueue()
         singleton.layout(info.usingFangYuanSubviews)
     }
     
@@ -128,7 +118,6 @@ extension ConstraintManager {
 private extension ConstraintManager {
 
     // TODO: UITableView.addSubiew 后，调用 UITableView 的 layoutSubviews 并不会被触发？
-    // TODO: 😇面对需要重新设定 UIView.constraint 的问题，可以再次套用一遍这个方法
     
     /// 核心布局方法
     func layout(views: [UIView]) {
@@ -147,7 +136,7 @@ private extension ConstraintManager {
             shouldRepeat = false
             layoutingViews.forEach { view in
                 if hasSetConstrainTo(view) {
-                    dispatch_group_wait(ConstraintManager.layoutGroup, DISPATCH_TIME_FOREVER)
+                    fangyuan_waitLayoutQueue()
                     view.layoutWithFangYuan()
                     setConstraintsFrom(view)
                     //  在被遍历的数组中移除该 view
@@ -177,10 +166,9 @@ private extension ConstraintManager {
     }
 
     /// 未设定的约束中，已经没有用来约束 view 的约束了
-    func hasSetConstrainTo(view:UIView, cons:Set<Constraint>? = nil) -> Bool {
-        dispatch_group_wait(ConstraintManager.layoutGroup, DISPATCH_TIME_FOREVER)
-        let _constrains = cons ?? constraints
-        for con in _constrains {
+    func hasSetConstrainTo(view:UIView) -> Bool {
+        fangyuan_waitLayoutQueue()
+        for con in constraints {
             if con.to == view {
                 assert(con.to.superview == con.from.superview, "A constraint.to and from must has same superview")
                 return false
@@ -191,8 +179,8 @@ private extension ConstraintManager {
 
     /// 确定了该 UIView.frame 后，装载 Constraint 至 to.ruler.section 中
     // TODO: 参数可变性还是一个问题！
-    func setConstraintsFrom(view: UIView, cons:Set<Constraint>? = nil) {
-        invokeInHelperQueue {
+    func setConstraintsFrom(view: UIView) {
+        fangyuan_async {
             self.constraints.forEach { constraint in
                 if constraint.from == view {
                     let _from = constraint.from

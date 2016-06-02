@@ -26,7 +26,7 @@ extension UIView {
     
     func basicSetting(setting:()->Void) {
         usingFangYuan = true
-        invokeInHelperQueue {
+        fangyuan_async {
             setting()
         }
     }
