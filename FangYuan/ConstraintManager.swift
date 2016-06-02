@@ -63,7 +63,6 @@ extension ConstraintManager {
      - parameter value:     约束固定值
      */
     class func popConstraintTo(to:UIView, direction: Constraint.Direction, value:CGFloat) {
-        
         //  这个方法应该被优先调用，可能出现 fy_XXX(a) 替换 fy_XXX(chainXXX) 的情况
         singleton.removeDuplicateConstraintOf(to, at: direction)
         
@@ -99,8 +98,6 @@ extension ConstraintManager {
     /// - Important: 这里面已经产生了递归调用了：fy_XXX -> [This Method] -> fy_XXX -> [This Method] -> ...
     /// - TODO: 部分方法不应该遍历两次的！这里的性能还有提升空间
     /// - TODO: horizontal 的意义并不明显啊
-    /// - TODO: 这种『分 - 总』式的方法，是完全可以使用并发遍历的，顺便也可以考量一下 `Set.remove` 的多线程可用性
-    /// - TODO: 可以写一个 UT 来测试一下并发遍历和非并发遍历
     class func resetRelatedConstraintFrom(view:UIView, isHorizontal horizontal:Bool) {
         singleton.settedConstraints.forEach { constraint in
             if let _from = constraint.from {
@@ -181,6 +178,7 @@ private extension ConstraintManager {
 
     /// 未设定的约束中，已经没有用来约束 view 的约束了
     func hasSetConstrainTo(view:UIView, cons:Set<Constraint>? = nil) -> Bool {
+        dispatch_group_wait(ConstraintManager.layoutGroup, DISPATCH_TIME_FOREVER)
         let _constrains = cons ?? constraints
         for con in _constrains {
             if con.to == view {
