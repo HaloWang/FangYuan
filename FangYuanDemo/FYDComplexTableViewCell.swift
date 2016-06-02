@@ -133,8 +133,10 @@ class FYDComplexTableViewCell: UITableViewCell {
         // TODO: 当初 hasSet 属性不就是为了做这件事情吗？
         // TODO: 能不能让开发者想的更少呢？
         // 或者你也可以使用 _FYDComplexTableViewCell 中的代码来设定约束
-        messageTextView.text = item.message
-        nickNameLabel.text   = item.nickName
+        dispatch_async(dispatch_get_main_queue()) { [weak self] in
+            self?.messageTextView.text = item.message
+            self?.nickNameLabel.text   = item.nickName
+        }
         
         switch item.imageURLs.count {
         case 1:
