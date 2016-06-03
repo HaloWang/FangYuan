@@ -69,9 +69,10 @@ extension ConstraintManager {
         
         _constraint.to = to
         _constraint.value = value
-        assert(singleton.noConstraintCirculationWith(_constraint), "\n⚠️FangYuan: There is a constraint circulation between\n\(to)\n🔄\n\(_constraint.from)\n")
         singleton.constraints.insert(_constraint)
         singleton.holder.clearConstraintAt(direction)
+        
+        assert(singleton.noConstraintCirculationWith(_constraint), "\n⚠️FangYuan: There is a constraint circulation between\n\(to)\n🔄\n\(_constraint.from)\n")
     }
 
     class func layout(view:UIView) {
@@ -188,7 +189,9 @@ private extension ConstraintManager {
     /// 确定了该 UIView.frame 后，装载 Constraint 至 to.ruler.section 中
     // TODO: 参数可变性还是一个问题！
     func setConstraintsFrom(view: UIView) {
+        
         assert(NSThread.isMainThread(), "This method should invoke in mainQueue!")
+        
         constraints.forEach { constraint in
             if constraint.from == view {
                 let _from = constraint.from
@@ -216,15 +219,11 @@ private extension ConstraintManager {
 private extension ConstraintManager {
     
     func setSettedConstraint(constraint:Constraint) {
-        settedConstraints.forEach { cons in
-            if let _to = cons.to {
-                if _to == constraint.to && cons.direction == constraint.direction {
-                    //  移除重复的约束
-                    settedConstraints.remove(cons)
-                }
-            } else {
-                //  移除无效（to == nil）的约束
-                settedConstraints.remove(cons)
+        settedConstraints.forEach { con in
+            if con.to == nil || con.from == nil {
+                settedConstraints.remove(con)
+            } else if con.to == constraint.to && con.direction == constraint.direction {
+                settedConstraints.remove(con)
             }
         }
         settedConstraints.insert(constraint)
