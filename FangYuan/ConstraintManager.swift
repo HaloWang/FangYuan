@@ -228,9 +228,10 @@ private extension ConstraintManager {
     /// 按照程序逻辑，一个 view 最多同时只能在一个方向上拥有一个约束
     func removeDuplicateConstraintOf(view:UIView, at direction: Constraint.Direction) {
         constraints.forEach { con in
-            if con.to == view && con.direction == direction {
+            if con.to == nil || con.from == nil {
                 constraints.remove(con)
-                return
+            } else if con.to == view && con.direction == direction {
+                constraints.remove(con)
             }
         }
     }

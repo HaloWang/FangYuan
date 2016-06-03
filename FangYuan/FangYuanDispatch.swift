@@ -13,10 +13,10 @@ let _fangyuan_layout_dispatch_group = dispatch_group_create()
 
 /// 进入布局线程
 internal func _fy_layoutQueue(block:()->Void) {
-    dispatch_group_async(_fangyuan_layout_dispatch_group, _fangyuan_layout_queue, block)
+    dispatch_async(_fangyuan_layout_queue, block)
 }
 
 /// 等待布局线程
 internal func _fy_waitLayoutQueue() {
-    dispatch_group_wait(_fangyuan_layout_dispatch_group, DISPATCH_TIME_FOREVER)
+    dispatch_barrier_sync(_fangyuan_layout_queue) {}
 }

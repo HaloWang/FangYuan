@@ -76,27 +76,27 @@ public extension UIView {
     /// - `viewA.fy_left(viewB.chainRight + viewB.chainLeft)`
     /// - `viewA.fy_left(viewB.chainRight + viewC.chainRight)`
     func fy_left(left: CGFloat) -> Self {
-        basicSetting { [weak self] in
-            self?.resetRelatedConstraintHorizontal(true)
-            self?.popConstraintAt(.RightLeft, value: left)
+        basicSetting {
+            self.resetRelatedConstraintHorizontal(true)
+            self.popConstraintAt(.RightLeft, value: left)
         }
         return self
     }
     
     /// 设定某个 UIView 的宽度，相当于 width
     func fy_width(width: CGFloat) -> Self {
-        basicSetting { [weak self] in
-            self?.resetRelatedConstraintHorizontal(true)
-            self?.rulerX.b = width
+        basicSetting {
+            self.resetRelatedConstraintHorizontal(true)
+            self.rulerX.b = width
         }
         return self
     }
     
     /// 设定某个 UIView 右边距离其 superview 右边的距离
     func fy_right(right: CGFloat) -> Self {
-        basicSetting { [weak self] in
-            self?.resetRelatedConstraintHorizontal(true)
-            self?.popConstraintAt(.LeftRigt, value: right)
+        basicSetting {
+            self.resetRelatedConstraintHorizontal(true)
+            self.popConstraintAt(.LeftRigt, value: right)
         }
         return self
     }
@@ -105,27 +105,27 @@ public extension UIView {
     
     /// 设定某个 UIView 顶部距离其 superview 顶部的距离，相当于 y
     func fy_top(top: CGFloat) -> Self {
-        basicSetting { [weak self] in
-            self?.resetRelatedConstraintHorizontal(true)
-            self?.popConstraintAt(.BottomTop, value: top)
+        basicSetting {
+            self.resetRelatedConstraintHorizontal(true)
+            self.popConstraintAt(.BottomTop, value: top)
         }
         return self
     }
     
     /// 设定某个 UIView 的高度，相当于 height
     func fy_height(height: CGFloat) -> Self {
-        basicSetting { [weak self] in
-            self?.resetRelatedConstraintHorizontal(false)
-            self?.rulerY.b = height
+        basicSetting {
+            self.resetRelatedConstraintHorizontal(false)
+            self.rulerY.b = height
         }
         return self
     }
     
     /// 设定某个 UIView 底部距离其 superview 底部的距离
     func fy_bottom(bottom: CGFloat) -> Self {
-        basicSetting { [weak self] in
-            self?.resetRelatedConstraintHorizontal(false)
-            self?.popConstraintAt(.TopBottom, value: bottom)
+        basicSetting {
+            self.resetRelatedConstraintHorizontal(false)
+            self.popConstraintAt(.TopBottom, value: bottom)
         }
         return self
     }
@@ -134,53 +134,53 @@ public extension UIView {
     
     /// 设定某个 UIView 四个边距离其父视图相对四边的距离
     func fy_edge(edge: UIEdgeInsets) -> Self {
-        basicSetting { [weak self] in
-            self?.resetRelatedConstraintHorizontal(true)
-            self?.resetRelatedConstraintHorizontal(false)
-            self?.popConstraintAt(.BottomTop, value: edge.top)
-            self?.popConstraintAt(.TopBottom, value: edge.bottom)
-            self?.popConstraintAt(.RightLeft, value: edge.left)
-            self?.popConstraintAt(.LeftRigt, value: edge.right)
+        basicSetting {
+            self.resetRelatedConstraintHorizontal(true)
+            self.resetRelatedConstraintHorizontal(false)
+            self.popConstraintAt(.BottomTop, value: edge.top)
+            self.popConstraintAt(.TopBottom, value: edge.bottom)
+            self.popConstraintAt(.RightLeft, value: edge.left)
+            self.popConstraintAt(.LeftRigt, value: edge.right)
         }
         return self
     }
     
     func fy_xRange(left:CGFloat, right:CGFloat) -> Self {
-        basicSetting { [weak self] in
-            self?.resetRelatedConstraintHorizontal(true)
-            self?.popConstraintAt(.RightLeft, value: left)
-            self?.popConstraintAt(.LeftRigt, value: right)
+        basicSetting {
+            self.resetRelatedConstraintHorizontal(true)
+            self.popConstraintAt(.RightLeft, value: left)
+            self.popConstraintAt(.LeftRigt, value: right)
         }
         return self
     }
     
     func fy_size(size:CGSize) -> Self {
-        basicSetting { [weak self] in
-            self?.resetRelatedConstraintHorizontal(true)
-            self?.resetRelatedConstraintHorizontal(false)
-            self?.rulerX.b = size.width
-            self?.rulerY.b = size.height
+        basicSetting {
+            self.resetRelatedConstraintHorizontal(true)
+            self.resetRelatedConstraintHorizontal(false)
+            self.rulerX.b = size.width
+            self.rulerY.b = size.height
         }
         return self
     }
     
     func fy_origin(origin:CGPoint) -> Self {
-        basicSetting { [weak self] in
-            self?.resetRelatedConstraintHorizontal(true)
-            self?.resetRelatedConstraintHorizontal(false)
-            self?.popConstraintAt(.BottomTop, value: origin.y)
-            self?.popConstraintAt(.RightLeft, value: origin.x)
+        basicSetting {
+            self.resetRelatedConstraintHorizontal(true)
+            self.resetRelatedConstraintHorizontal(false)
+            self.popConstraintAt(.BottomTop, value: origin.y)
+            self.popConstraintAt(.RightLeft, value: origin.x)
         }
         return self
     }
     
     func fy_frame(frame:CGRect) -> Self {
-        basicSetting { [weak self] in
-            self?.resetRelatedConstraintHorizontal(true)
-            self?.resetRelatedConstraintHorizontal(false)
-            self?.popConstraintAt(.BottomTop, value: frame.origin.y)
-            self?.popConstraintAt(.RightLeft, value: frame.origin.x)
-            self?.fy_size(frame.size)
+        basicSetting {
+            self.resetRelatedConstraintHorizontal(true)
+            self.resetRelatedConstraintHorizontal(false)
+            self.popConstraintAt(.BottomTop, value: frame.origin.y)
+            self.popConstraintAt(.RightLeft, value: frame.origin.x)
+            self.fy_size(frame.size)
         }
         return self
     }
