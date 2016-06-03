@@ -23,6 +23,7 @@ func _fy_randomImageName() -> String {
 }
 
 func _fy_randomImageNameS(count:Int) -> [String] {
+    // TODO: Set?
     var names = [String]()
     for _ in 0..<count {
         names.append(_fy_randomImageName())
