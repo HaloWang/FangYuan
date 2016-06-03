@@ -36,17 +36,15 @@ class FYDComplexDataSource {
                 item.comments.append(randomString(10, repeatString: "评论内容"))
             }
 
-//            let hasImage = arc4random() % 3 == 0
-//            if hasImage {
+            let hasImage = arc4random() % 2 == 0
+            if hasImage {
                 item.firstImageSize = CGSizeMake(_fy_arc4random(100).f + ScreenWidth, _fy_arc4random(100).f + 150.f)
                 switch arc4random() % 10 {
-//                case 0...1:
-//                    item.imageURLs = Array(count: 1, repeatedValue: "")
-//                case 2...3:
-//                    item.imageURLs = Array(count: 2, repeatedValue: "")
+                case 0...5:
+                    item.imageURLs = Array(count: 1, repeatedValue: "")
                 default:
                     item.imageURLs = Array(count: (_fy_arc4random(7) + 3), repeatedValue: "")
-//                }
+                }
             }
             
             items.append(item)
