@@ -69,7 +69,7 @@ extension ConstraintManager {
         
         _constraint.to = to
         _constraint.value = value
-        checkCyclingConstraintWith(_constraint)
+        assert(singleton.noConstraintCirculationWith(_constraint), "\n⚠️FangYuan: There is a constraint circulation between\n\(to)\n🔄\n\(_constraint.from)\n")
         singleton.constraints.insert(_constraint)
         singleton.holder.clearConstraintAt(direction)
     }
@@ -129,6 +129,8 @@ private extension ConstraintManager {
     /// 核心布局方法
     func layout(views: [UIView]) {
         
+        assert(NSThread.isMainThread(), "This method should invoke in mainQueue!")
+        
         guard hasUnsetConstraintsOf(views) else {
             views.forEach { view in
                 view.layoutWithFangYuan()
@@ -142,8 +144,9 @@ private extension ConstraintManager {
         repeat {
             shouldRepeat = false
             layoutingViews.forEach { view in
+                //  如果不 _fy_waitLayoutQueue ，就有可能产生无限 repeat 的情况，原因是在另一个线程的 `popConstraintTo` 方法中添加了新的 `constraints`
+                _fy_waitLayoutQueue()
                 if hasSetConstrainTo(view) {
-                    _fy_waitLayoutQueue()
                     view.layoutWithFangYuan()
                     setConstraintsFrom(view)
                     //  在被遍历的数组中移除该 view
@@ -174,10 +177,8 @@ private extension ConstraintManager {
 
     /// 未设定的约束中，已经没有用来约束 view 的约束了
     func hasSetConstrainTo(view:UIView) -> Bool {
-        _fy_waitLayoutQueue()
         for con in constraints {
             if con.to == view {
-                assert(con.to.superview == con.from.superview, "A constraint.to and from must has same superview")
                 return false
             }
         }
@@ -187,25 +188,24 @@ private extension ConstraintManager {
     /// 确定了该 UIView.frame 后，装载 Constraint 至 to.ruler.section 中
     // TODO: 参数可变性还是一个问题！
     func setConstraintsFrom(view: UIView) {
-        _fy_layoutQueue {
-            self.constraints.forEach { constraint in
-                if constraint.from == view {
-                    let _from = constraint.from
-                    let _to = constraint.to
-                    let _value = constraint.value
-                    switch constraint.direction {
-                    case .BottomTop:
-                        _to.rulerY.a = _from.frame.origin.y + _from.frame.height + _value
-                    case .TopBottom:
-                        _to.rulerY.c = _from.superview!.frame.height - _from.frame.origin.y + _value
-                    case .RightLeft:
-                        _to.rulerX.a = _from.frame.origin.x + _from.frame.width + _value
-                    case .LeftRigt:
-                        _to.rulerX.c = _from.superview!.frame.width - _from.frame.origin.x + _value
-                    }
-                    self.constraints.remove(constraint)
-                    self.setSettedConstraint(constraint)
+        assert(NSThread.isMainThread(), "This method should invoke in mainQueue!")
+        constraints.forEach { constraint in
+            if constraint.from == view {
+                let _from = constraint.from
+                let _to = constraint.to
+                let _value = constraint.value
+                switch constraint.direction {
+                case .BottomTop:
+                    _to.rulerY.a = _from.frame.origin.y + _from.frame.height + _value
+                case .TopBottom:
+                    _to.rulerY.c = _from.superview!.frame.height - _from.frame.origin.y + _value
+                case .RightLeft:
+                    _to.rulerX.a = _from.frame.origin.x + _from.frame.width + _value
+                case .LeftRigt:
+                    _to.rulerX.c = _from.superview!.frame.width - _from.frame.origin.x + _value
                 }
+                constraints.remove(constraint)
+                setSettedConstraint(constraint)
             }
         }
     }
@@ -241,16 +241,11 @@ private extension ConstraintManager {
         }
     }
     
-    // TODO: 这里的 assert 性能还可以提升一下（关于不同的编译模式）
-    class func checkCyclingConstraintWith(constraint:Constraint) {
-        dispatch_async(dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0)) {
-            singleton.constraints.forEach { con in
-                if con <=> constraint {
-                    assert(false, "\n⚠️FangYuan: There is a constraint circulation between\n\(con.to)\n🔄\n\(con.from)\n")
-                    return;
-                }
-            }
-        }
+    func noConstraintCirculationWith(constraint:Constraint) -> Bool {
+        return constraints.filter {
+            $0 <=> constraint
+        }.count == 0
     }
+    
 }
 
