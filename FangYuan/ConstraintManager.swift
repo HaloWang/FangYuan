@@ -77,7 +77,7 @@ extension ConstraintManager {
             return
         }
         
-        fangyuan_waitLayoutQueue()
+        _fy_waitLayoutQueue()
         singleton.layout(info.usingFangYuanSubviews)
     }
     
@@ -85,7 +85,9 @@ extension ConstraintManager {
     /// 为了能保证『自动重置相关约束』，这个方法会在 `UIView.fy_XXX` 时从 `settedConstraints` 中检查相关的约束。
     /// 并将其从新添加到 `constraints` 中
     ///
-    /// - Important: 这里面已经产生了递归调用了：fy_XXX -> [This Method] -> fy_XXX -> [This Method] -> ...
+    /// - Important: 
+    /// 这里面已经产生了递归调用了：fy_XXX -> [This Method] -> fy_XXX -> [This Method] -> ...
+    /// 这样可以保证每次设定了约束了之后，所有与之相关的约束都会被重新设定
     /// - TODO: 部分方法不应该遍历两次的！这里的性能还有提升空间
     /// - TODO: horizontal 的意义并不明显啊
     class func resetRelatedConstraintFrom(view:UIView, isHorizontal horizontal:Bool) {
@@ -136,7 +138,7 @@ private extension ConstraintManager {
             shouldRepeat = false
             layoutingViews.forEach { view in
                 if hasSetConstrainTo(view) {
-                    fangyuan_waitLayoutQueue()
+                    _fy_waitLayoutQueue()
                     view.layoutWithFangYuan()
                     setConstraintsFrom(view)
                     //  在被遍历的数组中移除该 view
@@ -167,7 +169,7 @@ private extension ConstraintManager {
 
     /// 未设定的约束中，已经没有用来约束 view 的约束了
     func hasSetConstrainTo(view:UIView) -> Bool {
-        fangyuan_waitLayoutQueue()
+        _fy_waitLayoutQueue()
         for con in constraints {
             if con.to == view {
                 assert(con.to.superview == con.from.superview, "A constraint.to and from must has same superview")
@@ -180,7 +182,7 @@ private extension ConstraintManager {
     /// 确定了该 UIView.frame 后，装载 Constraint 至 to.ruler.section 中
     // TODO: 参数可变性还是一个问题！
     func setConstraintsFrom(view: UIView) {
-        fangyuan_async {
+        _fy_layoutQueue {
             self.constraints.forEach { constraint in
                 if constraint.from == view {
                     let _from = constraint.from
