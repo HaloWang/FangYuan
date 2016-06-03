@@ -14,15 +14,27 @@ func _fy_arc4random(v: Int) -> Int {
     return Int(arc4random() % UInt32(v))
 }
 
+func randomString(maxRepeat:Int, repeatString:String) -> String {
+    return Array(count: _fy_arc4random(maxRepeat) + 1, repeatedValue: repeatString).reduce("") { $0 + $1 }
+}
+
+func _fy_randomImageName() -> String {
+    return "r\(_fy_arc4random(16))"
+}
+
+func _fy_randomImageNameS(count:Int) -> [String] {
+    var names = [String]()
+    for _ in 0..<count {
+        names.append(_fy_randomImageName())
+    }
+    return names
+}
+
 class FYDComplexDataSource {
     static let data : [Item] = [
     ]
     
     static var randomData : [Item] {
-        
-        func randomString(maxRepeat:Int, repeatString:String) -> String {
-            return Array(count: _fy_arc4random(maxRepeat) + 1, repeatedValue: repeatString).reduce("") { $0 + $1 }
-        }
         
         var items = [Item]()
         for _ in 0 ..< arc4random() % 50 + 50 {
@@ -38,12 +50,13 @@ class FYDComplexDataSource {
 
             let hasImage = arc4random() % 2 == 0
             if hasImage {
-                item.firstImageSize = CGSizeMake(_fy_arc4random(100).f + ScreenWidth, _fy_arc4random(100).f + 150.f)
+                item.firstImageSize = CGSizeMake(_fy_arc4random(100).f + ScreenWidth, _fy_arc4random(100).f + ScreenWidth/1.7)
                 switch arc4random() % 10 {
                 case 0...5:
-                    item.imageURLs = Array(count: 1, repeatedValue: "")
+                    item.imageURLs = _fy_randomImageNameS(1)
                 default:
-                    item.imageURLs = Array(count: (_fy_arc4random(7) + 3), repeatedValue: "")
+                    item.imageURLs = _fy_randomImageNameS(_fy_arc4random(7) + 3)
+                    assert(item.imageURLs.count <= 9, "WFT!")
                 }
             }
             

@@ -13,6 +13,7 @@ import FangYuan
 let HPadding = 5.f
 let VPadding = 3.f
 let AIVSize  = 40.size
+let FontSize = 14.f
 
 // TODO: 发现了布局时的 BUG
 // TODO: 为什么 UITextView.text 的调用那么耗时？有什么优化办法？
@@ -65,6 +66,7 @@ class FYDComplexTableViewCell: UITableViewCell {
             .superView(self)
             .backgroundColor(Yellow.alpha(0.1))
             .textContainerInset(UIEdgeInsetsZero)
+            .font(UIFont.systemFontOfSize(FontSize))
         
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 1
@@ -75,7 +77,7 @@ class FYDComplexTableViewCell: UITableViewCell {
         imageCollectionView.delegate = self
         imageCollectionView
             .scrollEnabled(false)
-            .registerCellClass(UICollectionViewCell)
+            .registerCellClass(FYDImageDisplayCollectionViewCell)
             .superView(self)
             .backgroundColor(White)
         
@@ -83,6 +85,7 @@ class FYDComplexTableViewCell: UITableViewCell {
             .superView(self)
             .contentMode(UIViewContentMode.ScaleAspectFill)
             .backgroundColor(Purple.alpha(0.3))
+            .clipsToBounds(true)
         
         FangYuanDemo.BeginLayout {
             
@@ -121,29 +124,35 @@ class FYDComplexTableViewCell: UITableViewCell {
     }
     
     func set(item item:Item) {
+        
+        // TODO: 这里的传值写的不好
+        
         self.item = item
-        
-        dispatch_async(dispatch_get_main_queue()) { [weak self] in
-            self?.messageTextView.text = item.message
-            self?.nickNameLabel.text   = item.nickName
+        func setValues() {
+            messageTextView.text = item.message
+            nickNameLabel.text   = item.nickName
+            switch item.imageURLs.count {
+            case 0:
+                singleImageView.hidden = true
+                imageCollectionView.hidden = true
+            case 1:
+                singleImageView.image(named: item.imageURLs.first!)
+                singleImageView.hidden = false
+                imageCollectionView.hidden = true
+            default:
+                singleImageView.hidden = true
+                imageCollectionView.hidden = false
+            }
+            
+            if item.imageURLs.count > 1 {
+                imageCollectionView.reloadData()
+            }
         }
         
-        switch item.imageURLs.count {
-        case 0:
-            singleImageView.hidden = true
-            imageCollectionView.hidden = true
-        case 1:
-            singleImageView.hidden = false
-            imageCollectionView.hidden = true
-        default:
-            singleImageView.hidden = true
-            imageCollectionView.hidden = false
+        dispatch_async(dispatch_get_main_queue()) { 
+            setValues()
         }
-        
-        if item.imageURLs.count > 1 {
-            imageCollectionView.reloadData()
-        }
-        
+    
         // TODO: 这个方法走了两次，没有必要的！
         layoutHorizontally()
         FYDComplexTableViewCell.layoutVerticallyAndComputeDisplayHeight(item, layoutCell: self)
@@ -187,7 +196,7 @@ class FYDComplexTableViewCell: UITableViewCell {
             if let cachedHeight = item.messageDisplayHeightCache {
                 messageDisplayHeight = cachedHeight
             } else {
-                messageDisplayHeight = (item.message as NSString).boundingRectWithSize(CGSize(width: ScreenWidth - 5.double, height:CGFloat(MAXFLOAT)), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFontOfSize(12)], context: nil).size.height
+                messageDisplayHeight = (item.message as NSString).boundingRectWithSize(CGSize(width: ScreenWidth - 5.double, height:CGFloat(MAXFLOAT)), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFontOfSize(FontSize)], context: nil).size.height
                 item.messageDisplayHeightCache = messageDisplayHeight
             }
             displayHeight += messageDisplayHeight
@@ -228,13 +237,20 @@ class FYDComplexTableViewCell: UITableViewCell {
 // MARK: - UICollectionViewDataSource
 extension FYDComplexTableViewCell : UICollectionViewDataSource {
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueCell(UICollectionViewCell.self, indexPath: indexPath)
+        let cell = collectionView.dequeueCell(FYDImageDisplayCollectionViewCell.self, indexPath: indexPath)
         cell.backgroundColor(Purple.alpha(0.1))
+        if indexPath.row < item.imageURLs.count {
+            // TODO: Crash: Index out of range
+            cell.imageView.image(named: item.imageURLs[indexPath.row])
+        }
         return cell
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return item?.imageURLs.count ?? 0
+        guard let item = item else {
+            return 0
+        }
+        return item.imageURLs.count > 1 ? item.imageURLs.count : 0
     }
 }
 
@@ -261,3 +277,30 @@ extension FYDComplexTableViewCell : UICollectionViewDelegateFlowLayout {
         }
     }
 }
+
+class FYDImageDisplayCollectionViewCell : UICollectionViewCell {
+    
+    let imageView = UIImageView()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        imageView
+            .superView(self)
+            .contentMode(UIViewContentMode.ScaleAspectFill)
+            .clipsToBounds(true)
+        
+        FangYuanDemo.BeginLayout { 
+            imageView
+                .fy_edge(UIEdgeInsetsZero)
+        }
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+
+
+
