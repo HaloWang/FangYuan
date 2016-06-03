@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreGraphics
+import Halo
 
 func _fy_arc4random(v: Int) -> Int {
     return Int(arc4random() % UInt32(v))
@@ -35,16 +36,17 @@ class FYDComplexDataSource {
                 item.comments.append(randomString(10, repeatString: "评论内容"))
             }
 
-            let hasImage = arc4random() % 3 == 0
-            if hasImage {
+//            let hasImage = arc4random() % 3 == 0
+//            if hasImage {
+                item.firstImageSize = CGSizeMake(_fy_arc4random(100).f + ScreenWidth, _fy_arc4random(100).f + 150.f)
                 switch arc4random() % 10 {
-                case 0...5:
-                    item.imageURLs = Array(count: 1, repeatedValue: "")
-                case 6...8:
-                    item.imageURLs = Array(count: 2, repeatedValue: "")
+//                case 0...1:
+//                    item.imageURLs = Array(count: 1, repeatedValue: "")
+//                case 2...3:
+//                    item.imageURLs = Array(count: 2, repeatedValue: "")
                 default:
-                    item.imageURLs = Array(count: (_fy_arc4random(8) + 3), repeatedValue: "")
-                }
+                    item.imageURLs = Array(count: (_fy_arc4random(7) + 3), repeatedValue: "")
+//                }
             }
             
             items.append(item)
@@ -61,6 +63,7 @@ class Item {
     var avatar    = ""
     var comments  = [String]()
     var imageURLs = [String]()
+    var firstImageSize = CGSizeZero
     var isMine    = false
     var marked    = false
 }

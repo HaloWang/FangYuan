@@ -10,8 +10,8 @@ class FYDListViewController: UIViewController {
         ["chainTop/Bottom/Left/Right 属性调用" : FYDChainViewController.self],
         ["动画" : FYDAnimationViewController.self],
         ["在 UITableViewCell 中使用" : FYDDemoTableViewController.self],
-        ["⚠️Unfinish 矩形拖拽" : FYDRectViewController.self],
-        ["⚠️Unfinish 在复杂的 UITableViewCell 中使用" : FYDComplexTableViewController.self],
+        ["矩形拖拽".unfinish : FYDRectViewController.self],
+        ["在复杂的 UITableViewCell 中使用".unfinish : FYDComplexTableViewController.self],
     ]
 
     lazy var tableView = UITableView(frame: ScreenBounds, style: .Plain)
@@ -25,6 +25,12 @@ class FYDListViewController: UIViewController {
             .tableFooterViewAdded()
             .superView(view)
             .fy_edge(UIEdgeInsetsZero)
+    }
+}
+
+private extension String {
+    var unfinish : String {
+        return "⚠️Unfinish " + self
     }
 }
 

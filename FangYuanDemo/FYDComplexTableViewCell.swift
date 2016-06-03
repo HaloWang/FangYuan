@@ -21,25 +21,20 @@ let AIVSize  = 40.size
 
 class FYDComplexTableViewCell: UITableViewCell {
     
-    var singleImageMaxHeight : CGFloat {
-        return ScreenHeight
-    }
-    
-    var singleImageMinHeight : CGFloat {
-        return 20
-    }
+    let singleImageMaxHeight    = ScreenHeight
+    let singleImageMinHeight    = 20
 
-    lazy var avatarImageView = UIImageView()
-    /// 昵称
-    lazy var nickNameLabel   = UILabel()
-    /// 动态
-    lazy var messageTextView = UITextView()
+    lazy var avatarImageView    = UIImageView()
+    lazy var nickNameLabel      = UILabel()
+    lazy var messageTextView    = UITextView()
     lazy var userBadgeImageView = UIImageView()
-    lazy var commentsList    = UITableView(frame: CGRectZero, style: .Plain)
-    lazy var deleteButton    = UIButton()
-    lazy var likeButton      = UIButton()
-    lazy var singleImageView = UIImageView()
+    lazy var commentsList       = UITableView(frame: CGRectZero, style: .Plain)
+    lazy var deleteButton       = UIButton()
+    lazy var likeButton         = UIButton()
+    lazy var singleImageView    = UIImageView()
+    
     var imageCollectionView : UICollectionView!
+    weak var item : Item!
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -72,7 +67,8 @@ class FYDComplexTableViewCell: UITableViewCell {
             .textContainerInset(UIEdgeInsetsZero)
         
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = (ScreenWidth / 3.5).size
+        layout.minimumLineSpacing = 1
+        layout.minimumInteritemSpacing = 1
         
         imageCollectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
         imageCollectionView.dataSource = self
@@ -81,7 +77,7 @@ class FYDComplexTableViewCell: UITableViewCell {
             .scrollEnabled(false)
             .registerCellClass(UICollectionViewCell)
             .superView(self)
-            .backgroundColor(Purple.alpha(0.3))
+            .backgroundColor(White)
         
         singleImageView
             .superView(self)
@@ -98,8 +94,8 @@ class FYDComplexTableViewCell: UITableViewCell {
                 .fy_right(HPadding)
             
             imageCollectionView
-                .fy_left(HPadding)
-                .fy_right(HPadding)
+                .fy_left(0)
+                .fy_right(0)
                 .fy_top(messageTextView.chainBottom + 5)
             
             singleImageView
@@ -124,8 +120,6 @@ class FYDComplexTableViewCell: UITableViewCell {
         }
     }
     
-    weak var item : Item!
-    
     func set(item item:Item) {
         self.item = item
         
@@ -135,15 +129,15 @@ class FYDComplexTableViewCell: UITableViewCell {
         }
         
         switch item.imageURLs.count {
+        case 0:
+            singleImageView.hidden = true
+            imageCollectionView.hidden = true
         case 1:
             singleImageView.hidden = false
             imageCollectionView.hidden = true
-        case 2:
-            singleImageView.hidden = true
-            imageCollectionView.hidden = false
         default:
             singleImageView.hidden = true
-            imageCollectionView.hidden = true
+            imageCollectionView.hidden = false
         }
         
         if item.imageURLs.count > 1 {
@@ -169,17 +163,6 @@ class FYDComplexTableViewCell: UITableViewCell {
         nickNameLabel.fy_width(nickNameDisplayWidth)
     }
     
-    /**
-     If cell is nil, only calculate the height to display item.
-     Called in `-tableView:heightForRowAtIndexPath:`.
-     
-     If cell is not nil, layout the cell vertically.
-     
-     - parameter item: item to display at the indexPath
-     - parameter cell: cell to layout
-     
-     - returns: the height to display this item
-     */
     class func layoutVerticallyAndComputeDisplayHeight(item:Item, layoutCell cell:FYDComplexTableViewCell?) -> CGFloat {
         
         let hasCellToLayout = cell != nil
@@ -216,14 +199,17 @@ class FYDComplexTableViewCell: UITableViewCell {
         //  Layout Image CollectionView
         var imagesDisplayHeight : CGFloat
         let imageCount = item.imageURLs.count
-        if imageCount != 0 {
-            if imageCount == 1 {
-                imagesDisplayHeight = 100
-            } else {
-                imagesDisplayHeight = (imageCount % 3) * 50 + 50
-            }
-        } else {
+        switch imageCount {
+        case 0:
             imagesDisplayHeight = 0
+        case 1:
+            imagesDisplayHeight = item.firstImageSize.height * (ScreenWidth / item.firstImageSize.width)
+        case 2, 4:
+            let imageWidth = ScreenWidth / 2
+            imagesDisplayHeight = (imageCount / 2) * imageWidth + (imageCount % 2 > 0 ? imageWidth : 0)
+        default:
+            let imageWidth = ScreenWidth / 3
+            imagesDisplayHeight = (imageCount / 3) * imageWidth  + (imageCount % 3 > 0 ? imageWidth : 0)
         }
         displayHeight += imagesDisplayHeight
 
@@ -254,7 +240,24 @@ extension FYDComplexTableViewCell : UICollectionViewDataSource {
 
 // MARK: - UICollectionViewDelegate
 extension FYDComplexTableViewCell : UICollectionViewDelegate {
+    
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
+    }
+}
+
+extension FYDComplexTableViewCell : UICollectionViewDelegateFlowLayout {
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        guard let item = item else {
+            return CGSizeZero
+        }
+        switch item.imageURLs.count {
+        case 0, 1:
+            return CGSizeZero
+        case 2, 4:
+            return CGSizeMake(ScreenWidth / 2 - 0.5, ScreenWidth / 2 - 0.5)
+        default:
+            return (ScreenWidth / 3 - 1).size
+        }
     }
 }

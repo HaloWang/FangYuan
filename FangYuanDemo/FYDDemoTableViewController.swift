@@ -5,7 +5,6 @@
 
 import UIKit
 import FangYuan
-import KMCGeigerCounter
 
 class FYDDemoTableViewController: UIViewController {
 
@@ -33,14 +32,8 @@ class FYDDemoTableViewController: UIViewController {
         tableView.delegate        = self
         tableView.tableFooterView = UIView()
         tableView.registerClass(FYDDemoTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(FYDDemoTableViewCell))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "帧率监视", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(FYDDemoTableViewController.changeStatus))
     }
-
-    func changeStatus() {
-        KMCGeigerCounter.sharedGeigerCounter().enabled = !KMCGeigerCounter.sharedGeigerCounter().enabled
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: KMCGeigerCounter.sharedGeigerCounter().enabled ? "关闭帧率监视" : "开启帧率监视", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(FYDDemoTableViewController.changeStatus))
-    }
-
+    
 }
 
 // MARK: - UITableViewDelegate
