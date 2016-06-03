@@ -38,6 +38,9 @@ extension ConstraintManager {
      - parameter direction: 约束方向
      */
     class func pushConstraintFrom(from:UIView, direction: Constraint.Direction) {
+        
+        assert(!NSThread.isMainThread(), "This method should invoke in fangyuan.layout.queue")
+        
         let newConstraint = Constraint(from: from, to: nil, direction: direction)
         singleton.holder.push(newConstraint, at: direction)
     }
@@ -53,6 +56,9 @@ extension ConstraintManager {
      - parameter value:     约束固定值
      */
     class func popConstraintTo(to:UIView, direction: Constraint.Direction, value:CGFloat) {
+        
+        assert(!NSThread.isMainThread(), "This method should invoke in fangyuan.layout.queue")
+        
         //  这个方法应该被优先调用，可能出现 fy_XXX(a) 替换 fy_XXX(chainXXX) 的情况
         singleton.removeDuplicateConstraintOf(to, at: direction)
         
@@ -69,7 +75,6 @@ extension ConstraintManager {
     }
 
     class func layout(view:UIView) {
-        
         
         let info = view.usingFangYuanInfo
 
