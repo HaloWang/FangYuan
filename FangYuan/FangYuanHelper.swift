@@ -1,10 +1,9 @@
-
 //
-//  FangYuanFrameworkHelper.swift
-//  Pods
+//  FangYuanHelper.swift
+//  FangYuan
 //
 //  Created by 王策 on 16/6/6.
-//
+//  Copyright © 2016年 WangCe. All rights reserved.
 //
 
 import Foundation
