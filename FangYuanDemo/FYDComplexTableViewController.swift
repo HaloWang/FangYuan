@@ -22,6 +22,7 @@ class FYDComplexTableViewController: UIViewController {
         
         tableView
             .dataSourceAndDelegate(self)
+            .separatorStyle(.None)
             .registerCellClass(FYDComplexTableViewCell)
             .superView(view)
     }

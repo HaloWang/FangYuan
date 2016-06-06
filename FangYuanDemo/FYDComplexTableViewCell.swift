@@ -14,6 +14,7 @@ let HPadding = 5.f
 let VPadding = 3.f
 let AIVSize  = 40.size
 let FontSize = 14.f
+let CellHorizontalPadding = 11.f
 
 // TODO: 发现了布局时的 BUG
 // TODO: 为什么 UITextView.text 的调用那么耗时？有什么优化办法？
@@ -29,10 +30,10 @@ class FYDComplexTableViewCell: UITableViewCell {
     lazy var nickNameLabel      = UILabel()
     lazy var messageTextView    = UITextView()
     lazy var userBadgeImageView = UIImageView()
-    lazy var commentsList       = UITableView(frame: CGRectZero, style: .Plain)
     lazy var deleteButton       = UIButton()
     lazy var likeButton         = UIButton()
     lazy var singleImageView    = UIImageView()
+    lazy var holderView         = UIView()
     
     var imageCollectionView : UICollectionView!
     weak var item : Item!
@@ -44,26 +45,32 @@ class FYDComplexTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        avatarImageView
+        backgroundColor(HEX("f1f1f1"))
+        
+        holderView
             .superView(self)
+            .backgroundColor(White)
+        
+        avatarImageView
+            .superView(holderView)
             .backgroundColor(Blue.alpha(0.3))
         
         nickNameLabel
-            .superView(self)
+            .superView(holderView)
             .backgroundColor(Red.alpha(0.3))
         
         userBadgeImageView
-            .superView(self)
+            .superView(holderView)
             .backgroundColor(Blue.alpha(0.3))
         
         deleteButton
-            .superView(self)
+            .superView(holderView)
             .backgroundColor(Green.alpha(0.3))
         
         messageTextView
             .editable(false)
             .scrollEnabled(false)
-            .superView(self)
+            .superView(holderView)
             .backgroundColor(Yellow.alpha(0.1))
             .textContainerInset(UIEdgeInsetsZero)
             .font(UIFont.systemFontOfSize(FontSize))
@@ -78,16 +85,19 @@ class FYDComplexTableViewCell: UITableViewCell {
         imageCollectionView
             .scrollEnabled(false)
             .registerCellClass(FYDImageDisplayCollectionViewCell)
-            .superView(self)
+            .superView(holderView)
             .backgroundColor(White)
         
         singleImageView
-            .superView(self)
+            .superView(holderView)
             .contentMode(UIViewContentMode.ScaleAspectFill)
             .backgroundColor(Purple.alpha(0.3))
             .clipsToBounds(true)
         
         FangYuanDemo.BeginLayout {
+            
+            holderView
+                .fy_edge(UIEdgeInsets(top: 0, left: 0, bottom: CellHorizontalPadding, right: 0))
             
             avatarImageView
                 .fy_frame(CGRect(x: HPadding, y: HPadding, width: AIVSize.width, height: AIVSize.height))
@@ -229,6 +239,7 @@ class FYDComplexTableViewCell: UITableViewCell {
         }
         
         displayHeight += 5
+        displayHeight += CellHorizontalPadding
         
         return displayHeight
     }
