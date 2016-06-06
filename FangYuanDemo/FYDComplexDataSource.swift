@@ -18,15 +18,15 @@ func randomString(maxRepeat:Int, repeatString:String) -> String {
     return Array(count: _fy_arc4random(maxRepeat) + 1, repeatedValue: repeatString).reduce("") { $0 + $1 }
 }
 
-func _fy_randomImageName() -> String {
-    return "r\(_fy_arc4random(16))"
+func _fy_randomImageName(size:CGSize = CGSize(width: ScreenWidth, height: ScreenWidth)) -> String {
+    return "https://unsplash.it/\(size.width)/\(size.height)?image=\(_fy_arc4random(1084))"
 }
 
 func _fy_randomImageNameS(count:Int) -> [String] {
     // TODO: Set?
     var names = [String]()
     for _ in 0..<count {
-        names.append(_fy_randomImageName())
+        names.append(_fy_randomImageName(CGSize(width: ScreenWidth/2, height: ScreenWidth/2)))
     }
     return names
 }
@@ -54,7 +54,7 @@ class FYDComplexDataSource {
                 item.firstImageSize = CGSizeMake(_fy_arc4random(100).f + ScreenWidth, _fy_arc4random(100).f + ScreenWidth/1.7)
                 switch arc4random() % 10 {
                 case 0...5:
-                    item.imageURLs = _fy_randomImageNameS(1)
+                    item.imageURLs = [_fy_randomImageName()]
                 default:
                     item.imageURLs = _fy_randomImageNameS(_fy_arc4random(7) + 3)
                     assert(item.imageURLs.count <= 9, "WFT!")

@@ -9,6 +9,7 @@
 import UIKit
 import Halo
 import FangYuan
+import Kingfisher
 
 let HPadding = 5.f
 let VPadding = 3.f
@@ -146,7 +147,7 @@ class FYDComplexTableViewCell: UITableViewCell {
                 singleImageView.hidden = true
                 imageCollectionView.hidden = true
             case 1:
-                singleImageView.image(named: item.imageURLs.first!)
+                singleImageView.kf_setImageWithURL(item.imageURLs.first!.URL)
                 singleImageView.hidden = false
                 imageCollectionView.hidden = true
             default:
@@ -252,7 +253,7 @@ extension FYDComplexTableViewCell : UICollectionViewDataSource {
         cell.backgroundColor(Purple.alpha(0.1))
         if indexPath.row < item.imageURLs.count {
             // TODO: Crash: Index out of range
-            cell.imageView.image(named: item.imageURLs[indexPath.row])
+            cell.imageView.kf_setImageWithURL(item.imageURLs[indexPath.row].URL)
         }
         return cell
     }

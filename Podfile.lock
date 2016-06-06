@@ -3,11 +3,13 @@ PODS:
   - Halo (0.0.8):
     - Halo/Foundation (= 0.0.8)
   - Halo/Foundation (0.0.8)
+  - Kingfisher (2.4.1)
   - Reveal-iOS-SDK (1.6.2)
 
 DEPENDENCIES:
   - FangYuan (from `./FangYuan`)
   - Halo
+  - Kingfisher
   - Reveal-iOS-SDK
 
 EXTERNAL SOURCES:
@@ -17,6 +19,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   FangYuan: 683390d03dbc101168e6a5aeca9a4ab3f7f0e33b
   Halo: 02517143d361875fca608695a157abf6fa721b37
+  Kingfisher: 41aed5b6c1ed8fa98cf6d75283ce89cf7890f517
   Reveal-iOS-SDK: e2250b3c155bcfac53ae223ddc1f76d08f206c33
 
 COCOAPODS: 0.39.0
