@@ -9,7 +9,6 @@
 import Foundation
 
 let _fangyuan_layout_queue = dispatch_queue_create("fangyuan.layout", DISPATCH_QUEUE_SERIAL)
-let _fangyuan_layout_dispatch_group = dispatch_group_create()
 
 /// 进入布局线程
 internal func _fy_layoutQueue(block:()->Void) {

@@ -141,14 +141,12 @@ private extension ConstraintManager {
         }
         
         var layoutingViews = Set(views)
+        //  注意，应该保证下面的代码在执行时，不能直接遍历 constraints 来设定 layoutingViews，因为 _fangyuan_layout_queue 可能会对 layoutingViews 中的 UIView 添加新的约束，导致 hasSetConstraints 始终为 false
         var layoutingConstraint = constraints
         var shouldRepeat: Bool
         repeat {
             shouldRepeat = false
             layoutingViews.forEach { view in
-                //  如果不 _fy_waitLayoutQueue ，就有可能产生无限 repeat 的情况，原因是在另一个线程的 `popConstraintTo` 方法中添加了新的 `constraints`
-                //  这里是需要保证 `constraints` 在遍历过程中是不可变的
-                //  不应该每次遍历等待主线程
                 if hasSetConstraints(layoutingConstraint, to: view) {
                     view.layoutWithFangYuan()
                     layoutingConstraint = setConstraints(layoutingConstraint, from: view)
