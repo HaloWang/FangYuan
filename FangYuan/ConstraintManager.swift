@@ -133,7 +133,7 @@ private extension ConstraintManager {
         
         assert(NSThread.isMainThread(), _fy_MainQueueAssert)
         
-        guard hasUnsetConstraintsOf(views) else {
+        guard hasUnsetConstraints(constraints, of: views) else {
             views.forEach { view in
                 view.layoutWithFangYuan()
             }
@@ -141,16 +141,17 @@ private extension ConstraintManager {
         }
         
         var layoutingViews = Set(views)
-        //  未设定的约束中，发现有用来约束 view 的约束
+        var layoutingConstraint = constraints
         var shouldRepeat: Bool
         repeat {
             shouldRepeat = false
             layoutingViews.forEach { view in
                 //  如果不 _fy_waitLayoutQueue ，就有可能产生无限 repeat 的情况，原因是在另一个线程的 `popConstraintTo` 方法中添加了新的 `constraints`
-                _fy_waitLayoutQueue()
-                if hasSetConstrainTo(view) {
+                //  这里是需要保证 `constraints` 在遍历过程中是不可变的
+                //  不应该每次遍历等待主线程
+                if hasSetConstraints(layoutingConstraint, to: view) {
                     view.layoutWithFangYuan()
-                    setConstraintsFrom(view)
+                    layoutingConstraint = setConstraints(layoutingConstraint, from: view)
                     //  在被遍历的数组中移除该 view
                     layoutingViews.remove(view)
                 } else {
@@ -159,27 +160,25 @@ private extension ConstraintManager {
             }
         } while shouldRepeat
     }
-
-    func hasUnsetConstraintsOf(views:[UIView]) -> Bool {
-
-        guard constraints.count != 0 else {
+    
+    func hasUnsetConstraints(cons:Set<Constraint>, of views:[UIView]) -> Bool {
+        guard cons.count != 0 else {
             return false
         }
         
         // TODO: 外层遍历遍历谁会更快？或者两个一起遍历？
-
         for view in views {
-            if !hasSetConstrainTo(view) {
+            if !hasSetConstraints(cons, to: view) {
                 return true
             }
         }
-
+        
         return false
     }
-
-    /// 未设定的约束中，已经没有用来约束 view 的约束了
-    func hasSetConstrainTo(view:UIView) -> Bool {
-        for con in constraints {
+    
+    /// 给定的约束中，已经没有用来约束 view 的约束了
+    func hasSetConstraints(cons:Set<Constraint>, to view:UIView) -> Bool {
+        for con in cons {
             if con.to == view {
                 return false
             }
@@ -187,13 +186,11 @@ private extension ConstraintManager {
         return true
     }
 
-    /// 确定了该 UIView.frame 后，装载 Constraint 至 to.ruler.section 中
+    /// 确定了该 UIView.frame 后，装载指定 Constraint 至 to.ruler.section 中
     // TODO: 参数可变性还是一个问题！
-    func setConstraintsFrom(view: UIView) {
-        
-        assert(NSThread.isMainThread(), _fy_MainQueueAssert)
-        
-        constraints.forEach { constraint in
+    func setConstraints(cons:Set<Constraint>, from view: UIView) -> Set<Constraint> {
+        var _cons = cons
+        _cons.forEach { constraint in
             if constraint.from == view {
                 let _from = constraint.from
                 let _to = constraint.to
@@ -208,12 +205,14 @@ private extension ConstraintManager {
                 case .LeftRigt:
                     _to.rulerX.c = _from.superview!.frame.width - _from.frame.origin.x + _value
                 }
-                constraints.remove(constraint)
-                setSettedConstraint(constraint)
+                _cons.remove(constraint)
+                _fy_layoutQueue {
+                    self.setSettedConstraint(constraint)
+                }
             }
         }
+        return _cons
     }
-    
 }
 
 // MARK: Assistant

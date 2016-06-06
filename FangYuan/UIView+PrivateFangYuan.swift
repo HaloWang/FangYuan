@@ -55,14 +55,9 @@ extension UIView {
     /// 在约束已经求解完全的情况下进行 frame 的设置
     func layoutWithFangYuan() {
         
-        // TODO: 能不能输出中文 assert 呢？
         assert(NSThread.isMainThread(), _fy_MainQueueAssert)
-        assert(rulerX.full, "⚠️FangYuan:\n\(self) \nUIView.RulerX is not fully defined!\n")
-        assert(rulerY.full, "⚠️FangYuan:\n\(self) \nUIView.RulerY is not fully defined!\n")
-        
-        guard rulerX.full && rulerY.full else {
-            return
-        }
+        assert(rulerX.full, "\(self) \nUIView.RulerX is not fully defined!\n".fy_alert)
+        assert(rulerY.full, "\(self) \nUIView.RulerY is not fully defined!\n".fy_alert)
 
         //  X
         let newX = rulerX.a
