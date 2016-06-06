@@ -1,5 +1,5 @@
 //
-//  FangYuanDispatch.swift
+//  Dispatch.swift
 //  FangYuan
 //
 //  Created by 王策 on 16/6/2.
