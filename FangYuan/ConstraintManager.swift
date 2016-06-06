@@ -39,8 +39,8 @@ extension ConstraintManager {
      */
     class func pushConstraintFrom(from:UIView, direction: Constraint.Direction) {
         
-        assert(!NSThread.isMainThread(), "This method should invoke in fangyuan.layout.queue")
-        
+        assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
+
         let newConstraint = Constraint(from: from, to: nil, direction: direction)
         singleton.holder.push(newConstraint, at: direction)
     }
@@ -57,7 +57,7 @@ extension ConstraintManager {
      */
     class func popConstraintTo(to:UIView, direction: Constraint.Direction, value:CGFloat) {
         
-        assert(!NSThread.isMainThread(), "This method should invoke in fangyuan.layout.queue")
+        assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
         
         //  这个方法应该被优先调用，可能出现 fy_XXX(a) 替换 fy_XXX(chainXXX) 的情况
         singleton.removeDuplicateConstraintOf(to, at: direction)
@@ -72,7 +72,7 @@ extension ConstraintManager {
         singleton.constraints.insert(_constraint)
         singleton.holder.clearConstraintAt(direction)
         
-        assert(singleton.noConstraintCirculationWith(_constraint), "\n⚠️FangYuan: There is a constraint circulation between\n\(to)\n🔄\n\(_constraint.from)\n")
+        assert(singleton.noConstraintCirculationWith(_constraint), "There is a constraint circulation between\n\(to)\n🔄\n\(_constraint.from)\n".fy_alert)
     }
 
     class func layout(view:UIView) {
@@ -130,7 +130,7 @@ private extension ConstraintManager {
     /// 核心布局方法
     func layout(views: [UIView]) {
         
-        assert(NSThread.isMainThread(), "This method should invoke in mainQueue!")
+        assert(NSThread.isMainThread(), _fy_MainQueueAssert)
         
         guard hasUnsetConstraintsOf(views) else {
             views.forEach { view in
@@ -190,7 +190,7 @@ private extension ConstraintManager {
     // TODO: 参数可变性还是一个问题！
     func setConstraintsFrom(view: UIView) {
         
-        assert(NSThread.isMainThread(), "This method should invoke in mainQueue!")
+        assert(NSThread.isMainThread(), _fy_MainQueueAssert)
         
         constraints.forEach { constraint in
             if constraint.from == view {
