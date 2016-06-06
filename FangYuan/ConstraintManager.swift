@@ -11,9 +11,6 @@ import UIKit
 // MARK: - Init & Properties
 
 /// 约束依赖管理者
-///
-/// 可能做着做着就成了 `AsyncDisplayKit` 那样抽取布局树，异步计算布局的东西了
-
 class ConstraintManager {
     
     private init() {}
