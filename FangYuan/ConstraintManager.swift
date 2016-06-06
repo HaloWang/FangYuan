@@ -219,6 +219,7 @@ private extension ConstraintManager {
 private extension ConstraintManager {
     
     func setSettedConstraint(constraint:Constraint) {
+        assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
         settedConstraints.forEach { con in
             if con.to == nil || con.from == nil {
                 settedConstraints.remove(con)
@@ -231,6 +232,7 @@ private extension ConstraintManager {
 
     /// 按照程序逻辑，一个 view 最多同时只能在一个方向上拥有一个约束
     func removeDuplicateConstraintOf(view:UIView, at direction: Constraint.Direction) {
+        assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
         constraints.forEach { con in
             if con.to == nil || con.from == nil {
                 constraints.remove(con)
@@ -241,6 +243,7 @@ private extension ConstraintManager {
     }
     
     func noConstraintCirculationWith(constraint:Constraint) -> Bool {
+        assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
         return constraints.filter {
             $0 <=> constraint
         }.count == 0
