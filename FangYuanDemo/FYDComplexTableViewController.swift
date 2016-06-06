@@ -25,6 +25,7 @@ class FYDComplexTableViewController: UIViewController {
             .separatorStyle(.None)
             .registerCellClass(FYDComplexTableViewCell)
             .superView(view)
+            .backgroundColor(HEX("f1f1f1"))
     }
 }
 

@@ -19,7 +19,8 @@ func randomString(maxRepeat:Int, repeatString:String) -> String {
 }
 
 func _fy_randomImageName(size:CGSize = CGSize(width: ScreenWidth, height: ScreenWidth)) -> String {
-    let URLString = "https://unsplash.it/\(size.width)/\(size.height)?image=\(_fy_arc4random(1084))"
+    let scale = UIScreen.mainScreen().scale
+    let URLString = "https://unsplash.it/\(size.width * scale)/\(size.height * scale)?image=\(_fy_arc4random(1084))"
     return URLString
 }
 
