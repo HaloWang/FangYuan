@@ -19,18 +19,21 @@ func randomString(maxRepeat:Int, repeatString:String) -> String {
 }
 
 func _fy_randomImageName(size:CGSize = CGSize(width: ScreenWidth, height: ScreenWidth)) -> String {
-    return "https://unsplash.it/\(size.width)/\(size.height)?image=\(_fy_arc4random(1084))"
+    let URLString = "https://unsplash.it/\(size.width)/\(size.height)?image=\(_fy_arc4random(1084))"
+    return URLString
 }
 
 func _fy_randomImageNameS(count:Int) -> [String] {
     var names = [String]()
     for _ in 0..<count {
+        let name : String
         switch count {
         case 2, 4:
-            names.append(_fy_randomImageName(CGSize(width: ScreenWidth/2, height: ScreenWidth/2)))
+            name = _fy_randomImageName(CGSize(width: ScreenWidth/2, height: ScreenWidth/2))
         default:
-            names.append(_fy_randomImageName(CGSize(width: ScreenWidth/3, height: ScreenWidth/3)))
+            name = _fy_randomImageName(CGSize(width: ScreenWidth/3, height: ScreenWidth/3))
         }
+        names.append(name)
     }
     return names
 }
