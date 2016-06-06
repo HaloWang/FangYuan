@@ -23,10 +23,14 @@ func _fy_randomImageName(size:CGSize = CGSize(width: ScreenWidth, height: Screen
 }
 
 func _fy_randomImageNameS(count:Int) -> [String] {
-    // TODO: Set?
     var names = [String]()
     for _ in 0..<count {
-        names.append(_fy_randomImageName(CGSize(width: ScreenWidth/2, height: ScreenWidth/2)))
+        switch count {
+        case 2, 4:
+            names.append(_fy_randomImageName(CGSize(width: ScreenWidth/2, height: ScreenWidth/2)))
+        default:
+            names.append(_fy_randomImageName(CGSize(width: ScreenWidth/3, height: ScreenWidth/3)))
+        }
     }
     return names
 }

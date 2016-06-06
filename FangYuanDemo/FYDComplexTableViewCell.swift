@@ -17,7 +17,6 @@ let AIVSize  = 40.size
 let FontSize = 14.f
 let CellHorizontalPadding = 11.f
 
-// TODO: 发现了布局时的 BUG
 // TODO: 为什么 UITextView.text 的调用那么耗时？有什么优化办法？
 // TODO: 什么时候能让 FangYuan 变成纯配置式 DSL？
 // 比如：textView.fy_rx_height(message.displayHeight)
@@ -98,7 +97,7 @@ class FYDComplexTableViewCell: UITableViewCell {
         FangYuanDemo.BeginLayout {
             
             holderView
-                .fy_edge(UIEdgeInsets(top: 0, left: 0, bottom: CellHorizontalPadding, right: 0))
+                .fy_edge(UIEdgeInsets(top: CellHorizontalPadding, left: 0, bottom: 0, right: 0))
             
             avatarImageView
                 .fy_frame(CGRect(x: HPadding, y: HPadding, width: AIVSize.width, height: AIVSize.height))

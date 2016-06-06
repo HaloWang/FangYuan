@@ -11,7 +11,7 @@ class FYDListViewController: UIViewController {
         ["动画" : FYDAnimationViewController.self],
         ["在 UITableViewCell 中使用" : FYDDemoTableViewController.self],
         ["矩形拖拽".unfinish : FYDRectViewController.self],
-        ["在复杂的 UITableViewCell 中使用".unfinish : FYDComplexTableViewController.self],
+        ["在复杂的 UITableViewCell 中使用" : FYDComplexTableViewController.self],
     ]
 
     lazy var tableView = UITableView(frame: ScreenBounds, style: .Plain)
