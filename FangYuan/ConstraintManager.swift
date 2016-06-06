@@ -97,6 +97,7 @@ extension ConstraintManager {
     /// - TODO: 部分方法不应该遍历两次的！这里的性能还有提升空间
     /// - TODO: horizontal 的意义并不明显啊
     class func resetRelatedConstraintFrom(view:UIView, isHorizontal horizontal:Bool) {
+        assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
         singleton.settedConstraints.forEach { constraint in
             if let _from = constraint.from {
                 if _from == view {

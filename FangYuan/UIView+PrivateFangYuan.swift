@@ -56,7 +56,7 @@ extension UIView {
     func layoutWithFangYuan() {
         
         // TODO: 能不能输出中文 assert 呢？
-        assert(NSThread.isMainThread(), "⚠️FangYuan:\nThis method should invoke in mainQueue!")
+        assert(NSThread.isMainThread(), _fy_MainQueueAssert)
         assert(rulerX.full, "⚠️FangYuan:\n\(self) \nUIView.RulerX is not fully defined!\n")
         assert(rulerY.full, "⚠️FangYuan:\n\(self) \nUIView.RulerY is not fully defined!\n")
         
