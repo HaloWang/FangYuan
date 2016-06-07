@@ -17,7 +17,7 @@ public extension UIView {
     /// someView.fy_right(self.chainLeft)
     var chainLeft: CGFloat {
         _fy_layoutQueue {
-            ConstraintManager.pushConstraintFrom(self, direction: .LeftRigt)
+            ConstraintManager.pushConstraintFrom(self, section: .Right)
         }
         return 0
     }
@@ -27,7 +27,7 @@ public extension UIView {
     /// someView.fy_left(self.chainRight)
     var chainRight: CGFloat {
         _fy_layoutQueue {
-            ConstraintManager.pushConstraintFrom(self, direction: .RightLeft)
+            ConstraintManager.pushConstraintFrom(self, section: .Left)
         }
         return 0
     }
@@ -37,7 +37,7 @@ public extension UIView {
     /// someView.fy_top(self.chainBottom)
     var chainBottom: CGFloat {
         _fy_layoutQueue {
-            ConstraintManager.pushConstraintFrom(self, direction: .BottomTop)
+            ConstraintManager.pushConstraintFrom(self, section: .Top)
         }
         return 0
     }
@@ -47,7 +47,7 @@ public extension UIView {
     /// someView.fy_bottom(self.chainTop)
     var chainTop: CGFloat {
         _fy_layoutQueue {
-            ConstraintManager.pushConstraintFrom(self, direction: .TopBottom)
+            ConstraintManager.pushConstraintFrom(self, section: .Bottom)
         }
         return 0
     }
@@ -78,7 +78,7 @@ public extension UIView {
     func fy_left(left: CGFloat) -> Self {
         basicSetting {
             self.resetRelatedConstraintHorizontal(true)
-            self.popConstraintAt(.RightLeft, value: left)
+            self.popConstraintAt(.Left, value: left)
         }
         return self
     }
@@ -96,7 +96,7 @@ public extension UIView {
     func fy_right(right: CGFloat) -> Self {
         basicSetting {
             self.resetRelatedConstraintHorizontal(true)
-            self.popConstraintAt(.LeftRigt, value: right)
+            self.popConstraintAt(.Right, value: right)
         }
         return self
     }
@@ -107,7 +107,7 @@ public extension UIView {
     func fy_top(top: CGFloat) -> Self {
         basicSetting {
             self.resetRelatedConstraintHorizontal(true)
-            self.popConstraintAt(.BottomTop, value: top)
+            self.popConstraintAt(.Top, value: top)
         }
         return self
     }
@@ -125,7 +125,7 @@ public extension UIView {
     func fy_bottom(bottom: CGFloat) -> Self {
         basicSetting {
             self.resetRelatedConstraintHorizontal(false)
-            self.popConstraintAt(.TopBottom, value: bottom)
+            self.popConstraintAt(.Bottom, value: bottom)
         }
         return self
     }
@@ -137,10 +137,10 @@ public extension UIView {
         basicSetting {
             self.resetRelatedConstraintHorizontal(true)
             self.resetRelatedConstraintHorizontal(false)
-            self.popConstraintAt(.BottomTop, value: edge.top)
-            self.popConstraintAt(.TopBottom, value: edge.bottom)
-            self.popConstraintAt(.RightLeft, value: edge.left)
-            self.popConstraintAt(.LeftRigt, value: edge.right)
+            self.popConstraintAt(.Top, value: edge.top)
+            self.popConstraintAt(.Bottom, value: edge.bottom)
+            self.popConstraintAt(.Left, value: edge.left)
+            self.popConstraintAt(.Right, value: edge.right)
         }
         return self
     }
@@ -148,8 +148,8 @@ public extension UIView {
     func fy_xRange(left:CGFloat, right:CGFloat) -> Self {
         basicSetting {
             self.resetRelatedConstraintHorizontal(true)
-            self.popConstraintAt(.RightLeft, value: left)
-            self.popConstraintAt(.LeftRigt, value: right)
+            self.popConstraintAt(.Left, value: left)
+            self.popConstraintAt(.Right, value: right)
         }
         return self
     }
@@ -168,8 +168,8 @@ public extension UIView {
         basicSetting {
             self.resetRelatedConstraintHorizontal(true)
             self.resetRelatedConstraintHorizontal(false)
-            self.popConstraintAt(.BottomTop, value: origin.y)
-            self.popConstraintAt(.RightLeft, value: origin.x)
+            self.popConstraintAt(.Top, value: origin.y)
+            self.popConstraintAt(.Left, value: origin.x)
         }
         return self
     }
@@ -178,8 +178,8 @@ public extension UIView {
         basicSetting {
             self.resetRelatedConstraintHorizontal(true)
             self.resetRelatedConstraintHorizontal(false)
-            self.popConstraintAt(.BottomTop, value: frame.origin.y)
-            self.popConstraintAt(.RightLeft, value: frame.origin.x)
+            self.popConstraintAt(.Top, value: frame.origin.y)
+            self.popConstraintAt(.Left, value: frame.origin.x)
             self.fy_size(frame.size)
         }
         return self
@@ -187,7 +187,7 @@ public extension UIView {
     
     // TODO: Unfinish
     private func fy_centerX(adjust:CGFloat) -> Self {
-        basicSetting { 
+        basicSetting {
             
         }
         return self

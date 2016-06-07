@@ -15,7 +15,7 @@ func ==(lhs: Constraint, rhs: Constraint) -> Bool {
 infix operator <=> {}
 /// 判断两个约束是否产生了循环依赖
 
-// TODO: 这个方法应该拆分的，也许是两个方向上的约束？那 LayoutWithFangYuan 是不是也需要拆分成两个方向上的？
+// TODO: 这个方法应该拆分的，也许是两个区间上的约束？那 LayoutWithFangYuan 是不是也需要拆分成两个区间上的？
 func <=>(lhs: Constraint, rhs: Constraint) -> Bool {
     return lhs.to == rhs.from && lhs.from == rhs.to
 }
@@ -34,21 +34,21 @@ class Constraint: Hashable {
     /// 约束为谁设定
     weak var to: UIView!
 
-    /// 约束方向
-    var direction: Direction
+    /// 约束区间
+    var section: Section
 
     /// 该约束的数字量
     var value: CGFloat = 0
 
-    /// 约束方向
-    enum Direction {
-        case BottomTop
-        case LeftRigt
-        case RightLeft
-        case TopBottom
+    /// 约束区间
+    enum Section {
+        case Left
+        case Right
+        case Top
+        case Bottom
         
         var horizontal : Bool {
-            return self == Constraint.Direction.LeftRigt || self == Constraint.Direction.RightLeft
+            return self == Constraint.Section.Right || self == Constraint.Section.Left
         }
     }
     
@@ -57,14 +57,14 @@ class Constraint: Hashable {
      
      - parameter from:      该约束需要等待 from 布局完成后才能是有效的
      - parameter to:        from 布局完成后，to会开始根据这个约束来布局
-     - parameter direction: 约束方向
+     - parameter section:   约束区间
      - parameter value:     该约束的固定值，默认为 0
      */
-    init(from: UIView?, to: UIView?, direction: Constraint.Direction, value: CGFloat = 0) {
+    init(from: UIView?, to: UIView?, section: Constraint.Section, value: CGFloat = 0) {
         self.hashValue = Constraint.hashStore
         self.from = from
         self.to = to
-        self.direction = direction
+        self.section = section
         self.value = value
         Constraint.checkAndUpdateHashStore()
     }
@@ -84,39 +84,39 @@ class ConstraintHolder {
     var leftRight: Constraint?
     var rightLeft: Constraint?
     
-    func popConstraintAt(direction: Constraint.Direction) -> Constraint? {
-        switch direction {
-        case .TopBottom:
+    func popConstraintAt(section: Constraint.Section) -> Constraint? {
+        switch section {
+        case .Bottom:
             return topBottom
-        case .BottomTop:
+        case .Top:
             return bottomTop
-        case .LeftRigt:
+        case .Right:
             return leftRight
-        case .RightLeft:
+        case .Left:
             return rightLeft
         }
     }
     
-    func push(constraint:Constraint?, at direction:Constraint.Direction) {
-        switch direction {
-        case .TopBottom:
+    func push(constraint:Constraint?, at section:Constraint.Section) {
+        switch section {
+        case .Bottom:
             topBottom = constraint
-        case .BottomTop:
+        case .Top:
             bottomTop = constraint
-        case .LeftRigt:
+        case .Right:
             leftRight = constraint
-        case .RightLeft:
+        case .Left:
             rightLeft = constraint
         }
     }
     
-    func clearConstraintAt(direction: Constraint.Direction) {
-        push(nil, at: direction)
+    func clearConstraintAt(section: Constraint.Section) {
+        push(nil, at: section)
     }
 }
 
 extension Constraint: CustomStringConvertible {
     var description: String {
-        return "\nConstraint:\n✅direction: \(direction) \n⏬from: \(from) \n⏫to: \(to)\nℹ️Value: \(value)"
+        return "\nConstraint:\n✅section: \(section) \n⏬from: \(from) \n⏫to: \(to)\nℹ️Value: \(value)"
     }
 }

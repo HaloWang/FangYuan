@@ -34,18 +34,18 @@ extension UIView {
         }
     }
     
-    func popConstraintAt(direction: Constraint.Direction, value: CGFloat) {
-        switch direction {
-        case .RightLeft:
+    func popConstraintAt(section: Constraint.Section, value: CGFloat) {
+        switch section {
+        case .Left:
             rulerX.a = value
-        case .LeftRigt:
+        case .Right:
             rulerX.c = value
-        case .BottomTop:
+        case .Top:
             rulerY.a = value
-        case .TopBottom:
+        case .Bottom:
             rulerY.c = value
         }
-        ConstraintManager.popConstraintTo(self, direction: direction, value: value)
+        ConstraintManager.popConstraintTo(self, section: section, value: value)
     }
     
     func resetRelatedConstraintHorizontal(horizontal:Bool) {
