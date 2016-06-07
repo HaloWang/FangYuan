@@ -11,9 +11,6 @@ import UIKit
 // MARK: - Init & Properties
 
 /// 约束依赖管理者
-///
-/// 可能做着做着就成了 `AsyncDisplayKit` 那样抽取布局树，异步计算布局的东西了
-
 class ConstraintManager {
     
     private init() {}
@@ -23,10 +20,9 @@ class ConstraintManager {
     
     // TODO: 重要的还是做到按照 superview 分组遍历以提高性能
     // TODO: 有没有集散型的并发遍历？
-    
-    var constraints = Set<Constraint>()
-    // TODO: 英语语法错误：set - set - set
-    var settedConstraints = Set<Constraint>()
+
+    var unsetConstraints = Set<Constraint>()
+    var storedConstraints = Set<Constraint>()
 }
 
 // MARK: - Public Methods
@@ -70,10 +66,11 @@ extension ConstraintManager {
         
         _constraint.to = to
         _constraint.value = value
-        singleton.constraints.insert(_constraint)
+        singleton.unsetConstraints.insert(_constraint)
         singleton.holder.clearConstraintAt(direction)
         
-        assert(singleton.noConstraintCirculationWith(_constraint), "There is a constraint circulation between\n\(to)\n🔄\n\(_constraint.from)\n".fy_alert)
+        assert(singleton.noConstraintCirculationWith(_constraint),
+                "There is a constraint circulation between\n\(to)\n- and -\n\(_constraint.from)\n".fy_alert)
     }
 
     class func layout(view:UIView) {
@@ -99,7 +96,7 @@ extension ConstraintManager {
     /// - TODO: horizontal 的意义并不明显啊
     class func resetRelatedConstraintFrom(view:UIView, isHorizontal horizontal:Bool) {
         assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
-        singleton.settedConstraints.forEach { constraint in
+        singleton.storedConstraints.forEach { constraint in
             if let _from = constraint.from {
                 if _from == view {
                     if horizontal == constraint.direction.horizontal {
@@ -116,7 +113,7 @@ extension ConstraintManager {
                     }
                 }
             } else {
-                singleton.settedConstraints.remove(constraint)
+                singleton.storedConstraints.remove(constraint)
             }
         }
     }
@@ -134,7 +131,7 @@ private extension ConstraintManager {
         
         assert(NSThread.isMainThread(), _fy_MainQueueAssert)
         
-        guard hasUnsetConstraints(constraints, of: views) else {
+        guard hasUnsetConstraints(unsetConstraints, of: views) else {
             views.forEach { view in
                 view.layoutWithFangYuan()
             }
@@ -143,7 +140,7 @@ private extension ConstraintManager {
         
         var layoutingViews = Set(views)
         //  注意，应该保证下面的代码在执行时，不能直接遍历 constraints 来设定 layoutingViews，因为 _fangyuan_layout_queue 可能会对 layoutingViews 中的 UIView 添加新的约束，导致 hasSetConstraints 始终为 false
-        var layoutingConstraint = constraints
+        var layoutingConstraint = unsetConstraints
         var shouldRepeat: Bool
         repeat {
             shouldRepeat = false
@@ -219,31 +216,31 @@ private extension ConstraintManager {
     
     func setSettedConstraint(constraint:Constraint) {
         assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
-        settedConstraints.forEach { con in
+        storedConstraints.forEach { con in
             if con.to == nil || con.from == nil {
-                settedConstraints.remove(con)
+                storedConstraints.remove(con)
             } else if con.to == constraint.to && con.direction == constraint.direction {
-                settedConstraints.remove(con)
+                storedConstraints.remove(con)
             }
         }
-        settedConstraints.insert(constraint)
+        storedConstraints.insert(constraint)
     }
 
     /// 按照程序逻辑，一个 view 最多同时只能在一个方向上拥有一个约束
     func removeDuplicateConstraintOf(view:UIView, at direction: Constraint.Direction) {
         assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
-        constraints.forEach { con in
+        unsetConstraints.forEach { con in
             if con.to == nil || con.from == nil {
-                constraints.remove(con)
+                unsetConstraints.remove(con)
             } else if con.to == view && con.direction == direction {
-                constraints.remove(con)
+                unsetConstraints.remove(con)
             }
         }
     }
     
     func noConstraintCirculationWith(constraint:Constraint) -> Bool {
         assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
-        return constraints.filter {
+        return unsetConstraints.filter {
             $0 <=> constraint
         }.count == 0
     }
