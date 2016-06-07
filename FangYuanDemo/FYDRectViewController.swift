@@ -66,15 +66,15 @@ class FYDRectViewController: UIViewController {
             
             bottomRightPan
                 .fy_bottom(0)
-                .fy_height(20)
+                .fy_height(40)
                 .fy_right(0)
-                .fy_width(20)
+                .fy_width(40)
             
             topLeftPan
                 .fy_top(0)
-                .fy_height(20)
+                .fy_height(40)
                 .fy_left(0)
-                .fy_width(20)
+                .fy_width(40)
         }
     }
 }
