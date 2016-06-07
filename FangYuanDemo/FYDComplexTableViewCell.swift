@@ -15,7 +15,7 @@ let HPadding = 5.f
 let VPadding = 3.f
 let AIVSize  = 40.size
 let FontSize = 14.f
-let CellHorizontalPadding = 11.f
+let CellVerticalPadding = 11.f
 
 // TODO: 为什么 UITextView.text 的调用那么耗时？有什么优化办法？
 // TODO: 什么时候能让 FangYuan 变成纯配置式 DSL？
@@ -97,7 +97,7 @@ class FYDComplexTableViewCell: UITableViewCell {
         FangYuanDemo.BeginLayout {
             
             holderView
-                .fy_edge(UIEdgeInsets(top: CellHorizontalPadding, left: 0, bottom: 0, right: 0))
+                .fy_edge(UIEdgeInsets(top: CellVerticalPadding, left: 0, bottom: 0, right: 0))
             
             avatarImageView
                 .fy_frame(CGRect(x: HPadding, y: HPadding, width: AIVSize.width, height: AIVSize.height))
@@ -170,7 +170,6 @@ class FYDComplexTableViewCell: UITableViewCell {
     
     func layoutHorizontally() {
         deleteButton.fy_width(item.isMine ? 100 : 0)
-        //  设定 nickNameLabel 的宽度，建议计算字符串展示面积的时候，缓存一下计算出来的面积
         var nickNameDisplayWidth : CGFloat
         if let cachedWidth = item.nickNameDisplayWidthCache {
             nickNameDisplayWidth = cachedWidth
@@ -184,38 +183,46 @@ class FYDComplexTableViewCell: UITableViewCell {
     
     class func layoutVerticallyAndComputeDisplayHeight(item:Item, layoutCell cell:FYDComplexTableViewCell?) -> CGFloat {
         
-        let hasCellToLayout = cell != nil
-        
-        //  布局函数
-        func layoutCellIfNeeded(@noescape block:(cell:FYDComplexTableViewCell)->Void) {
-            guard hasCellToLayout else {
-                return
-            }
-            block(cell: cell!)
-        }
-        
         var displayHeight : CGFloat = 0
         
         displayHeight += 5
+        //  Height for display avatar, nickname and other info
         displayHeight += 40
         displayHeight += 3
         
-        //  Layout TextView
-        var messageDisplayHeight : CGFloat
-        if item.message.length != 0 {
-            if let cachedHeight = item.messageDisplayHeightCache {
-                messageDisplayHeight = cachedHeight
-            } else {
-                messageDisplayHeight = (item.message as NSString).boundingRectWithSize(CGSize(width: ScreenWidth - 5.double, height:CGFloat(MAXFLOAT)), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFontOfSize(FontSize)], context: nil).size.height
-                item.messageDisplayHeightCache = messageDisplayHeight
-            }
+        let messageDisplayHeight = calculateMessageDisplayHeightFor(item)
+        if messageDisplayHeight != 0 {
             displayHeight += messageDisplayHeight
             displayHeight += 3
-        } else {
-            messageDisplayHeight = 0
         }
         
-        //  Layout Image CollectionView
+        let imageDisplayHeight = calculateImageDispalyHeightFor(item)
+        displayHeight += imageDisplayHeight
+        
+        displayHeight += 5
+        displayHeight += CellVerticalPadding
+        
+        if let cell = cell {
+            cell.messageTextView.fy_height(messageDisplayHeight)
+            cell.singleImageView.fy_height(imageDisplayHeight)
+            cell.imageCollectionView.fy_height(imageDisplayHeight)
+        }
+        
+        return displayHeight
+    }
+    
+    class func calculateMessageDisplayHeightFor(item:Item) -> CGFloat {
+        var messageDisplayHeight : CGFloat
+        if let cachedHeight = item.messageDisplayHeightCache {
+            messageDisplayHeight = cachedHeight
+        } else {
+            messageDisplayHeight = (item.message as NSString).boundingRectWithSize(CGSize(width: ScreenWidth - 5.double, height:CGFloat(MAXFLOAT)), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFontOfSize(FontSize)], context: nil).size.height
+            item.messageDisplayHeightCache = messageDisplayHeight
+        }
+        return messageDisplayHeight
+    }
+    
+    class func calculateImageDispalyHeightFor(item:Item) -> CGFloat {
         var imagesDisplayHeight : CGFloat
         let imageCount = item.imageURLs.count
         switch imageCount {
@@ -230,19 +237,9 @@ class FYDComplexTableViewCell: UITableViewCell {
             let imageWidth = ScreenWidth / 3
             imagesDisplayHeight = (imageCount / 3) * imageWidth  + (imageCount % 3 > 0 ? imageWidth : 0)
         }
-        displayHeight += imagesDisplayHeight
-
-        layoutCellIfNeeded { (cell) in
-            cell.messageTextView.fy_height(messageDisplayHeight)
-            cell.singleImageView.fy_height(imagesDisplayHeight)
-            cell.imageCollectionView.fy_height(imagesDisplayHeight)
-        }
-        
-        displayHeight += 5
-        displayHeight += CellHorizontalPadding
-        
-        return displayHeight
+        return imagesDisplayHeight
     }
+
 }
 
 // MARK: - UICollectionViewDataSource
@@ -311,7 +308,3 @@ class FYDImageDisplayCollectionViewCell : UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
-
-
-
