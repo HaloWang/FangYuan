@@ -79,34 +79,34 @@ class Constraint: Hashable {
 }
 
 class ConstraintHolder {
-    var topBottom: Constraint?
-    var bottomTop: Constraint?
-    var leftRight: Constraint?
-    var rightLeft: Constraint?
+    var bottom: Constraint?
+    var top: Constraint?
+    var right: Constraint?
+    var left: Constraint?
     
     func popConstraintAt(section: Constraint.Section) -> Constraint? {
         switch section {
         case .Bottom:
-            return topBottom
+            return bottom
         case .Top:
-            return bottomTop
+            return top
         case .Right:
-            return leftRight
+            return right
         case .Left:
-            return rightLeft
+            return left
         }
     }
     
     func push(constraint:Constraint?, at section:Constraint.Section) {
         switch section {
         case .Bottom:
-            topBottom = constraint
+            bottom = constraint
         case .Top:
-            bottomTop = constraint
+            top = constraint
         case .Right:
-            leftRight = constraint
+            right = constraint
         case .Left:
-            rightLeft = constraint
+            left = constraint
         }
     }
     
