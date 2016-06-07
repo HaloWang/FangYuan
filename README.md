@@ -12,7 +12,7 @@
 
 ## 你是否愿意使用方圆
 
-- 如果你经常使用 Masonry/SnapKit 和 frame 进行布局，我非常推荐你使用『方圆』
+- 如果你经常使用 Masonry/SnapKit 和 frame/frame-based-layout-util 进行布局，我非常推荐你使用『方圆』
 - 如果你有一套自己的布局库，那我将非常乐意和你交流😁
 - 如果你热衷使用 `xib/storyboard`，『方圆』可能并不是你想要的的
 
@@ -33,13 +33,6 @@ pod 'FangYuan'
 pod 'FangYuanObjC'
 ```
 ## 使用方式
-
-『方圆』在 Swift 和 ObjC 中的语法仅有两点不同
-
-- ObjC 中链式代码的结尾需要添加 `;` 分号
-- ObjC 中链式代码返回值类型为 `UIView` 而非 `instancetype`
-
-所以下面的示范代码在 Swift / ObjC 环境下是通用的
 
 ### 基本使用方式
 
@@ -76,7 +69,7 @@ view
 - 使用简单，和现有布局库没有命名和使用上的冲突（但是不可以混用）
 - 基于 `UIView.frame` 布局，比 `NSAutoLayout` 有更高的性能
 - 使用链式语法，代码美观简介
-- 『方圆』在 Swift 和 ObjC 中的语法仅有两点不同：
+- 『方圆』在 Swift 和 ObjC 中的语法仅有两点不同，能让你在 ObjC/Swift 环境下近乎无缝的使用：
 	- ObjC 中链式代码的结尾需要添加 `;` 
 	- ObjC 中链式代码返回值类型为 `UIView` 而非 `instancetype`
 
@@ -95,12 +88,11 @@ fy_right	|	chainLeft
 
 ## 要做的事情
 
-- 更多，更完善的 demo
+- 更多，更完善的 `Demo/Test`
 - 将字符串展示面积的计算方法融入『方圆』中，并且可以同时设定高度/宽度
+- 添加 `fy_centerX/fy_centerY`
 - 为逻辑部分添加充分的 Unit Test
 - 优化性能
-	- 布局树的抽象
-	- 关联对象性能
 
 ## 写在最后
 
