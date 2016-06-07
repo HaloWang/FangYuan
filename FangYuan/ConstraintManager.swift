@@ -157,14 +157,14 @@ private extension ConstraintManager {
         } while shouldRepeat
     }
     
-    func hasUnsetConstraints(cons:Set<Constraint>, of views:[UIView]) -> Bool {
-        guard cons.count != 0 else {
+    func hasUnsetConstraints(constraints:Set<Constraint>, of views:[UIView]) -> Bool {
+        guard constraints.count != 0 else {
             return false
         }
         
         // TODO: 外层遍历遍历谁会更快？或者两个一起遍历？
         for view in views {
-            if !hasSetConstraints(cons, to: view) {
+            if !hasSetConstraints(constraints, to: view) {
                 return true
             }
         }
@@ -173,9 +173,9 @@ private extension ConstraintManager {
     }
     
     /// 给定的约束中，已经没有用来约束 view 的约束了
-    func hasSetConstraints(cons:Set<Constraint>, to view:UIView) -> Bool {
-        for con in cons {
-            if con.to == view {
+    func hasSetConstraints(constraints:Set<Constraint>, to view:UIView) -> Bool {
+        for constraint in constraints {
+            if constraint.to == view {
                 return false
             }
         }
@@ -184,9 +184,9 @@ private extension ConstraintManager {
 
     /// 确定了该 UIView.frame 后，装载指定 Constraint 至 to.ruler.section 中
     // TODO: 参数可变性还是一个问题！
-    func setConstraints(cons:Set<Constraint>, from view: UIView) -> Set<Constraint> {
-        var _cons = cons
-        _cons.forEach { constraint in
+    func setConstraints(constraints:Set<Constraint>, from view: UIView) -> Set<Constraint> {
+        var _constraints = constraints
+        _constraints.forEach { constraint in
             if constraint.from == view {
                 let _from = constraint.from
                 let _to = constraint.to
@@ -201,13 +201,13 @@ private extension ConstraintManager {
                 case .LeftRigt:
                     _to.rulerX.c = _from.superview!.frame.width - _from.frame.origin.x + _value
                 }
-                _cons.remove(constraint)
+                _constraints.remove(constraint)
                 _fy_layoutQueue {
                     self.setSettedConstraint(constraint)
                 }
             }
         }
-        return _cons
+        return _constraints
     }
 }
 
@@ -216,11 +216,11 @@ private extension ConstraintManager {
     
     func setSettedConstraint(constraint:Constraint) {
         assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
-        storedConstraints.forEach { con in
-            if con.to == nil || con.from == nil {
-                storedConstraints.remove(con)
-            } else if con.to == constraint.to && con.direction == constraint.direction {
-                storedConstraints.remove(con)
+        storedConstraints.forEach { constraint in
+            if constraint.to == nil || constraint.from == nil {
+                storedConstraints.remove(constraint)
+            } else if constraint.to == constraint.to && constraint.direction == constraint.direction {
+                storedConstraints.remove(constraint)
             }
         }
         storedConstraints.insert(constraint)
@@ -229,11 +229,11 @@ private extension ConstraintManager {
     /// 按照程序逻辑，一个 view 最多同时只能在一个方向上拥有一个约束
     func removeDuplicateConstraintOf(view:UIView, at direction: Constraint.Direction) {
         assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
-        unsetConstraints.forEach { con in
-            if con.to == nil || con.from == nil {
-                unsetConstraints.remove(con)
-            } else if con.to == view && con.direction == direction {
-                unsetConstraints.remove(con)
+        unsetConstraints.forEach { constraint in
+            if constraint.to == nil || constraint.from == nil {
+                unsetConstraints.remove(constraint)
+            } else if constraint.to == view && constraint.direction == direction {
+                unsetConstraints.remove(constraint)
             }
         }
     }
