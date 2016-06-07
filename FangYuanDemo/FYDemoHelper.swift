@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct FangYuanDemo {
+class FangYuanDemo {
     /// 仅仅是一个<font color=#CC6633>标识</font>，不要在意这个函数
     static func BeginLayout(@noescape layoutCode: ()-> Void) {
         layoutCode()
