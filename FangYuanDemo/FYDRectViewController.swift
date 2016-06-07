@@ -25,7 +25,9 @@ class FYDRectViewController: UIViewController {
         codeList
             .dataSourceAndDelegate(self)
             .registerCellClass(FYDCodeTableViewCell)
+            .separatorStyle(.None)
             .superView(view)
+            .backgroundColor(FYDCodeTableViewCell.codeBackgroundColor)
         
         rectView
             .superView(view)
@@ -37,9 +39,14 @@ class FYDRectViewController: UIViewController {
         bottomRightPan
             .superView(rectView)
             .backgroundColor(UIColor(red: 1, green: 0.7, blue: 0.1, alpha: 1))
+        
+        bottomRightPan.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(FYDRectViewController.bottomRightPanTouched(_:))))
+        
         topLeftPan
             .superView(rectView)
             .backgroundColor(UIColor(red: 1, green: 0.7, blue: 0.1, alpha: 1))
+        
+        topLeftPan.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(FYDRectViewController.topLeftPanTouched(_:))))
         
         FangYuanDemo.BeginLayout {
             codeList
@@ -67,6 +74,16 @@ class FYDRectViewController: UIViewController {
     }
 }
 
+extension FYDRectViewController {
+    func bottomRightPanTouched(sender: UIPanGestureRecognizer) {
+        
+    }
+    
+    func topLeftPanTouched(sender: UIPanGestureRecognizer) {
+        
+    }
+}
+
 // MARK: - UITableViewDelegate
 extension FYDRectViewController : UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -85,19 +102,19 @@ extension FYDRectViewController : UITableViewDataSource {
         
         switch indexPath.row {
         case 0:
-            cell.code = "rectView"
+            cell.code = "    rectView"
         case 1:
-            cell.code = "    .fy_top()"
+            cell.code = "        .fy_top()"
         case 2:
-            cell.code = "    .fy_top()"
+            cell.code = "        .fy_bottom()"
         case 3:
-            cell.code = "    .fy_top()"
+            cell.code = "        .fy_left()"
         case 4:
-            cell.code = "    .fy_top()"
+            cell.code = "        .fy_right()"
         case 5:
-            cell.code = "    .fy_top()"
+            cell.code = "        .fy_width()"
         case 6:
-            cell.code = "    .fy_top()"
+            cell.code = "        .fy_height()"
         default:
             break
         }
