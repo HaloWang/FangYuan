@@ -62,7 +62,7 @@ class FYDComplexDataSource {
                 item.firstImageSize = CGSizeMake(_fy_arc4random(100).f + ScreenWidth, _fy_arc4random(100).f + ScreenWidth/1.7)
                 switch arc4random() % 10 {
                 case 0...5:
-                    item.imageURLs = [_fy_randomImageName(item.firstImageSize)]
+                    item.imageURLs = [_fy_randomImageName(ScreenWidth.size)]
                 default:
                     item.imageURLs = _fy_randomImageNameS(_fy_arc4random(7) + 3)
                     assert(item.imageURLs.count <= 9, "WFT!")

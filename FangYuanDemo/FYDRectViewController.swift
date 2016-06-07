@@ -54,7 +54,6 @@ class FYDRectViewController: UIViewController {
         topLeftPan.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(FYDRectViewController.topLeftPanTouched(_:))))
         
         FangYuanDemo.BeginLayout {
-            
             rectView
                 .fy_frame(CGRect(x: 50, y: 200, width: 200, height: 200))
             
