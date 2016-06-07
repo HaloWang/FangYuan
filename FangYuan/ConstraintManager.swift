@@ -22,6 +22,7 @@ class ConstraintManager {
     // TODO: 有没有集散型的并发遍历？
     
     var constraints = Set<Constraint>()
+    // TODO: 英语语法错误：set - set - set
     var settedConstraints = Set<Constraint>()
 }
 
