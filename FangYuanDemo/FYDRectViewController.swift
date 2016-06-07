@@ -10,6 +10,10 @@ import UIKit
 import FangYuan
 import Halo
 
+private var storeLeftTop     = CGPointZero
+private var storeWidthHeight = CGSizeZero
+private var storeRightBottom = CGPointZero
+
 class FYDRectViewController: UIViewController {
 
     let rectView = UILabel()
@@ -34,11 +38,12 @@ class FYDRectViewController: UIViewController {
             .backgroundColor(UIColor(red: 1, green: 0.8, blue: 0.8, alpha: 1))
             .text("rectView")
             .textAlignment(.Center)
-        rectView.frame = CGRect(x: 50, y: 200, width: 200, height: 200)
+            .userInteractionEnabled(true)
         
         bottomRightPan
             .superView(rectView)
             .backgroundColor(UIColor(red: 1, green: 0.7, blue: 0.1, alpha: 1))
+            .userInteractionEnabled(true)
         
         bottomRightPan.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(FYDRectViewController.bottomRightPanTouched(_:))))
         
@@ -49,6 +54,10 @@ class FYDRectViewController: UIViewController {
         topLeftPan.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(FYDRectViewController.topLeftPanTouched(_:))))
         
         FangYuanDemo.BeginLayout {
+            
+            rectView
+                .fy_frame(CGRect(x: 50, y: 200, width: 200, height: 200))
+            
             codeList
                 .fy_left(0)
                 .fy_right(0)
@@ -56,31 +65,47 @@ class FYDRectViewController: UIViewController {
                 .fy_height(FYDCodeTableViewCell.displayHeight * 7)
             
             bottomRightPan
-                .fy_bottom(-10)
+                .fy_bottom(0)
                 .fy_height(20)
-                .fy_right(-10)
+                .fy_right(0)
                 .fy_width(20)
             
             topLeftPan
-                .fy_top(-10)
+                .fy_top(0)
                 .fy_height(20)
-                .fy_left(-10)
+                .fy_left(0)
                 .fy_width(20)
         }
-    }
-
-    func pan(sender: UIPanGestureRecognizer) {
-        print(sender.translationInView(view))
     }
 }
 
 extension FYDRectViewController {
     func bottomRightPanTouched(sender: UIPanGestureRecognizer) {
-        
+        let t = sender.translationInView(view)
+        switch sender.state {
+        case .Began:
+            storeWidthHeight = rectView.frame.size
+        case .Changed:
+            let newSize = CGSize(width: storeWidthHeight.width + t.x, height: storeWidthHeight.height + t.y)
+            rectView.fy_size(newSize).toAnimation()
+        default:
+            break
+        }
     }
     
     func topLeftPanTouched(sender: UIPanGestureRecognizer) {
-        
+        let t = sender.translationInView(view)
+        switch sender.state {
+        case .Began:
+            storeLeftTop = rectView.frame.origin
+            storeRightBottom = CGPoint(x: view.frame.size.width - rectView.frame.origin.x - rectView.frame.size.width,
+                                       y: view.frame.size.height - rectView.frame.origin.y - rectView.frame.size.height)
+        case .Changed:
+            let newOrigin = CGPoint(x: storeLeftTop.x + t.x, y: storeLeftTop.y + t.y)
+            rectView.fy_edge(UIEdgeInsets(top: newOrigin.y, left: newOrigin.x, bottom: storeRightBottom.x, right: storeRightBottom.y)).toAnimation()
+        default:
+            break
+        }
     }
 }
 
