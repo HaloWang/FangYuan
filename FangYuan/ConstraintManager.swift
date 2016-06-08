@@ -75,14 +75,13 @@ extension ConstraintManager {
 
     class func layout(view:UIView) {
         
-        let info = view.usingFangYuanInfo
-
-        guard info.hasUsingFangYuanSubview else {
+        let usingFangYuanSubviews = view.usingFangYuanSubviews
+        guard usingFangYuanSubviews.count > 0 else {
             return
         }
-        
         _fy_waitLayoutQueue()
-        singleton.layout(info.usingFangYuanSubviews)
+        singleton.layout(usingFangYuanSubviews)
+        
     }
     
     /// 当某个依赖发生变化时，寻找相关的依赖，并重新根据存储的值赋值

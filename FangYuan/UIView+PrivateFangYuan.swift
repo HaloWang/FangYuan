@@ -12,24 +12,20 @@ import Foundation
 
 extension UIView {
     
-    /// 该 UIView.subviews 使用方圆的信息，通过一次 filter，返回的是否在使用方圆和所有使用方圆的 `subview`
-    /// - parameter hasUsingFangYuanSubview: 是否有使用方圆的 subview
-    /// - parameter usingFangYuanSubviews: 使用方圆的 subview
     /// - Note: 已经对弱引用数组做了尝试，效果不理想，直接将每个 usingFangYuan = true 的 UIView 加到 Set 中，Set.contains 方法会非常消耗性能（大概在 30-40 个 Weak.view 之间遍历的情况）
     /// - Warning: Set.remove 在移除 `hashValue = 0` 的 Element 时好像很不奏效！
     /// - TODO: 但是，这种给每个 UIView 加属性，并且不断调用的方法还是很讨厌，将来一定想办法移除之
-    
-    var usingFangYuanInfo: (hasUsingFangYuanSubview:Bool, usingFangYuanSubviews:[UIView]) {
-        let _usingFangYuanSubviews = subviews.filter {
-            (subview) -> Bool in
-            return subview.usingFangYuan
+    /// - TODO: 这个遍历是不是可以顺便把每个 UIView 的 constraint 个遍历出来？
+
+    var usingFangYuanSubviews: [UIView] {
+        return subviews.filter {
+            $0.usingFangYuan
         }
-        return (_usingFangYuanSubviews.count != 0, _usingFangYuanSubviews)
     }
     
     func basicSetting(setting:()->Void) {
-        usingFangYuan = true
         _fy_layoutQueue {
+            self.usingFangYuan = true
             setting()
         }
     }
@@ -56,8 +52,8 @@ extension UIView {
     func layoutWithFangYuan() {
         
         assert(NSThread.isMainThread(), _fy_MainQueueAssert)
-        assert(rulerX.full, "\(self) \nUIView.RulerX is not fully defined!\n".fy_alert)
-        assert(rulerY.full, "\(self) \nUIView.RulerY is not fully defined!\n".fy_alert)
+        assert(rulerX.full, "\(self)\nUIView.RulerX is not fully defined!\n".fy_alert)
+        assert(rulerY.full, "\(self)\nUIView.RulerY is not fully defined!\n".fy_alert)
 
         //  X
         let newX = rulerX.a
