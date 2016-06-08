@@ -178,36 +178,3 @@ extension UIView {
     }
 
 }
-
-// MARK: - UIButton Swizzling
-// TODO: 这个问题还是应该探究一下，为什么就要单独为 UIButton 写一个？
-
-extension UIButton {
-
-    struct _fy_uibutton_once {
-        static var token: dispatch_once_t = 0
-    }
-
-    override public class func initialize() {
-        dispatch_once(&_fy_uibutton_once.token) {
-            _swizzle_layoutSubviews()
-        }
-    }
-    
-    //  If following method is not implemented
-    //  -[_UINavigationBarBackground state]: unrecognized selector sent to instance 0x137e804d0
-    //  Interesting!
-
-    override class func _swizzle_layoutSubviews() {
-        let originalSelector = #selector(layoutSubviews)
-        let swizzledSelector = #selector(_swizzled_layoutSubviews)
-        let originalMethod = class_getInstanceMethod(self, originalSelector)
-        let swizzledMethod = class_getInstanceMethod(self, swizzledSelector)
-        method_exchangeImplementations(originalMethod, swizzledMethod)
-    }
-
-    override func _swizzled_layoutSubviews() {
-        _swizzled_layoutSubviews()
-        ConstraintManager.layout(self)
-    }
-}
