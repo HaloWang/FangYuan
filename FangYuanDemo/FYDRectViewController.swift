@@ -14,12 +14,26 @@ private var storeLeftTop     = CGPointZero
 private var storeWidthHeight = CGSizeZero
 private var storeRightBottom = CGPointZero
 
+/// - TODO: Holder
+/// - TODO: Line
+/// - TODO: Click
 class FYDRectViewController: UIViewController {
 
-    let rectView = UILabel()
-    let topLeftPan = UIView()
+    let rectView       = UILabel()
+    let topLeftPan     = UIView()
     let bottomRightPan = UIView()
-    let codeList = UITableView()
+    let codeList       = UITableView()
+    
+    class ValueStore {
+        var top    = 0.f
+        var height = 0.f
+        var bottom = 0.f
+        var left   = 0.f
+        var width  = 0.f
+        var right  = 0.f
+    }
+    
+    let vs = ValueStore()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,10 +89,28 @@ class FYDRectViewController: UIViewController {
                 .fy_left(0)
                 .fy_width(40)
         }
+        
+        rectView.addObserver(self, forKeyPath: "frame", options: NSKeyValueObservingOptions.New, context: nil)
+    }
+    
+    deinit {
+        rectView.removeObserver(self, forKeyPath: "frame")
     }
 }
 
 extension FYDRectViewController {
+    
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+        let _frame = rectView.frame
+        vs.left    = _frame.origin.x
+        vs.top     = _frame.origin.y
+        vs.height  = _frame.size.height
+        vs.width   = _frame.size.width
+        vs.bottom  = view.frame.size.height - vs.top - vs.height
+        vs.right   = view.frame.size.width - vs.left - vs.width
+        codeList.reloadData()
+    }
+    
     func bottomRightPanTouched(sender: UIPanGestureRecognizer) {
         let t = sender.translationInView(view)
         switch sender.state {
@@ -151,17 +183,17 @@ extension FYDRectViewController : UITableViewDataSource {
         case 0:
             cell.code = "    rectView"
         case 1:
-            cell.code = "        .fy_top()"
+            cell.code = "        .fy_top(\(vs.top))"
         case 2:
-            cell.code = "        .fy_bottom()"
+            cell.code = "        .fy_bottom(\(vs.bottom))"
         case 3:
-            cell.code = "        .fy_left()"
+            cell.code = "        .fy_left(\(vs.left))"
         case 4:
-            cell.code = "        .fy_right()"
+            cell.code = "        .fy_right(\(vs.right))"
         case 5:
-            cell.code = "        .fy_width()"
+            cell.code = "        .fy_width(\(vs.width))"
         case 6:
-            cell.code = "        .fy_height()"
+            cell.code = "        .fy_height(\(vs.height))"
         default:
             break
         }
