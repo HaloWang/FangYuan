@@ -128,6 +128,7 @@ private extension ConstraintManager {
     /// 核心布局方法
     /// - TODO: 这个算法相当于使用了什么排序？
     /// - TODO: 能不能尽量写成函数而非方法？
+    /// - TODO: 还是把两部分合并一下，整理成一步算法吧
     func layout(views: [UIView]) {
         
         assert(NSThread.isMainThread(), _fy_MainQueueAssert)
