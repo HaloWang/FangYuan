@@ -126,6 +126,7 @@ private extension ConstraintManager {
     // TODO: UITableView.addSubiew 后，调用 UITableView 的 layoutSubviews 并不会被触发？
     
     /// 核心布局方法
+    /// - TODO: 这个算法相当于使用了什么排序？
     func layout(views: [UIView]) {
         
         assert(NSThread.isMainThread(), _fy_MainQueueAssert)
