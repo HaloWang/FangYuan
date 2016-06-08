@@ -139,6 +139,7 @@ private extension ConstraintManager {
         
         var layoutingViews = Set(views)
         //  注意，应该保证下面的代码在执行时，不能直接遍历 constraints 来设定 layoutingViews，因为 _fangyuan_layout_queue 可能会对 layoutingViews 中的 UIView 添加新的约束，导致 hasSetConstraints 始终为 false
+        //  当然，objc_sync_enter 也是一种解决方案，但是这里我并不想阻塞 _fangyuan_layout_queue 对 unsetConstraints 的访问
         var layoutingConstraint = unsetConstraints
         var shouldRepeat: Bool
         repeat {
