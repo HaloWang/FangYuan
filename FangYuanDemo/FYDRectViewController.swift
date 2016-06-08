@@ -83,10 +83,28 @@ extension FYDRectViewController {
         let t = sender.translationInView(view)
         switch sender.state {
         case .Began:
+            storeLeftTop = rectView.frame.origin
+            rectView.fy_origin(storeLeftTop)
             storeWidthHeight = rectView.frame.size
         case .Changed:
             let newSize = CGSize(width: storeWidthHeight.width + t.x, height: storeWidthHeight.height + t.y)
-            rectView.fy_size(newSize).toAnimation()
+            rectView
+                .fy_size(newSize)
+                .toAnimation()
+        case .Ended:
+            if rectView.frame.origin.x + rectView.frame.size.width > rectView.superview!.frame.width {
+                rectView
+                    .fy_left(storeLeftTop.x)
+                    .fy_right(0)
+            }
+            if rectView.frame.origin.y + rectView.frame.size.height > rectView.superview!.frame.height {
+                rectView
+                    .fy_top(storeLeftTop.y)
+                    .fy_bottom(0)
+            }
+            AnimateWithDuration(0.15) {
+                rectView.toAnimation()
+            }
         default:
             break
         }
@@ -99,9 +117,14 @@ extension FYDRectViewController {
             storeLeftTop = rectView.frame.origin
             storeRightBottom = CGPoint(x: view.frame.size.width - rectView.frame.origin.x - rectView.frame.size.width,
                                        y: view.frame.size.height - rectView.frame.origin.y - rectView.frame.size.height)
+            rectView
+                .fy_bottom(storeRightBottom.y)
+                .fy_right(storeRightBottom.x)
         case .Changed:
             let newOrigin = CGPoint(x: storeLeftTop.x + t.x, y: storeLeftTop.y + t.y)
-            rectView.fy_edge(UIEdgeInsets(top: newOrigin.y, left: newOrigin.x, bottom: storeRightBottom.x, right: storeRightBottom.y)).toAnimation()
+            rectView
+                .fy_origin(newOrigin)
+                .toAnimation()
         default:
             break
         }
