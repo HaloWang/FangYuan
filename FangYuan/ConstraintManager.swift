@@ -35,14 +35,14 @@ extension ConstraintManager {
      从某个视图得到约束
      
      - parameter from:      约束依赖视图
-     - parameter direction: 约束方向
+     - parameter section:   约束区间
      */
-    class func pushConstraintFrom(from:UIView, direction: Constraint.Direction) {
+    class func pushConstraintFrom(from:UIView, section: Constraint.Section) {
         
         assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
 
-        let newConstraint = Constraint(from: from, to: nil, direction: direction)
-        singleton.holder.push(newConstraint, at: direction)
+        let newConstraint = Constraint(from: from, to: nil, section: section)
+        singleton.holder.push(newConstraint, at: section)
     }
 
     // TODO: setConstraint 是生成『渲染队列』的最佳时机了吧
@@ -52,25 +52,25 @@ extension ConstraintManager {
      设定约束到某个视图上
      
      - parameter to:        约束目标
-     - parameter direction: 约束方向
+     - parameter section:   约束区间
      - parameter value:     约束固定值
      */
-    class func popConstraintTo(to:UIView, direction: Constraint.Direction, value:CGFloat) {
+    class func popConstraintTo(to:UIView, section: Constraint.Section, value:CGFloat) {
         
         assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
         
         //  这个方法应该被优先调用，可能出现 fy_XXX(a) 替换 fy_XXX(chainXXX) 的情况
-        singleton.removeDuplicateConstraintOf(to, at: direction)
+        singleton.removeDuplicateConstraintOf(to, at: section)
         
-        //  如果对应方向上没有 holder，则认为 fy_XXX() 的参数中没有调用 chainXXX，直接返回，不进行后续操作
-        guard let _constraint = singleton.holder.popConstraintAt(direction) else {
+        //  如果对应区间上没有 holder，则认为 fy_XXX() 的参数中没有调用 chainXXX，直接返回，不进行后续操作
+        guard let _constraint = singleton.holder.popConstraintAt(section) else {
             return
         }
         
         _constraint.to = to
         _constraint.value = value
         singleton.unsetConstraints.insert(_constraint)
-        singleton.holder.clearConstraintAt(direction)
+        singleton.holder.clearConstraintAt(section)
         
         assert(singleton.noConstraintCirculationWith(_constraint),
                 "There is a constraint circulation between\n\(to)\n- and -\n\(_constraint.from)\n".fy_alert)
@@ -100,15 +100,15 @@ extension ConstraintManager {
         assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
         singleton.storedConstraints.forEach { constraint in
             if let _from = constraint.from where _from == view {
-                if horizontal == constraint.direction.horizontal {
-                    switch constraint.direction {
-                    case .RightLeft:
+                if horizontal == constraint.section.horizontal {
+                    switch constraint.section {
+                    case .Left:
                         constraint.to.fy_left(view.chainRight + constraint.value)
-                    case .LeftRigt:
+                    case .Right:
                         constraint.to.fy_right(view.chainLeft + constraint.value)
-                    case .BottomTop:
+                    case .Top:
                         constraint.to.fy_top(view.chainBottom + constraint.value)
-                    case .TopBottom:
+                    case .Bottom:
                         constraint.to.fy_bottom(view.chainTop + constraint.value)
                     }
                 }
@@ -196,14 +196,14 @@ private extension ConstraintManager {
                 let _from = constraint.from
                 let _to = constraint.to
                 let _value = constraint.value
-                switch constraint.direction {
-                case .BottomTop:
+                switch constraint.section {
+                case .Top:
                     _to.rulerY.a = _from.frame.origin.y + _from.frame.height + _value
-                case .TopBottom:
+                case .Bottom:
                     _to.rulerY.c = _from.superview!.frame.height - _from.frame.origin.y + _value
-                case .RightLeft:
+                case .Left:
                     _to.rulerX.a = _from.frame.origin.x + _from.frame.width + _value
-                case .LeftRigt:
+                case .Right:
                     _to.rulerX.c = _from.superview!.frame.width - _from.frame.origin.x + _value
                 }
                 _constraints.remove(constraint)
@@ -221,20 +221,20 @@ private extension ConstraintManager {
         storedConstraints.forEach { constraint in
             if constraint.to == nil || constraint.from == nil {
                 storedConstraints.remove(constraint)
-            } else if constraint.to == constraint.to && constraint.direction == constraint.direction {
+            } else if constraint.to == constraint.to && constraint.section == constraint.section {
                 storedConstraints.remove(constraint)
             }
         }
         storedConstraints.insert(constraint)
     }
 
-    /// 按照程序逻辑，一个 view 最多同时只能在一个方向上拥有一个约束
-    func removeDuplicateConstraintOf(view:UIView, at direction: Constraint.Direction) {
+    /// 按照程序逻辑，一个 view 最多同时只能在一个区间上拥有一个约束
+    func removeDuplicateConstraintOf(view:UIView, at section: Constraint.Section) {
         assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
         unsetConstraints.forEach { constraint in
             if constraint.to == nil || constraint.from == nil {
                 unsetConstraints.remove(constraint)
-            } else if constraint.to == view && constraint.direction == direction {
+            } else if constraint.to == view && constraint.section == section {
                 unsetConstraints.remove(constraint)
             }
         }
