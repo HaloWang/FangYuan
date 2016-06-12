@@ -180,7 +180,8 @@ public extension UIView {
             self.resetRelatedConstraintHorizontal(false)
             self.popConstraintAt(.Top, value: frame.origin.y)
             self.popConstraintAt(.Left, value: frame.origin.x)
-            self.fy_size(frame.size)
+            self.rulerX.b = frame.size.width
+            self.rulerY.b = frame.size.height
         }
         return self
     }
