@@ -21,7 +21,10 @@ class ConstraintManager {
     // TODO: 重要的还是做到按照 superview 分组遍历以提高性能
     // TODO: 有没有集散型的并发遍历？
 
+    /// 还没有被赋值到 UIView.Ruler 上的约束
     var unsetConstraints = Set<Constraint>()
+    
+    /// 已经被设定好的，存储起来的约束，用于以后抽取出来再次使用
     var storedConstraints = Set<Constraint>()
 }
 
@@ -96,23 +99,19 @@ extension ConstraintManager {
     class func resetRelatedConstraintFrom(view:UIView, isHorizontal horizontal:Bool) {
         assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
         singleton.storedConstraints.forEach { constraint in
-            if let _from = constraint.from {
-                if _from == view {
-                    if horizontal == constraint.direction.horizontal {
-                        switch constraint.direction {
-                        case .RightLeft:
-                            constraint.to.fy_left(view.chainRight + constraint.value)
-                        case .LeftRigt:
-                            constraint.to.fy_right(view.chainLeft + constraint.value)
-                        case .BottomTop:
-                            constraint.to.fy_top(view.chainBottom + constraint.value)
-                        case .TopBottom:
-                            constraint.to.fy_bottom(view.chainTop + constraint.value)
-                        }
+            if let _from = constraint.from where _from == view {
+                if horizontal == constraint.direction.horizontal {
+                    switch constraint.direction {
+                    case .RightLeft:
+                        constraint.to.fy_left(view.chainRight + constraint.value)
+                    case .LeftRigt:
+                        constraint.to.fy_right(view.chainLeft + constraint.value)
+                    case .BottomTop:
+                        constraint.to.fy_top(view.chainBottom + constraint.value)
+                    case .TopBottom:
+                        constraint.to.fy_bottom(view.chainTop + constraint.value)
                     }
                 }
-            } else {
-                singleton.storedConstraints.remove(constraint)
             }
         }
     }
@@ -191,6 +190,9 @@ private extension ConstraintManager {
         var _constraints = constraints
         _constraints.forEach { constraint in
             if constraint.from == view {
+                _fy_layoutQueue {
+                    self.setSettedConstraint(constraint)
+                }
                 let _from = constraint.from
                 let _to = constraint.to
                 let _value = constraint.value
@@ -205,9 +207,6 @@ private extension ConstraintManager {
                     _to.rulerX.c = _from.superview!.frame.width - _from.frame.origin.x + _value
                 }
                 _constraints.remove(constraint)
-                _fy_layoutQueue {
-                    self.setSettedConstraint(constraint)
-                }
             }
         }
         return _constraints
