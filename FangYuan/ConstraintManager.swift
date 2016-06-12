@@ -139,19 +139,19 @@ private extension ConstraintManager {
             return
         }
         
-        var layoutingViews = Set(views)
         //  注意，应该保证下面的代码在执行时，不能直接遍历 constraints 来设定 layoutingViews，因为 _fangyuan_layout_queue 可能会对 layoutingViews 中的 UIView 添加新的约束，导致 hasSetConstraints 始终为 false
         //  当然，objc_sync_enter 也是一种解决方案，但是这里我并不想阻塞 _fangyuan_layout_queue 对 unsetConstraints 的访问
-        var layoutingConstraint = unsetConstraints
+        var _views = Set(views)
+        var constraints = unsetConstraints
         var shouldRepeat: Bool
         repeat {
             shouldRepeat = false
-            layoutingViews.forEach { view in
-                if hasSetConstraints(layoutingConstraint, to: view) {
+            _views.forEach { view in
+                if hasSetConstraints(constraints, to: view) {
                     view.layoutWithFangYuan()
-                    layoutingConstraint = setConstraints(layoutingConstraint, from: view)
+                    constraints = setConstraints(constraints, from: view)
                     //  在被遍历的数组中移除该 view
-                    layoutingViews.remove(view)
+                    _views.remove(view)
                 } else {
                     shouldRepeat = true
                 }
@@ -191,7 +191,7 @@ private extension ConstraintManager {
         _constraints.forEach { constraint in
             if constraint.from == view {
                 _fy_layoutQueue {
-                    self.setSettedConstraint(constraint)
+                    self.setStoredConstraints(constraint)
                 }
                 let _from = constraint.from
                 let _to = constraint.to
@@ -216,7 +216,7 @@ private extension ConstraintManager {
 // MARK: Assistant
 private extension ConstraintManager {
     
-    func setSettedConstraint(constraint:Constraint) {
+    func setStoredConstraints(constraint:Constraint) {
         assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
         storedConstraints.forEach { constraint in
             if constraint.to == nil || constraint.from == nil {
