@@ -24,8 +24,8 @@ extension UIView {
     }
     
     func basicSetting(setting:()->Void) {
+        usingFangYuan = true
         _fy_layoutQueue {
-            self.usingFangYuan = true
             setting()
         }
     }
