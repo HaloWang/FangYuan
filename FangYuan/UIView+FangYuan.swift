@@ -185,6 +185,22 @@ public extension UIView {
         return self
     }
     
+    // TODO: Unfinish
+    private func fy_centerX(adjust:CGFloat) -> Self {
+        basicSetting {
+            
+        }
+        return self
+    }
+    
+    // TODO: Unfinish
+    private func fy_centerY(adjust:CGFloat) -> Self {
+        basicSetting { 
+            
+        }
+        return self
+    }
+    
     // MARK: Animation
     
     /// 触发动画
