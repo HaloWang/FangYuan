@@ -20,6 +20,7 @@ private var storeRightBottom = CGPointZero
 class FYDRectViewController: UIViewController {
 
     let rectView       = UILabel()
+    let holder         = UIView()
     let topLeftPan     = UIView()
     let bottomRightPan = UIView()
     let codeList       = UITableView()
@@ -48,11 +49,14 @@ class FYDRectViewController: UIViewController {
             .backgroundColor(FYDCodeTableViewCell.codeBackgroundColor)
         
         rectView
-            .superView(view)
+            .superView(holder)
             .backgroundColor(UIColor(red: 1, green: 0.8, blue: 0.8, alpha: 1))
             .text("rectView")
             .textAlignment(.Center)
             .userInteractionEnabled(true)
+        
+        holder
+            .superView(view)
         
         bottomRightPan
             .superView(rectView)
@@ -74,8 +78,11 @@ class FYDRectViewController: UIViewController {
             codeList
                 .fy_left(0)
                 .fy_right(0)
-                .fy_bottom(0)
+                .fy_top(64)
                 .fy_height(FYDCodeTableViewCell.displayHeight * 7)
+            
+            holder
+                .fy_edge(UIEdgeInsets(top: codeList.chainBottom, left: 0, bottom: 0, right: 0))
             
             bottomRightPan
                 .fy_bottom(0)
@@ -102,53 +109,22 @@ extension FYDRectViewController {
     
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         let _frame = rectView.frame
-        vs.left    = _frame.origin.x
-        vs.top     = _frame.origin.y
-        vs.height  = _frame.size.height
-        vs.width   = _frame.size.width
-        vs.bottom  = view.frame.size.height - vs.top - vs.height
-        vs.right   = view.frame.size.width - vs.left - vs.width
+        vs.left    = _frame.x
+        vs.top     = _frame.y
+        vs.height  = _frame.height
+        vs.width   = _frame.width
+        vs.bottom  = view.height - vs.top - vs.height
+        vs.right   = view.width - vs.left - vs.width
         codeList.reloadData()
     }
     
-    func bottomRightPanTouched(sender: UIPanGestureRecognizer) {
-        let t = sender.translationInView(view)
-        switch sender.state {
-        case .Began:
-            storeLeftTop = rectView.frame.origin
-            rectView.fy_origin(storeLeftTop)
-            storeWidthHeight = rectView.frame.size
-        case .Changed:
-            let newSize = CGSize(width: storeWidthHeight.width + t.x, height: storeWidthHeight.height + t.y)
-            rectView
-                .fy_size(newSize)
-                .toAnimation()
-        case .Ended:
-            if rectView.frame.origin.x + rectView.frame.size.width > rectView.superview!.frame.width {
-                rectView
-                    .fy_left(storeLeftTop.x)
-                    .fy_right(0)
-            }
-            if rectView.frame.origin.y + rectView.frame.size.height > rectView.superview!.frame.height {
-                rectView
-                    .fy_top(storeLeftTop.y)
-                    .fy_bottom(0)
-            }
-            AnimateWithDuration(0.15) {
-                rectView.toAnimation()
-            }
-        default:
-            break
-        }
-    }
-    
     func topLeftPanTouched(sender: UIPanGestureRecognizer) {
-        let t = sender.translationInView(view)
+        let t = sender.translationInView(holder)
         switch sender.state {
         case .Began:
-            storeLeftTop = rectView.frame.origin
-            storeRightBottom = CGPoint(x: view.frame.size.width - rectView.frame.origin.x - rectView.frame.size.width,
-                                       y: view.frame.size.height - rectView.frame.origin.y - rectView.frame.size.height)
+            storeLeftTop = rectView.origin
+            storeRightBottom = CGPoint(x: holder.width - rectView.x - rectView.width,
+                                       y: holder.height - rectView.y - rectView.height)
             rectView
                 .fy_bottom(storeRightBottom.y)
                 .fy_right(storeRightBottom.x)
@@ -157,6 +133,48 @@ extension FYDRectViewController {
             rectView
                 .fy_origin(newOrigin)
                 .toAnimation()
+        case .Ended:
+            if rectView.x < 20 {
+                rectView.fy_left(20)
+            }
+            if rectView.y < 10 {
+                rectView.fy_top(10)
+            }
+            AnimateWithDuration(0.15) {
+                // TODO: JUMP?
+                rectView.toAnimation()
+            }
+        default:
+            break
+        }
+    }
+
+    func bottomRightPanTouched(sender: UIPanGestureRecognizer) {
+        let t = sender.translationInView(holder)
+        switch sender.state {
+        case .Began:
+            storeLeftTop = rectView.origin
+            rectView.fy_origin(storeLeftTop)
+            storeWidthHeight = rectView.size
+        case .Changed:
+            let newSize = CGSize(width: storeWidthHeight.width + t.x, height: storeWidthHeight.height + t.y)
+            rectView
+                .fy_size(newSize)
+                .toAnimation()
+        case .Ended:
+            if rectView.x + rectView.width + 10 > rectView.superview!.width {
+                rectView
+                    .fy_left(storeLeftTop.x)
+                    .fy_right(10)
+            }
+            if rectView.y + rectView.height + 10 > rectView.superview!.height {
+                rectView
+                    .fy_top(storeLeftTop.y)
+                    .fy_bottom(10)
+            }
+            AnimateWithDuration(0.15) {
+                rectView.toAnimation()
+            }
         default:
             break
         }
