@@ -7,5 +7,5 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/HaloWang/Halo"
   s.platform     = :ios, "8.0"
   s.source       = { :path => '.' }
-  s.source_files = "*.swift"
+  s.source_files = "*.swift", "OnlyForDemo/*.swift"
 end
