@@ -63,9 +63,11 @@ public extension UIView {
     
     // MARK: X
     
+    /// Set a UIView left distance from it's superview, just like setting of `UIView.frame.origin.x`
+    ///
     /// 设定某个 UIView 左边距离其 superview 左边的距离，相当于 x
     ///
-    /// ### <font color="#77dd66">Usage:</font>
+    /// ### <font color="#77dd66">Vaild Usage:</font>
     /// - `view.fy_left(15)`
     /// - `viewA.fy_left(viewB.chainRight)`
     /// - `viewA.fy_left(viewB.chainRight + 15)`

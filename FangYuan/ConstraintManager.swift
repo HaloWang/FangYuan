@@ -240,10 +240,13 @@ private extension ConstraintManager {
         }
     }
     
+    /// Check constraint circulation
+    ///
+    /// - TODO: Only 2 ? What about 3, 4, 5...?
     func noConstraintCirculationWith(constraint:Constraint) -> Bool {
         assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
         return unsetConstraints.filter {
-            $0 <=> constraint
+            $0.to == constraint.from && $0.from == constraint.to
         }.count == 0
     }
     

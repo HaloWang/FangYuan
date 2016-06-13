@@ -32,6 +32,16 @@ class FYDRectViewController: UIViewController {
         var left   = 0.f
         var width  = 0.f
         var right  = 0.f
+        var vs = ValidStore()
+    }
+    
+    class ValidStore {
+        var top    = true
+        var bottom = true
+        var left   = true
+        var right  = true
+        var height = false
+        var width  = false
     }
     
     let vs = ValueStore()
