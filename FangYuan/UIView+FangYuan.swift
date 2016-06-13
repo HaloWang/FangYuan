@@ -67,11 +67,11 @@ public extension UIView {
     ///
     /// 设定某个 UIView 左边距离其 superview 左边的距离，相当于 x
     ///
-    /// ### <font color="#77dd66">Vaild Usage:</font>
+    /// ### <font>✅ Vaild Usage:</font>
     /// - `view.fy_left(15)`
     /// - `viewA.fy_left(viewB.chainRight)`
     /// - `viewA.fy_left(viewB.chainRight + 15)`
-    /// ### <font color="#dd6677">Invalid Usage:</font>
+    /// ### <font>❌ Invalid Usage:</font>
     /// - `viewA.fy_left(viewA.chainRight)`
     /// - `viewA.fy_left(viewB.chainTop)`
     /// - `viewA.fy_left(viewB.chainRight * 2)`

@@ -150,10 +150,7 @@ extension FYDRectViewController {
             if rectView.y < 10 {
                 rectView.fy_top(10)
             }
-            AnimateWithDuration(0.15) {
-                // TODO: JUMP?
-                rectView.toAnimation()
-            }
+            rectView.toAnimation()
         default:
             break
         }
@@ -182,9 +179,7 @@ extension FYDRectViewController {
                     .fy_top(storeLeftTop.y)
                     .fy_bottom(10)
             }
-            AnimateWithDuration(0.15) {
-                rectView.toAnimation()
-            }
+            rectView.toAnimation()
         default:
             break
         }
