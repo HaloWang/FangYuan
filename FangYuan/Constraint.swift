@@ -76,7 +76,7 @@ class ConstraintHolder {
     var right: Constraint?
     var left: Constraint?
     
-    func popConstraintAt(section: Constraint.Section) -> Constraint? {
+    func constraintAt(section: Constraint.Section) -> Constraint? {
         switch section {
         case .Bottom:
             return bottom
@@ -89,7 +89,7 @@ class ConstraintHolder {
         }
     }
     
-    func push(constraint:Constraint?, at section:Constraint.Section) {
+    func set(constraint:Constraint?, at section:Constraint.Section) {
         switch section {
         case .Bottom:
             bottom = constraint
@@ -103,7 +103,7 @@ class ConstraintHolder {
     }
     
     func clearConstraintAt(section: Constraint.Section) {
-        push(nil, at: section)
+        set(nil, at: section)
     }
 }
 

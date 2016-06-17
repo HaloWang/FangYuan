@@ -42,7 +42,7 @@ extension ConstraintManager {
         assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
 
         let newConstraint = Constraint(from: from, to: nil, section: section)
-        singleton.holder.push(newConstraint, at: section)
+        singleton.holder.set(newConstraint, at: section)
     }
 
     // TODO: setConstraint 是生成『渲染队列』的最佳时机了吧
@@ -63,7 +63,7 @@ extension ConstraintManager {
         singleton.removeDuplicateConstraintOf(to, at: section)
         
         //  如果对应区间上没有 holder，则认为 fy_XXX() 的参数中没有调用 chainXXX，直接返回，不进行后续操作
-        guard let _constraint = singleton.holder.popConstraintAt(section) else {
+        guard let _constraint = singleton.holder.constraintAt(section) else {
             return
         }
         
@@ -191,7 +191,7 @@ private extension ConstraintManager {
         _constraints.forEach { constraint in
             if constraint.from == view {
                 _fy_layoutQueue {
-                    self.setStoredConstraints(constraint)
+                    self.storedConstraintsInsert(constraint)
                 }
                 let _from = constraint.from
                 let _to = constraint.to
@@ -216,7 +216,7 @@ private extension ConstraintManager {
 // MARK: Assistant
 private extension ConstraintManager {
     
-    func setStoredConstraints(constraint:Constraint) {
+    func storedConstraintsInsert(constraint:Constraint) {
         assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
         storedConstraints.forEach { constraint in
             if constraint.to == nil || constraint.from == nil {
