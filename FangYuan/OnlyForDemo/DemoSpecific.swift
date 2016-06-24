@@ -3,7 +3,7 @@ import Foundation
 
 public class EnableConstraintHolder {
     
-    enum Section {
+    public enum Section {
         case Left
         case Right
         case Width
@@ -12,9 +12,20 @@ public class EnableConstraintHolder {
         case Height
     }
     
-    static let holderView = UIView()
+    private static let holderView = UIView()
     
-    class func pushConstraintAt(section: Section) -> [Section] {
+    public static var validSections = [Section]()
+    
+    public class func validAt(section:Section) -> Bool {
+        for _section in validSections {
+            if section == _section {
+                return true
+            }
+        }
+        return false
+    }
+    
+    public class func pushConstraintAt(section: EnableConstraintHolder.Section) {
         
         var sections = [Section]()
         
@@ -60,8 +71,6 @@ public class EnableConstraintHolder {
             sections.append(.Bottom)
         }
         
-        assert(sections.count <= 4)
-        
-        return sections
+        validSections = sections
     }
 }

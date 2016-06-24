@@ -108,7 +108,7 @@
 				096A97721CAFA84A00497C1E /* AppDelegate.swift */,
 				096A97741CAFA84A00497C1E /* FYDListViewController.swift */,
 				09BB85931CE2CBF100AF4D15 /* ViewController */,
-				09DC5AD21CE5DB4100E2982B /* Basic */,
+				09DC5AD21CE5DB4100E2982B /* RectCode */,
 				09BB85941CE2CC0900AF4D15 /* Chain */,
 				09BB85921CE2CBBC00AF4D15 /* SimpleTableView */,
 				09BB85951CE2CC2000AF4D15 /* Animation */,
@@ -176,13 +176,13 @@
 			name = ComplexTableView;
 			sourceTree = "<group>";
 		};
-		09DC5AD21CE5DB4100E2982B /* Basic */ = {
+		09DC5AD21CE5DB4100E2982B /* RectCode */ = {
 			isa = PBXGroup;
 			children = (
 				09F439101CD0BA400058029F /* FYDRectViewController.swift */,
 				09DC5AD31CE5DB6800E2982B /* FYDCodeTableViewCell.swift */,
 			);
-			name = Basic;
+			name = RectCode;
 			sourceTree = "<group>";
 		};
 		768E4709872ED99AD41FE4F9 /* Pods */ = {

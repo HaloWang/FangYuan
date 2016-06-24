@@ -190,10 +190,38 @@ extension FYDRectViewController {
 extension FYDRectViewController : UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
+        switch indexPath.row {
+        case 1:
+            EnableConstraintHolder.pushConstraintAt(.Top)
+        case 2:
+            EnableConstraintHolder.pushConstraintAt(.Bottom)
+        case 3:
+            EnableConstraintHolder.pushConstraintAt(.Left)
+        case 4:
+            EnableConstraintHolder.pushConstraintAt(.Right)
+        case 5:
+            EnableConstraintHolder.pushConstraintAt(.Width)
+        case 6:
+            EnableConstraintHolder.pushConstraintAt(.Height)
+        default:
+            break
+        }
+        
+        tableView.reloadData()
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return FYDCodeTableViewCell.displayHeight
+    }
+}
+
+private extension String {
+    func indentation(indentation:Int) -> String {
+        var newString = self
+        for _ in 0..<indentation {
+            newString = "    " + newString
+        }
+        return newString
     }
 }
 
@@ -204,19 +232,25 @@ extension FYDRectViewController : UITableViewDataSource {
         
         switch indexPath.row {
         case 0:
-            cell.code = "    rectView"
+            cell.code = "rectView".indentation(1)
         case 1:
-            cell.code = "        .fy_top(\(vs.top))"
+            cell.code = ".fy_top(\(vs.top))".indentation(2)
+            cell.commented = !EnableConstraintHolder.validAt(.Top)
         case 2:
-            cell.code = "        .fy_bottom(\(vs.bottom))"
+            cell.code = ".fy_bottom(\(vs.bottom))".indentation(2)
+            cell.commented = !EnableConstraintHolder.validAt(.Bottom)
         case 3:
-            cell.code = "        .fy_left(\(vs.left))"
+            cell.code = ".fy_left(\(vs.left))".indentation(2)
+            cell.commented = !EnableConstraintHolder.validAt(.Left)
         case 4:
-            cell.code = "        .fy_right(\(vs.right))"
+            cell.code = ".fy_right(\(vs.right))".indentation(2)
+            cell.commented = !EnableConstraintHolder.validAt(.Right)
         case 5:
-            cell.code = "        .fy_width(\(vs.width))"
+            cell.code = ".fy_width(\(vs.width))".indentation(2)
+            cell.commented = !EnableConstraintHolder.validAt(.Width)
         case 6:
-            cell.code = "        .fy_height(\(vs.height))"
+            cell.code = ".fy_height(\(vs.height))".indentation(2)
+            cell.commented = !EnableConstraintHolder.validAt(.Height)
         default:
             break
         }

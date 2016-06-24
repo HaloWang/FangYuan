@@ -14,7 +14,8 @@ import Halo
 class FYDCodeTableViewCell: UITableViewCell {
     
     static let codeBackgroundColor = HEX("222222")
-    static let codeColor = HEX("BEBEBE")
+    static let codeColor = HEX("CECECE")
+    static let commentedCodeColor = codeColor.alpha(0.3)
     
     static let displayHeight = 20.f
     
@@ -26,6 +27,12 @@ class FYDCodeTableViewCell: UITableViewCell {
         }
         set {
             codeLabel.text = newValue
+        }
+    }
+    
+    var commented : Bool = true {
+        didSet {
+            codeLabel.textColor = commented ? FYDCodeTableViewCell.commentedCodeColor : FYDCodeTableViewCell.codeColor
         }
     }
     
