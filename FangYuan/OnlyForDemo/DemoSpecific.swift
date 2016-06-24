@@ -1,6 +1,9 @@
 
 import Foundation
 
+/// This class is used to provide FangYuan.Ruler's logic
+///
+/// - Warning: Only available in demo codes
 public class EnableConstraintHolder {
     
     public enum Section {
@@ -72,5 +75,13 @@ public class EnableConstraintHolder {
         }
         
         validSections = sections
+    }
+    
+    public class func randomSections() {
+        
+    }
+    
+    public class func clearSections() {
+        
     }
 }
