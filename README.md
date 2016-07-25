@@ -21,16 +21,21 @@
 在你的 `Podfile` 中键入以下语句
 
 ### Swift
-```
+``` ruby
+platform :ios, '8.0'
 use_frameworks!
-pod 'FangYuan'
+target '<Your Target Name>' do
+    pod 'FangYuan'
+end
 ```
 ### Objective-C
 
 如果你想在 ObjC 环境中使用方圆，你需要使用方圆的 ObjC 实现
 
-```
-pod 'FangYuanObjC'
+``` ruby
+target '<Your Target Name>' do
+    pod 'FangYuanObjC'
+end
 ```
 ## 使用方式
 
@@ -38,28 +43,28 @@ pod 'FangYuanObjC'
 
 设定一个 `UIView` 距离其父视图的边距为 `10`
 
-```
+``` swift
 view
-	.fy_top(10)
-	.fy_left(10)
-	.fy_right(10)
-	.fy_bottom(10)
+    .fy_top(10)
+    .fy_left(10)
+    .fy_right(10)
+    .fy_bottom(10)
 ```
 或者
 
-```
+``` swift
 view.fy_edge(UIEdgeInsets(top: 10, left: 10, bottom: 10, right:10))
 ```
 ### 两个 UIView 间的关系
 
 设定一个 `UIView` 的底部距离另一个 `UIView` 的顶部的距离为 20
 
-```
+``` swift
 view
-	.fy_top(10)
-	.fy_left(10)
-	.fy_right(10)
-	.fy_bottom(anotherView.chainTop + 20)
+    .fy_top(10)
+    .fy_left(10)
+    .fy_right(10)
+    .fy_bottom(anotherView.chainTop + 20)
 ```
 
 ### 你可以在 Demo 中查看更多的代码
