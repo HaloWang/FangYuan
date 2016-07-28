@@ -12,7 +12,7 @@
 
 ## 你是否愿意使用方圆
 
-- 如果你经常使用 Masonry/SnapKit 和 frame/frame-based-layout-util 进行布局，我非常推荐你使用『方圆』
+- 如果你经常使用 Masonry/SnapKit 和 frame/frame-based-layout-util 进行布局，我非常推荐你了解一下『方圆』
 - 如果你有一套自己的布局库，那我将非常乐意和你交流😁
 - 如果你热衷使用 `xib/storyboard`，『方圆』可能并不是你想要的的
 
