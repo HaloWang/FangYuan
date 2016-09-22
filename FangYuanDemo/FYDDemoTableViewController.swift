@@ -31,7 +31,7 @@ class FYDDemoTableViewController: UIViewController {
         tableView.dataSource      = self
         tableView.delegate        = self
         tableView.tableFooterView = UIView()
-        tableView.register(FYDDemoTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(FYDDemoTableViewCell))
+        tableView.register(FYDDemoTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(FYDDemoTableViewCell.self))
     }
     
 }
@@ -52,7 +52,7 @@ extension FYDDemoTableViewController : UITableViewDelegate {
 extension FYDDemoTableViewController : UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(FYDDemoTableViewCell)) as! FYDDemoTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(FYDDemoTableViewCell.self)) as! FYDDemoTableViewCell
         return cell
     }
 

@@ -165,7 +165,7 @@ class FYDComplexTableViewCell: UITableViewCell {
     
         // TODO: 这个方法走了两次，没有必要的！
         layoutHorizontally()
-        FYDComplexTableViewCell.layoutVerticallyAndComputeDisplayHeight(item, layoutCell: self)
+        _ = FYDComplexTableViewCell.layoutVerticallyAndComputeDisplayHeight(item, layoutCell: self)
     }
     
     func layoutHorizontally() {
