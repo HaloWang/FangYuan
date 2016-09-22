@@ -4,22 +4,22 @@ import Foundation
 /// This class is used to provide FangYuan.Ruler's logic
 ///
 /// - Warning: Only available in demo codes
-public class EnableConstraintHolder {
+open class EnableConstraintHolder {
     
     public enum Section {
-        case Left
-        case Right
-        case Width
-        case Top
-        case Bottom
-        case Height
+        case left
+        case right
+        case width
+        case top
+        case bottom
+        case height
     }
     
-    private static let holderView = UIView()
+    fileprivate static let holderView = UIView()
     
-    public static var validSections = [Section]()
+    open static var validSections = [Section]()
     
-    public class func validAt(section:Section) -> Bool {
+    open class func validAt(_ section:Section) -> Bool {
         for _section in validSections {
             if section == _section {
                 return true
@@ -28,7 +28,7 @@ public class EnableConstraintHolder {
         return false
     }
     
-    public class func pushConstraintAt(section: EnableConstraintHolder.Section) {
+    open class func pushConstraintAt(_ section: EnableConstraintHolder.Section) {
         
         var sections = [Section]()
         
@@ -36,52 +36,52 @@ public class EnableConstraintHolder {
         let ry = holderView.rulerY
         
         switch section {
-        case .Bottom:
+        case .bottom:
             ry.c = 0
-        case .Height:
+        case .height:
             ry.b = 0
-        case .Top:
+        case .top:
             ry.a = 0
-        case .Left:
+        case .left:
             rx.a = 0
-        case .Width:
+        case .width:
             rx.b = 0
-        case .Right:
+        case .right:
             rx.c = 0
         }
         
         if rx.a != nil {
-            sections.append(.Left)
+            sections.append(.left)
         }
         
         if rx.b != nil {
-            sections.append(.Width)
+            sections.append(.width)
         }
         
         if rx.c != nil {
-            sections.append(.Right)
+            sections.append(.right)
         }
         
         if ry.a != nil {
-            sections.append(.Top)
+            sections.append(.top)
         }
         
         if ry.b != nil {
-            sections.append(.Height)
+            sections.append(.height)
         }
         
         if ry.c != nil {
-            sections.append(.Bottom)
+            sections.append(.bottom)
         }
         
         validSections = sections
     }
     
-    public class func randomSections() {
+    open class func randomSections() {
         
     }
     
-    public class func clearSections() {
+    open class func clearSections() {
         
     }
 }

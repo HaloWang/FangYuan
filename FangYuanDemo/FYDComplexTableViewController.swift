@@ -11,7 +11,7 @@ import Halo
 
 class FYDComplexTableViewController: UIViewController {
     
-    let tableView = UITableView(frame: ScreenBounds, style: .Plain)
+    let tableView = UITableView(frame: ScreenBounds, style: .plain)
     
     var data = [Item]()
 
@@ -22,8 +22,8 @@ class FYDComplexTableViewController: UIViewController {
         
         tableView
             .dataSourceAndDelegate(self)
-            .separatorStyle(.None)
-            .registerCellClass(FYDComplexTableViewCell)
+            .separatorStyle(.none)
+            .registerCellClass(FYDComplexTableViewCell.self)
             .superView(view)
             .backgroundColor(HEX("f1f1f1"))
     }
@@ -31,30 +31,30 @@ class FYDComplexTableViewController: UIViewController {
 
 // MARK: - UITableViewDelegate
 extension FYDComplexTableViewController : UITableViewDelegate {
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        let item = data[indexPath.row]
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let item = data[(indexPath as NSIndexPath).row]
         return FYDComplexTableViewCell.layoutVerticallyAndComputeDisplayHeight(item, layoutCell: nil)
     }
     
-    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 150
     }
 }
 
 // MARK: - UITableViewDataSource
 extension FYDComplexTableViewController : UITableViewDataSource {
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView
-            .dequeueCell(FYDComplexTableViewCell)
-            .selectionStyle(.None)
+            .dequeueCell(FYDComplexTableViewCell.self)
+            .selectionStyle(.none)
         
-        cell.set(item: data[indexPath.row])
+        cell.set(data[indexPath.row])
         
         return cell
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
 }

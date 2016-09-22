@@ -13,7 +13,7 @@ import UIKit
 /// 约束依赖管理者
 class ConstraintManager {
     
-    private init() {}
+    fileprivate init() {}
     static let singleton = ConstraintManager()
     
     var holder = ConstraintHolder()
@@ -37,9 +37,9 @@ extension ConstraintManager {
      - parameter from:      约束依赖视图
      - parameter section:   约束区间
      */
-    class func pushConstraintFrom(from:UIView, section: Constraint.Section) {
+    class func pushConstraintFrom(_ from:UIView, section: Constraint.Section) {
         
-        assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
+        assert(!Thread.isMainThread, _fy_noMainQueueAssert)
 
         let newConstraint = Constraint(from: from, to: nil, section: section)
         singleton.holder.set(newConstraint, at: section)
@@ -55,9 +55,9 @@ extension ConstraintManager {
      - parameter section:   约束区间
      - parameter value:     约束固定值
      */
-    class func popConstraintTo(to:UIView, section: Constraint.Section, value:CGFloat) {
+    class func popConstraintTo(_ to:UIView, section: Constraint.Section, value:CGFloat) {
         
-        assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
+        assert(!Thread.isMainThread, _fy_noMainQueueAssert)
         
         //  这个方法应该被优先调用，可能出现 fy_XXX(a) 替换 fy_XXX(chainXXX) 的情况
         singleton.removeDuplicateConstraintOf(to, at: section)
@@ -76,7 +76,7 @@ extension ConstraintManager {
                 "There is a constraint circulation between\n\(to)\n- and -\n\(_constraint.from)\n".fy_alert)
     }
 
-    class func layout(view:UIView) {
+    class func layout(_ view:UIView) {
         
         let usingFangYuanSubviews = view.usingFangYuanSubviews
         guard usingFangYuanSubviews.count > 0 else {
@@ -96,19 +96,19 @@ extension ConstraintManager {
     /// 这样可以保证每次设定了约束了之后，所有与之相关的约束都会被重新设定
     /// - TODO: 部分方法不应该遍历两次的！这里的性能还有提升空间
     /// - TODO: horizontal 的意义并不明显啊
-    class func resetRelatedConstraintFrom(view:UIView, isHorizontal horizontal:Bool) {
-        assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
+    class func resetRelatedConstraintFrom(_ view:UIView, isHorizontal horizontal:Bool) {
+        assert(!Thread.isMainThread, _fy_noMainQueueAssert)
         singleton.storedConstraints.forEach { constraint in
-            if let _from = constraint.from where _from == view {
+            if let _from = constraint.from , _from == view {
                 if horizontal == constraint.section.horizontal {
                     switch constraint.section {
-                    case .Left:
+                    case .left:
                         constraint.to.fy_left(view.chainRight + constraint.value)
-                    case .Right:
+                    case .right:
                         constraint.to.fy_right(view.chainLeft + constraint.value)
-                    case .Top:
+                    case .top:
                         constraint.to.fy_top(view.chainBottom + constraint.value)
-                    case .Bottom:
+                    case .bottom:
                         constraint.to.fy_bottom(view.chainTop + constraint.value)
                     }
                 }
@@ -128,9 +128,9 @@ private extension ConstraintManager {
     /// - TODO: 这个算法相当于使用了什么排序？
     /// - TODO: 能不能尽量写成函数而非方法？
     /// - TODO: 还是把两部分合并一下，整理成一步算法吧
-    func layout(views: [UIView]) {
+    func layout(_ views: [UIView]) {
         
-        assert(NSThread.isMainThread(), _fy_MainQueueAssert)
+        assert(Thread.isMainThread, _fy_MainQueueAssert)
         
         guard hasUnsetConstraints(unsetConstraints, of: views) else {
             views.forEach { view in
@@ -159,7 +159,7 @@ private extension ConstraintManager {
         } while shouldRepeat
     }
     
-    func hasUnsetConstraints(constraints:Set<Constraint>, of views:[UIView]) -> Bool {
+    func hasUnsetConstraints(_ constraints:Set<Constraint>, of views:[UIView]) -> Bool {
         guard constraints.count != 0 else {
             return false
         }
@@ -175,7 +175,7 @@ private extension ConstraintManager {
     }
     
     /// 给定的约束中，已经没有用来约束 view 的约束了
-    func hasSetConstraints(constraints:Set<Constraint>, to view:UIView) -> Bool {
+    func hasSetConstraints(_ constraints:Set<Constraint>, to view:UIView) -> Bool {
         for constraint in constraints {
             if constraint.to == view {
                 return false
@@ -186,7 +186,7 @@ private extension ConstraintManager {
 
     /// 确定了该 UIView.frame 后，装载指定 Constraint 至 to.ruler.section 中
     // TODO: 参数可变性还是一个问题！
-    func setConstraints(constraints:Set<Constraint>, from view: UIView) -> Set<Constraint> {
+    func setConstraints(_ constraints:Set<Constraint>, from view: UIView) -> Set<Constraint> {
         var _constraints = constraints
         _constraints.forEach { constraint in
             if constraint.from == view {
@@ -197,14 +197,14 @@ private extension ConstraintManager {
                 let _to = constraint.to
                 let _value = constraint.value
                 switch constraint.section {
-                case .Top:
-                    _to.rulerY.a = _from.frame.origin.y + _from.frame.height + _value
-                case .Bottom:
-                    _to.rulerY.c = _from.superview!.frame.height - _from.frame.origin.y + _value
-                case .Left:
-                    _to.rulerX.a = _from.frame.origin.x + _from.frame.width + _value
-                case .Right:
-                    _to.rulerX.c = _from.superview!.frame.width - _from.frame.origin.x + _value
+                case .top:
+                    _to?.rulerY.a = (_from?.frame.origin.y)! + (_from?.frame.height)! + _value
+                case .bottom:
+                    _to?.rulerY.c = (_from?.superview!.frame.height)! - (_from?.frame.origin.y)! + _value
+                case .left:
+                    _to?.rulerX.a = (_from?.frame.origin.x)! + (_from?.frame.width)! + _value
+                case .right:
+                    _to?.rulerX.c = (_from?.superview!.frame.width)! - (_from?.frame.origin.x)! + _value
                 }
                 _constraints.remove(constraint)
             }
@@ -216,8 +216,8 @@ private extension ConstraintManager {
 // MARK: Assistant
 private extension ConstraintManager {
     
-    func storedConstraintsInsert(constraint:Constraint) {
-        assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
+    func storedConstraintsInsert(_ constraint:Constraint) {
+        assert(!Thread.isMainThread, _fy_noMainQueueAssert)
         storedConstraints.forEach { constraint in
             if constraint.to == nil || constraint.from == nil {
                 storedConstraints.remove(constraint)
@@ -229,8 +229,8 @@ private extension ConstraintManager {
     }
 
     /// 按照程序逻辑，一个 view 最多同时只能在一个区间上拥有一个约束
-    func removeDuplicateConstraintOf(view:UIView, at section: Constraint.Section) {
-        assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
+    func removeDuplicateConstraintOf(_ view:UIView, at section: Constraint.Section) {
+        assert(!Thread.isMainThread, _fy_noMainQueueAssert)
         unsetConstraints.forEach { constraint in
             if constraint.to == nil || constraint.from == nil {
                 unsetConstraints.remove(constraint)
@@ -243,8 +243,8 @@ private extension ConstraintManager {
     /// Check constraint circulation
     ///
     /// - TODO: Only 2 ? What about 3, 4, 5...?
-    func noConstraintCirculationWith(constraint:Constraint) -> Bool {
-        assert(!NSThread.isMainThread(), _fy_noMainQueueAssert)
+    func noConstraintCirculationWith(_ constraint:Constraint) -> Bool {
+        assert(!Thread.isMainThread, _fy_noMainQueueAssert)
         return unsetConstraints.filter {
             $0.to == constraint.from && $0.from == constraint.to
         }.count == 0

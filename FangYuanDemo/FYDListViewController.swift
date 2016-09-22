@@ -14,17 +14,17 @@ class FYDListViewController: UIViewController {
         ["在复杂的 UITableViewCell 中使用" : FYDComplexTableViewController.self],
     ]
 
-    lazy var tableView = UITableView(frame: ScreenBounds, style: .Plain)
+    lazy var tableView = UITableView(frame: ScreenBounds, style: .plain)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         backgroundColor(White)
         tableView
-            .registerCellClass(UITableViewCell)
+            .registerCellClass(UITableViewCell.self)
             .dataSourceAndDelegate(self)
             .tableFooterViewAdded()
             .superView(view)
-            .fy_edge(UIEdgeInsetsZero)
+            .fy_edge(UIEdgeInsets.zero)
     }
 }
 
@@ -36,23 +36,23 @@ private extension String {
 
 // MARK: - UITableViewDelegate
 extension FYDListViewController : UITableViewDelegate {
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let pair = demoMaps[indexPath.row].first!
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let pair = demoMaps[(indexPath as NSIndexPath).row].first!
         push(pair.1.init().backgroundColor(White).title(pair.0))
     }
 }
 
 // MARK: - UITableViewDataSource
 extension FYDListViewController : UITableViewDataSource {
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         return tableView
-            .dequeueCell(UITableViewCell)
-            .selectionStyle(.None)
-            .accessoryType(.DisclosureIndicator)
+            .dequeueCell(UITableViewCell.self)
+            .selectionStyle(.none)
+            .accessoryType(.disclosureIndicator)
             .text(demoMaps[indexPath.row].keys.first!)
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return demoMaps.count
     }
 }

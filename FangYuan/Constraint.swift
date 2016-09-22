@@ -34,13 +34,13 @@ class Constraint: Hashable {
 
     /// 约束区间
     enum Section {
-        case Left
-        case Right
-        case Top
-        case Bottom
+        case left
+        case right
+        case top
+        case bottom
         
         var horizontal : Bool {
-            return self == Constraint.Section.Right || self == Constraint.Section.Left
+            return self == Constraint.Section.right || self == Constraint.Section.left
         }
     }
     
@@ -76,33 +76,33 @@ class ConstraintHolder {
     var right: Constraint?
     var left: Constraint?
     
-    func constraintAt(section: Constraint.Section) -> Constraint? {
+    func constraintAt(_ section: Constraint.Section) -> Constraint? {
         switch section {
-        case .Bottom:
+        case .bottom:
             return bottom
-        case .Top:
+        case .top:
             return top
-        case .Right:
+        case .right:
             return right
-        case .Left:
+        case .left:
             return left
         }
     }
     
-    func set(constraint:Constraint?, at section:Constraint.Section) {
+    func set(_ constraint:Constraint?, at section:Constraint.Section) {
         switch section {
-        case .Bottom:
+        case .bottom:
             bottom = constraint
-        case .Top:
+        case .top:
             top = constraint
-        case .Right:
+        case .right:
             right = constraint
-        case .Left:
+        case .left:
             left = constraint
         }
     }
     
-    func clearConstraintAt(section: Constraint.Section) {
+    func clearConstraintAt(_ section: Constraint.Section) {
         set(nil, at: section)
     }
 }

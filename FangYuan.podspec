@@ -6,8 +6,9 @@ Pod::Spec.new do |s|
   s.license      = { :type => "MIT", :file => "LICENSE" }
   s.author       = { "王策" => "634692517@qq.com" }
   s.platform     = :ios, "8.0"
-  s.source       = { :git => "https://github.com/HaloWang/FangYuan.git", :tag => "0.1.2" }
+  s.source       = { :git => "https://github.com/HaloWang/FangYuan.git", :tag => s.version }
   s.source_files = "FangYuan/*.{swift}"
   s.frameworks   = "UIKit"
   s.requires_arc = true
+  s.pod_target_xcconfig = { 'SWIFT_VERSION' => '3.0' }
 end

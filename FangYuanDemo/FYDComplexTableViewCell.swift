@@ -72,25 +72,25 @@ class FYDComplexTableViewCell: UITableViewCell {
             .scrollEnabled(false)
             .superView(holderView)
             .backgroundColor(Yellow.alpha(0.1))
-            .textContainerInset(UIEdgeInsetsZero)
-            .font(UIFont.systemFontOfSize(FontSize))
+            .textContainerInset(UIEdgeInsets.zero)
+            .font(UIFont.systemFont(ofSize: FontSize))
         
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 1
         layout.minimumInteritemSpacing = 1
         
-        imageCollectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
+        imageCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         imageCollectionView.dataSource = self
         imageCollectionView.delegate = self
         imageCollectionView
             .scrollEnabled(false)
-            .registerCellClass(FYDImageDisplayCollectionViewCell)
+            .registerCellClass(FYDImageDisplayCollectionViewCell.self)
             .superView(holderView)
             .backgroundColor(White)
         
         singleImageView
             .superView(holderView)
-            .contentMode(UIViewContentMode.ScaleAspectFill)
+            .contentMode(UIViewContentMode.scaleAspectFill)
             .backgroundColor(Purple.alpha(0.3))
             .clipsToBounds(true)
         
@@ -133,7 +133,7 @@ class FYDComplexTableViewCell: UITableViewCell {
         }
     }
     
-    func set(item item:Item) {
+    func set(_ item:Item) {
         
         // TODO: 这里的传值写的不好
         
@@ -143,15 +143,15 @@ class FYDComplexTableViewCell: UITableViewCell {
             nickNameLabel.text   = item.nickName
             switch item.imageURLs.count {
             case 0:
-                singleImageView.hidden = true
-                imageCollectionView.hidden = true
+                singleImageView.isHidden = true
+                imageCollectionView.isHidden = true
             case 1:
-                singleImageView.kf_setImageWithURL(item.imageURLs.first!.URL)
-                singleImageView.hidden = false
-                imageCollectionView.hidden = true
+                singleImageView.kf.setImage(with: ImageResource(downloadURL: item.imageURLs.first!.URL))
+                singleImageView.isHidden = false
+                imageCollectionView.isHidden = true
             default:
-                singleImageView.hidden = true
-                imageCollectionView.hidden = false
+                singleImageView.isHidden = true
+                imageCollectionView.isHidden = false
             }
             
             if item.imageURLs.count > 1 {
@@ -159,7 +159,7 @@ class FYDComplexTableViewCell: UITableViewCell {
             }
         }
         
-        dispatch_async(dispatch_get_main_queue()) { 
+        DispatchQueue.main.async { 
             setValues()
         }
     
@@ -175,13 +175,13 @@ class FYDComplexTableViewCell: UITableViewCell {
             nickNameDisplayWidth = cachedWidth
         } else {
             let maxCGFloat = CGFloat(MAXFLOAT)
-            nickNameDisplayWidth = (item.nickName as NSString).boundingRectWithSize(maxCGFloat.size, options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName:nickNameLabel.font], context: nil).size.width
+            nickNameDisplayWidth = (item.nickName as NSString).boundingRect(with: maxCGFloat.size, options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName:nickNameLabel.font], context: nil).size.width
             item.nickNameDisplayWidthCache = nickNameDisplayWidth
         }
         nickNameLabel.fy_width(nickNameDisplayWidth)
     }
     
-    class func layoutVerticallyAndComputeDisplayHeight(item:Item, layoutCell cell:FYDComplexTableViewCell?) -> CGFloat {
+    class func layoutVerticallyAndComputeDisplayHeight(_ item:Item, layoutCell cell:FYDComplexTableViewCell?) -> CGFloat {
         
         var displayHeight : CGFloat = 0
         
@@ -211,18 +211,18 @@ class FYDComplexTableViewCell: UITableViewCell {
         return displayHeight
     }
     
-    class func calculateMessageDisplayHeightFor(item:Item) -> CGFloat {
+    class func calculateMessageDisplayHeightFor(_ item:Item) -> CGFloat {
         var messageDisplayHeight : CGFloat
         if let cachedHeight = item.messageDisplayHeightCache {
             messageDisplayHeight = cachedHeight
         } else {
-            messageDisplayHeight = (item.message as NSString).boundingRectWithSize(CGSize(width: ScreenWidth - 5.double, height:CGFloat(MAXFLOAT)), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFontOfSize(FontSize)], context: nil).size.height
+            messageDisplayHeight = (item.message as NSString).boundingRect(with: CGSize(width: ScreenWidth - 5.double, height:CGFloat(MAXFLOAT)), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: FontSize)], context: nil).size.height
             item.messageDisplayHeightCache = messageDisplayHeight
         }
         return messageDisplayHeight
     }
     
-    class func calculateImageDispalyHeightFor(item:Item) -> CGFloat {
+    class func calculateImageDispalyHeightFor(_ item:Item) -> CGFloat {
         var imagesDisplayHeight : CGFloat
         let imageCount = item.imageURLs.count
         switch imageCount {
@@ -244,17 +244,17 @@ class FYDComplexTableViewCell: UITableViewCell {
 
 // MARK: - UICollectionViewDataSource
 extension FYDComplexTableViewCell : UICollectionViewDataSource {
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueCell(FYDImageDisplayCollectionViewCell.self, indexPath: indexPath)
         cell.backgroundColor(Purple.alpha(0.1))
-        if indexPath.row < item.imageURLs.count {
+        if (indexPath as NSIndexPath).row < item.imageURLs.count {
             // TODO: Crash: Index out of range
-            cell.imageView.kf_setImageWithURL(item.imageURLs[indexPath.row].URL)
+            cell.imageView.kf.setImage(with: ImageResource(downloadURL: item.imageURLs[indexPath.row].URL))
         }
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let item = item else {
             return 0
         }
@@ -265,21 +265,21 @@ extension FYDComplexTableViewCell : UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegate
 extension FYDComplexTableViewCell : UICollectionViewDelegate {
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
     }
 }
 
 extension FYDComplexTableViewCell : UICollectionViewDelegateFlowLayout {
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         guard let item = item else {
-            return CGSizeZero
+            return CGSize.zero
         }
         switch item.imageURLs.count {
         case 0, 1:
-            return CGSizeZero
+            return CGSize.zero
         case 2, 4:
-            return CGSizeMake(ScreenWidth / 2 - 0.5, ScreenWidth / 2 - 0.5)
+            return CGSize(width: ScreenWidth / 2 - 0.5, height: ScreenWidth / 2 - 0.5)
         default:
             return (ScreenWidth / 3 - 1).size
         }
@@ -294,12 +294,12 @@ class FYDImageDisplayCollectionViewCell : UICollectionViewCell {
         super.init(frame: frame)
         imageView
             .superView(self)
-            .contentMode(UIViewContentMode.ScaleAspectFill)
+            .contentMode(UIViewContentMode.scaleAspectFill)
             .clipsToBounds(true)
         
         FangYuanDemo.BeginLayout { 
             imageView
-                .fy_edge(UIEdgeInsetsZero)
+                .fy_edge(UIEdgeInsets.zero)
         }
         
     }

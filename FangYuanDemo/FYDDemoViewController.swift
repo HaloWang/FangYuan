@@ -37,7 +37,7 @@ class FYDDemoViewController: UIViewController {
         for i in 0..<demoSubviews.count {
             let demoSubview = self.demoSubviews[i]
             demoSubview.text = "dv\(i)"
-            demoSubview.textAlignment = .Center
+            demoSubview.textAlignment = .center
             self.view.addSubview(demoSubview)
         }
 

@@ -20,9 +20,9 @@ class Ruler {
     ///
     /// 每个 Ruler 有 A, B, C, 三段
     enum Section {
-        case A
-        case B
-        case C
+        case a
+        case b
+        case c
     }
 
     /// 最后一次设定的约束
@@ -42,13 +42,13 @@ class Ruler {
                 return
             }
             if let last = last {
-                if last == .B {
+                if last == .b {
                     c = nil
-                } else if last == .C {
+                } else if last == .c {
                     b = nil
                 }
             }
-            last = .A
+            last = .a
         }
     }
 
@@ -61,13 +61,13 @@ class Ruler {
                 return
             }
             if let last = last {
-                if last == .A {
+                if last == .a {
                     c = nil
-                } else if last == .C {
+                } else if last == .c {
                     a = nil
                 }
             }
-            last = .B
+            last = .b
         }
     }
 
@@ -80,13 +80,13 @@ class Ruler {
                 return
             }
             if let last = last {
-                if last == .B {
+                if last == .b {
                     a = nil
-                } else if last == .A {
+                } else if last == .a {
                     b = nil
                 }
             }
-            last = .C
+            last = .c
         }
     }
 }

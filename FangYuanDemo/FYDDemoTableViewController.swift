@@ -8,12 +8,12 @@ import FangYuan
 
 class FYDDemoTableViewController: UIViewController {
 
-    lazy var tableView = UITableView(frame: UIScreen.mainScreen().bounds, style: UITableViewStyle.Plain)
+    lazy var tableView = UITableView(frame: UIScreen.main.bounds, style: UITableViewStyle.plain)
     lazy var heightArray = [CGFloat]()
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nil, bundle: nil)
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             for _ in 0...99 {
                 self.heightArray.append(75 + CGFloat(arc4random() % 200))
             }
@@ -31,7 +31,7 @@ class FYDDemoTableViewController: UIViewController {
         tableView.dataSource      = self
         tableView.delegate        = self
         tableView.tableFooterView = UIView()
-        tableView.registerClass(FYDDemoTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(FYDDemoTableViewCell))
+        tableView.register(FYDDemoTableViewCell.self, forCellReuseIdentifier: NSStringFromClass(FYDDemoTableViewCell))
     }
     
 }
@@ -39,24 +39,24 @@ class FYDDemoTableViewController: UIViewController {
 // MARK: - UITableViewDelegate
 extension FYDDemoTableViewController : UITableViewDelegate {
 
-    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 105 + 30
     }
 
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return heightArray[indexPath.row]
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return heightArray[(indexPath as NSIndexPath).row]
     }
 }
 
 // MARK: - UITableViewDataSource
 extension FYDDemoTableViewController : UITableViewDataSource {
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(FYDDemoTableViewCell)) as! FYDDemoTableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(FYDDemoTableViewCell)) as! FYDDemoTableViewCell
         return cell
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return heightArray.count
     }
 }

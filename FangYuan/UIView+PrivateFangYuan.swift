@@ -23,35 +23,35 @@ extension UIView {
         }
     }
     
-    func basicSetting(setting:()->Void) {
+    func basicSetting(_ setting:@escaping ()->Void) {
         usingFangYuan = true
         _fy_layoutQueue {
             setting()
         }
     }
     
-    func popConstraintAt(section: Constraint.Section, value: CGFloat) {
+    func popConstraintAt(_ section: Constraint.Section, value: CGFloat) {
         switch section {
-        case .Left:
+        case .left:
             rulerX.a = value
-        case .Right:
+        case .right:
             rulerX.c = value
-        case .Top:
+        case .top:
             rulerY.a = value
-        case .Bottom:
+        case .bottom:
             rulerY.c = value
         }
         ConstraintManager.popConstraintTo(self, section: section, value: value)
     }
     
-    func resetRelatedConstraintHorizontal(horizontal:Bool) {
+    func resetRelatedConstraintHorizontal(_ horizontal:Bool) {
         ConstraintManager.resetRelatedConstraintFrom(self, isHorizontal: horizontal)
     }
 
     /// 在约束已经求解完全的情况下进行 frame 的设置
     func layoutWithFangYuan() {
         
-        assert(NSThread.isMainThread(), _fy_MainQueueAssert)
+        assert(Thread.isMainThread, _fy_MainQueueAssert)
         assert(rulerX.full, "\(self)\nUIView.RulerX is not fully defined!\n".fy_alert)
         assert(rulerY.full, "\(self)\nUIView.RulerY is not fully defined!\n".fy_alert)
 
@@ -59,9 +59,9 @@ extension UIView {
         let newX = rulerX.a
         if newX != nil {
             if frame.origin.x != newX {
-                frame.origin.x = newX
+                frame.origin.x = newX!
             }
-            let newWidth = rulerX.b ?? superview!.frame.width - newX - rulerX.c
+            let newWidth = rulerX.b ?? superview!.frame.width - newX! - rulerX.c
             if frame.size.width != newWidth {
                 frame.size.width = newWidth
             }
@@ -72,7 +72,7 @@ extension UIView {
             }
             let newWidth = rulerX.b
             if frame.width != newWidth {
-                frame.size.width = newWidth
+                frame.size.width = newWidth!
             }
         }
 
@@ -80,9 +80,9 @@ extension UIView {
         let newY = rulerY.a
         if newY != nil {
             if frame.origin.y != newY {
-                frame.origin.y = newY
+                frame.origin.y = newY!
             }
-            let newHeight = rulerY.b ?? superview!.frame.height - newY - rulerY.c
+            let newHeight = rulerY.b ?? superview!.frame.height - newY! - rulerY.c
             if frame.height != newHeight {
                 frame.size.height = newHeight
             }
@@ -93,7 +93,7 @@ extension UIView {
             }
             let newHeight = rulerY.b
             if frame.height != newHeight {
-                frame.size.height = newHeight
+                frame.size.height = newHeight!
             }
         }
     }
@@ -151,12 +151,13 @@ extension UIView {
 extension UIView {
 
     struct _fy_uiview_once {
-        static var token: dispatch_once_t = 0
+        static var token: Int = 0
     }
 
-    override public class func initialize() {
-        dispatch_once(&_fy_uiview_once.token) {
+    override open class func initialize() {
+        if _fy_uiview_once.token == 0 {
             _swizzle_layoutSubviews()
+            _fy_uiview_once.token = 1
         }
     }
 

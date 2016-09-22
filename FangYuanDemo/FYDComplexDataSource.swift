@@ -10,21 +10,21 @@ import Foundation
 import CoreGraphics
 import Halo
 
-func _fy_arc4random(v: Int) -> Int {
+func _fy_arc4random(_ v: Int) -> Int {
     return Int(arc4random() % UInt32(v))
 }
 
-func randomString(maxRepeat:Int, repeatString:String) -> String {
-    return Array(count: _fy_arc4random(maxRepeat) + 1, repeatedValue: repeatString).reduce("") { $0 + $1 }
+func randomString(_ maxRepeat:Int, repeatString:String) -> String {
+    return Array(repeating: repeatString, count: _fy_arc4random(maxRepeat) + 1).reduce("") { $0 + $1 }
 }
 
-func _fy_randomImageName(size:CGSize = CGSize(width: ScreenWidth, height: ScreenWidth)) -> String {
-    let scale = UIScreen.mainScreen().scale
+func _fy_randomImageName(_ size:CGSize = CGSize(width: ScreenWidth, height: ScreenWidth)) -> String {
+    let scale = UIScreen.main.scale
     let URLString = "https://unsplash.it/\(size.width * scale)/\(size.height * scale)?image=\(_fy_arc4random(1084))"
     return URLString
 }
 
-func _fy_randomImageNameS(count:Int) -> [String] {
+func _fy_randomImageNameS(_ count:Int) -> [String] {
     var names = [String]()
     for _ in 0..<count {
         let name : String
@@ -59,7 +59,7 @@ class FYDComplexDataSource {
 
             let hasImage = arc4random() % 2 == 0
             if hasImage {
-                item.firstImageSize = CGSizeMake(_fy_arc4random(100).f + ScreenWidth, _fy_arc4random(100).f + ScreenWidth/1.7)
+                item.firstImageSize = CGSize(width: _fy_arc4random(100).f + ScreenWidth, height: _fy_arc4random(100).f + ScreenWidth/1.7)
                 switch arc4random() % 10 {
                 case 0...5:
                     item.imageURLs = [_fy_randomImageName(ScreenWidth.size)]
@@ -83,7 +83,7 @@ class Item {
     var avatar    = ""
     var comments  = [String]()
     var imageURLs = [String]()
-    var firstImageSize = CGSizeZero
+    var firstImageSize = CGSize.zero
     var isMine    = false
     var marked    = false
 }

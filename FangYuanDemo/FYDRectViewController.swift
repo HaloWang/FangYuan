@@ -10,9 +10,9 @@ import UIKit
 import FangYuan
 import Halo
 
-private var storeLeftTop     = CGPointZero
-private var storeWidthHeight = CGSizeZero
-private var storeRightBottom = CGPointZero
+private var storeLeftTop     = CGPoint.zero
+private var storeWidthHeight = CGSize.zero
+private var storeRightBottom = CGPoint.zero
 
 /// - TODO: Holder
 /// - TODO: Line
@@ -53,8 +53,8 @@ class FYDRectViewController: UIViewController {
         
         codeList
             .dataSourceAndDelegate(self)
-            .registerCellClass(FYDCodeTableViewCell)
-            .separatorStyle(.None)
+            .registerCellClass(FYDCodeTableViewCell.self)
+            .separatorStyle(.none)
             .superView(view)
             .backgroundColor(FYDCodeTableViewCell.codeBackgroundColor)
         
@@ -62,7 +62,7 @@ class FYDRectViewController: UIViewController {
             .superView(holder)
             .backgroundColor(UIColor(red: 1, green: 0.8, blue: 0.8, alpha: 1))
             .text("rectView")
-            .textAlignment(.Center)
+            .textAlignment(.center)
             .userInteractionEnabled(true)
         
         holder
@@ -107,7 +107,7 @@ class FYDRectViewController: UIViewController {
                 .fy_width(40)
         }
         
-        rectView.addObserver(self, forKeyPath: "frame", options: NSKeyValueObservingOptions.New, context: nil)
+        rectView.addObserver(self, forKeyPath: "frame", options: NSKeyValueObservingOptions.new, context: nil)
     }
     
     deinit {
@@ -117,7 +117,7 @@ class FYDRectViewController: UIViewController {
 
 extension FYDRectViewController {
     
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         let _frame = rectView.frame
         vs.left    = _frame.x
         vs.top     = _frame.y
@@ -128,22 +128,22 @@ extension FYDRectViewController {
         codeList.reloadData()
     }
     
-    func topLeftPanTouched(sender: UIPanGestureRecognizer) {
-        let t = sender.translationInView(holder)
+    func topLeftPanTouched(_ sender: UIPanGestureRecognizer) {
+        let t = sender.translation(in: holder)
         switch sender.state {
-        case .Began:
+        case .began:
             storeLeftTop = rectView.origin
             storeRightBottom = CGPoint(x: holder.width - rectView.x - rectView.width,
                                        y: holder.height - rectView.y - rectView.height)
             rectView
                 .fy_bottom(storeRightBottom.y)
                 .fy_right(storeRightBottom.x)
-        case .Changed:
+        case .changed:
             let newOrigin = CGPoint(x: storeLeftTop.x + t.x, y: storeLeftTop.y + t.y)
             rectView
                 .fy_origin(newOrigin)
                 .toAnimation()
-        case .Ended:
+        case .ended:
             if rectView.x < 20 {
                 rectView.fy_left(20)
             }
@@ -156,19 +156,19 @@ extension FYDRectViewController {
         }
     }
 
-    func bottomRightPanTouched(sender: UIPanGestureRecognizer) {
-        let t = sender.translationInView(holder)
+    func bottomRightPanTouched(_ sender: UIPanGestureRecognizer) {
+        let t = sender.translation(in: holder)
         switch sender.state {
-        case .Began:
+        case .began:
             storeLeftTop = rectView.origin
             rectView.fy_origin(storeLeftTop)
             storeWidthHeight = rectView.size
-        case .Changed:
+        case .changed:
             let newSize = CGSize(width: storeWidthHeight.width + t.x, height: storeWidthHeight.height + t.y)
             rectView
                 .fy_size(newSize)
                 .toAnimation()
-        case .Ended:
+        case .ended:
             if rectView.x + rectView.width + 10 > rectView.superview!.width {
                 rectView
                     .fy_left(storeLeftTop.x)
@@ -188,21 +188,21 @@ extension FYDRectViewController {
 
 // MARK: - UITableViewDelegate
 extension FYDRectViewController : UITableViewDelegate {
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        switch indexPath.row {
+        switch (indexPath as NSIndexPath).row {
         case 1:
-            EnableConstraintHolder.pushConstraintAt(.Top)
+            EnableConstraintHolder.pushConstraintAt(.top)
         case 2:
-            EnableConstraintHolder.pushConstraintAt(.Bottom)
+            EnableConstraintHolder.pushConstraintAt(.bottom)
         case 3:
-            EnableConstraintHolder.pushConstraintAt(.Left)
+            EnableConstraintHolder.pushConstraintAt(.left)
         case 4:
-            EnableConstraintHolder.pushConstraintAt(.Right)
+            EnableConstraintHolder.pushConstraintAt(.right)
         case 5:
-            EnableConstraintHolder.pushConstraintAt(.Width)
+            EnableConstraintHolder.pushConstraintAt(.width)
         case 6:
-            EnableConstraintHolder.pushConstraintAt(.Height)
+            EnableConstraintHolder.pushConstraintAt(.height)
         default:
             break
         }
@@ -210,13 +210,13 @@ extension FYDRectViewController : UITableViewDelegate {
         tableView.reloadData()
     }
 
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return FYDCodeTableViewCell.displayHeight
     }
 }
 
 private extension String {
-    func indentation(indentation:Int) -> String {
+    func indentation(_ indentation:Int) -> String {
         var newString = self
         for _ in 0..<indentation {
             newString = "    " + newString
@@ -227,30 +227,30 @@ private extension String {
 
 // MARK: - UITableViewDataSource
 extension FYDRectViewController : UITableViewDataSource {
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueCell(FYDCodeTableViewCell).selectionStyle(.None)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueCell(FYDCodeTableViewCell.self).selectionStyle(.none)
         
-        switch indexPath.row {
+        switch (indexPath as NSIndexPath).row {
         case 0:
             cell.code = "rectView".indentation(1)
         case 1:
             cell.code = ".fy_top(\(vs.top))".indentation(2)
-            cell.commented = !EnableConstraintHolder.validAt(.Top)
+            cell.commented = !EnableConstraintHolder.validAt(.top)
         case 2:
             cell.code = ".fy_bottom(\(vs.bottom))".indentation(2)
-            cell.commented = !EnableConstraintHolder.validAt(.Bottom)
+            cell.commented = !EnableConstraintHolder.validAt(.bottom)
         case 3:
             cell.code = ".fy_left(\(vs.left))".indentation(2)
-            cell.commented = !EnableConstraintHolder.validAt(.Left)
+            cell.commented = !EnableConstraintHolder.validAt(.left)
         case 4:
             cell.code = ".fy_right(\(vs.right))".indentation(2)
-            cell.commented = !EnableConstraintHolder.validAt(.Right)
+            cell.commented = !EnableConstraintHolder.validAt(.right)
         case 5:
             cell.code = ".fy_width(\(vs.width))".indentation(2)
-            cell.commented = !EnableConstraintHolder.validAt(.Width)
+            cell.commented = !EnableConstraintHolder.validAt(.width)
         case 6:
             cell.code = ".fy_height(\(vs.height))".indentation(2)
-            cell.commented = !EnableConstraintHolder.validAt(.Height)
+            cell.commented = !EnableConstraintHolder.validAt(.height)
         default:
             break
         }
@@ -258,7 +258,7 @@ extension FYDRectViewController : UITableViewDataSource {
         return cell
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 7
     }
 }

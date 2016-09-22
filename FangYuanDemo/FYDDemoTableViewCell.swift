@@ -19,7 +19,7 @@ class FYDDemoTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        selectionStyle = .None
+        selectionStyle = .none
         
         addSubview(avatarImageView)
         addSubview(timeLabel)
@@ -33,12 +33,12 @@ class FYDDemoTableViewCell: UITableViewCell {
         avatarImageView.layer.cornerRadius = 18
         
         nickNameLabel.backgroundColor      = UIColor(red: 1, green: 0.8, blue: 0.4, alpha: 0.8)
-        nickNameLabel.font                 = UIFont.systemFontOfSize(10)
+        nickNameLabel.font                 = UIFont.systemFont(ofSize: 10)
         
         timeLabel.backgroundColor          = UIColor(red: 0.6, green: 0.5, blue: 1, alpha: 1)
         
         messageTextView.backgroundColor    = UIColor(red: 0.8, green: 1, blue: 0.9, alpha: 1)
-        messageTextView.scrollEnabled      = false
+        messageTextView.isScrollEnabled      = false
         
         likeButton.backgroundColor         = UIColor(red: 0.2, green: 0.6, blue: 1, alpha: 0.8)
         
