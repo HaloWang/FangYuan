@@ -55,9 +55,9 @@ public extension UIView {
 
 // MARK: - Chainable Method
 
-// TODO: 真的可以开一个线程，把大运算量的操作都扔到后台去，layoutSubviews 的时候在等待一下，但是得补一下『等待某个值为 true 才执行』这种需求了吧
+/// - Todo: 真的可以开一个线程，把大运算量的操作都扔到后台去，layoutSubviews 的时候在等待一下，但是得补一下『等待某个值为 true 才执行』这种需求了吧
 
-// TODO: 如何在调用完下面的方法后让 superview 刷新？
+/// - Todo: 如何在调用完下面的方法后让 superview 刷新？
 
 public extension UIView {
     
@@ -199,7 +199,7 @@ public extension UIView {
         return self
     }
     
-    // TODO: Unfinish
+    /// - Todo: Unfinish
     fileprivate func fy_centerX(_ adjust:CGFloat) -> Self {
         basicSetting {
             
@@ -207,7 +207,7 @@ public extension UIView {
         return self
     }
     
-    // TODO: Unfinish
+    /// - Todo: Unfinish
     fileprivate func fy_centerY(_ adjust:CGFloat) -> Self {
         basicSetting { 
             
@@ -222,7 +222,7 @@ public extension UIView {
     /// 只有当 view.superview 不为空时，该方法才有效
     func toAnimation() {
         
-        // TODO: 这个方法还有更好的写法吗？
+        /// - Todo: 这个方法还有更好的写法吗？
         
         guard let superview = superview else {
             return

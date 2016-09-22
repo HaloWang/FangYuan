@@ -61,7 +61,7 @@ class Constraint: Hashable {
         Constraint.checkAndUpdateHashStore()
     }
     
-    // TODO: thread safe ?
+    /// - Todo: thread safe ?
     class func checkAndUpdateHashStore() {
         if hashStore == Int.max {
             hashStore = 0

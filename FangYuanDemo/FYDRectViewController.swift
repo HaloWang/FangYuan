@@ -14,9 +14,9 @@ private var storeLeftTop     = CGPoint.zero
 private var storeWidthHeight = CGSize.zero
 private var storeRightBottom = CGPoint.zero
 
-/// - TODO: Holder
-/// - TODO: Line
-/// - TODO: Click
+/// - Todo: Holder
+/// - Todo: Line
+/// - Todo: Click
 class FYDRectViewController: UIViewController {
 
     let rectView       = UILabel()

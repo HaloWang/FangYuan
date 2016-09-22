@@ -17,8 +17,8 @@ let AIVSize  = 40.size
 let FontSize = 14.f
 let CellVerticalPadding = 11.f
 
-// TODO: 为什么 UITextView.text 的调用那么耗时？有什么优化办法？
-// TODO: 什么时候能让 FangYuan 变成纯配置式 DSL？
+/// - Todo: 为什么 UITextView.text 的调用那么耗时？有什么优化办法？
+/// - Todo: 什么时候能让 FangYuan 变成纯配置式 DSL？
 // 比如：textView.fy_rx_height(message.displayHeight)
 
 class FYDComplexTableViewCell: UITableViewCell {
@@ -135,7 +135,7 @@ class FYDComplexTableViewCell: UITableViewCell {
     
     func set(_ item:Item) {
         
-        // TODO: 这里的传值写的不好
+        /// - Todo: 这里的传值写的不好
         
         self.item = item
         func setValues() {
@@ -163,7 +163,7 @@ class FYDComplexTableViewCell: UITableViewCell {
             setValues()
         }
     
-        // TODO: 这个方法走了两次，没有必要的！
+        /// - Todo: 这个方法走了两次，没有必要的！
         layoutHorizontally()
         _ = FYDComplexTableViewCell.layoutVerticallyAndComputeDisplayHeight(item, layoutCell: self)
     }
@@ -248,7 +248,7 @@ extension FYDComplexTableViewCell : UICollectionViewDataSource {
         let cell = collectionView.dequeueCell(FYDImageDisplayCollectionViewCell.self, indexPath: indexPath)
         cell.backgroundColor(Purple.alpha(0.1))
         if (indexPath as NSIndexPath).row < item.imageURLs.count {
-            // TODO: Crash: Index out of range
+            /// - Todo: Crash: Index out of range
             cell.imageView.kf.setImage(with: ImageResource(downloadURL: item.imageURLs[indexPath.row].URL))
         }
         return cell

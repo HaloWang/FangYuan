@@ -18,8 +18,8 @@ class ConstraintManager {
     
     var holder = ConstraintHolder()
     
-    // TODO: 重要的还是做到按照 superview 分组遍历以提高性能
-    // TODO: 有没有集散型的并发遍历？
+    /// - Todo: 重要的还是做到按照 superview 分组遍历以提高性能
+    /// - Todo: 有没有集散型的并发遍历？
 
     /// 还没有被赋值到 UIView.Ruler 上的约束
     var unsetConstraints = Set<Constraint>()
@@ -45,8 +45,8 @@ extension ConstraintManager {
         singleton.holder.set(newConstraint, at: section)
     }
 
-    // TODO: setConstraint 是生成『渲染队列』的最佳时机了吧
-    // TODO: 这个『渲染队列』还可以抽象成一个专门计算高度的类方法？
+    /// - Todo: setConstraint 是生成『渲染队列』的最佳时机了吧
+    /// - Todo: 这个『渲染队列』还可以抽象成一个专门计算高度的类方法？
 
     /**
      设定约束到某个视图上
@@ -94,8 +94,8 @@ extension ConstraintManager {
     /// - Important: 
     /// 这里面已经产生了递归调用了：fy_XXX -> [This Method] -> fy_XXX -> [This Method] -> ...
     /// 这样可以保证每次设定了约束了之后，所有与之相关的约束都会被重新设定
-    /// - TODO: 部分方法不应该遍历两次的！这里的性能还有提升空间
-    /// - TODO: horizontal 的意义并不明显啊
+    /// - Todo: 部分方法不应该遍历两次的！这里的性能还有提升空间
+    /// - Todo: horizontal 的意义并不明显啊
     class func resetRelatedConstraintFrom(_ view:UIView, isHorizontal horizontal:Bool) {
         assert(!Thread.isMainThread, _fy_noMainQueueAssert)
         singleton.storedConstraints.forEach { constraint in
@@ -122,12 +122,12 @@ extension ConstraintManager {
 // MARK: Layout
 private extension ConstraintManager {
 
-    // TODO: UITableView.addSubiew 后，调用 UITableView 的 layoutSubviews 并不会被触发？
+    /// - Todo: UITableView.addSubiew 后，调用 UITableView 的 layoutSubviews 并不会被触发？
     
     /// 核心布局方法
-    /// - TODO: 这个算法相当于使用了什么排序？
-    /// - TODO: 能不能尽量写成函数而非方法？
-    /// - TODO: 还是把两部分合并一下，整理成一步算法吧
+    /// - Todo: 这个算法相当于使用了什么排序？
+    /// - Todo: 能不能尽量写成函数而非方法？
+    /// - Todo: 还是把两部分合并一下，整理成一步算法吧
     func layout(_ views: [UIView]) {
         
         assert(Thread.isMainThread, _fy_MainQueueAssert)
@@ -164,7 +164,7 @@ private extension ConstraintManager {
             return false
         }
         
-        // TODO: 外层遍历遍历谁会更快？或者两个一起遍历？
+        /// - Todo: 外层遍历遍历谁会更快？或者两个一起遍历？
         for view in views {
             if !hasSetConstraints(constraints, to: view) {
                 return true
@@ -185,7 +185,7 @@ private extension ConstraintManager {
     }
 
     /// 确定了该 UIView.frame 后，装载指定 Constraint 至 to.ruler.section 中
-    // TODO: 参数可变性还是一个问题！
+    /// - Todo: 参数可变性还是一个问题！
     func setConstraints(_ constraints:Set<Constraint>, from view: UIView) -> Set<Constraint> {
         var _constraints = constraints
         _constraints.forEach { constraint in
@@ -242,7 +242,7 @@ private extension ConstraintManager {
     
     /// Check constraint circulation
     ///
-    /// - TODO: Only 2 ? What about 3, 4, 5...?
+    /// - Todo: Only 2 ? What about 3, 4, 5...?
     func noConstraintCirculationWith(_ constraint:Constraint) -> Bool {
         assert(!Thread.isMainThread, _fy_noMainQueueAssert)
         return unsetConstraints.filter {
