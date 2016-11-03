@@ -177,6 +177,9 @@ private extension ConstraintManager {
     /// 给定的约束中，已经没有用来约束 view 的约束了
     func hasSetConstraints(_ constraints:Set<Constraint>, to view:UIView) -> Bool {
         for constraint in constraints {
+            //  ⚠️ Crash
+            //  "fatal error: unexpectedly found nil while unwrapping an Optional value"
+            //  `constraint.to` is nil
             if constraint.to == view {
                 return false
             }
