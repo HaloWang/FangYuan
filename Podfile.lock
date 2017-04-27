@@ -1,17 +1,17 @@
 PODS:
-  - Halo (0.1.3):
-    - Halo/Foundation (= 0.1.3)
-  - Halo/Foundation (0.1.3)
-  - Kingfisher (3.1.0)
+  - Halo (0.1.4):
+    - Halo/Foundation (= 0.1.4)
+  - Halo/Foundation (0.1.4)
+  - Kingfisher (3.6.2)
 
 DEPENDENCIES:
   - Halo
   - Kingfisher
 
 SPEC CHECKSUMS:
-  Halo: 19f0b2e0052e1500199f1028e8c8bf40111b0d7d
-  Kingfisher: 7779f22e977393e9533a89a9685beb8f679d3767
+  Halo: ab4b719b905f03a0393dfaef2273a3af4348e19b
+  Kingfisher: 2c94e72c6830622c71d06adf4ea024c37d316830
 
 PODFILE CHECKSUM: 681230f2c9098de18108dbcc6459e444ce815130
 
-COCOAPODS: 1.1.0.rc.2
+COCOAPODS: 1.2.1

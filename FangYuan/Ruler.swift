@@ -95,6 +95,6 @@ class Ruler {
 
 extension Ruler: CustomStringConvertible {
     var description: String {
-        return "\(a ?? nil) | \(b ?? nil) | \(c ?? nil)"
+        return "\(String(describing: a ?? nil)) | \(String(describing: b ?? nil)) | \(String(describing: c ?? nil))"
     }
 }
