@@ -1,7 +1,5 @@
 # FangYuan 方圆
 
-[![Travis CI](https://travis-ci.org/HaloWang/FangYuan.svg?branch=master)](https://travis-ci.org/HaloWang/FangYuan)
-
 『方圆』是一个容易使用，轻量级，高性能，纯代码的布局库。
 
 『方圆』基于 `UIView.frame` 属性来进行布局，有 Swift 和 [Objective-C](https://github.com/HaloWang/FangYuanObjC) 两种实现
