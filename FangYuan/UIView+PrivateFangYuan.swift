@@ -148,19 +148,24 @@ extension UIView {
 
 // MARK: - UIView Swizzling
 
+// In Swift 3.1: Method 'initialize()' defines Objective-C class method 'initialize', which is not guaranteed to be invoked by Swift and will be disallowed in future versions
+
+//  https://stackoverflow.com/questions/42824541/swift-3-1-deprecates-initialize-how-can-i-achieve-the-same-thing
+
+extension UIApplication {
+    private static let runOnce: Void = {
+        UIView._swizzle_layoutSubviews()
+    }()
+    
+    override open var next: UIResponder? {
+        UIApplication.runOnce
+        return super.next
+    }
+}
+
 extension UIView {
-
-    struct _fy_uiview_once {
-        static var token: Int = 0
-    }
-
-    override open class func initialize() {
-        if _fy_uiview_once.token == 0 {
-            _swizzle_layoutSubviews()
-            _fy_uiview_once.token = 1
-        }
-    }
-
+    
+    /// This method exchange the implmentation of `UIView.layoutSubviews` with `_swizzled_layoutSubviews`
     class func _swizzle_layoutSubviews() {
         let originalSelector = #selector(layoutSubviews)
         let swizzledSelector = #selector(_swizzled_layoutSubviews)
