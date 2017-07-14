@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "FangYuan"
-  s.version      = "0.1.3"
+  s.version      = "0.1.4"
   s.summary      = "Light weight, high-performance manual layout framework."
   s.homepage     = "https://github.com/HaloWang/Halo"
   s.license      = { :type => "MIT", :file => "LICENSE" }
@@ -10,5 +10,5 @@ Pod::Spec.new do |s|
   s.source_files = "FangYuan/*.{swift}"
   s.frameworks   = "UIKit"
   s.requires_arc = true
-  s.pod_target_xcconfig = { 'SWIFT_VERSION' => '3.0' }
+  s.pod_target_xcconfig = { 'SWIFT_VERSION' => '3.1' }
 end
