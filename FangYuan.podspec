@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "FangYuan"
-  s.version      = "0.1.4"
+  s.version      = "0.1.5"
   s.summary      = "Light weight, high-performance manual layout framework."
   s.homepage     = "https://github.com/HaloWang/Halo"
   s.license      = { :type => "MIT", :file => "LICENSE" }
