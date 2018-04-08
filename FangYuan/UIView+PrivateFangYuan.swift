@@ -154,7 +154,7 @@ extension UIView {
 
 extension UIApplication {
     private static let runOnce: Void = {
-        UIView._swizzle_layoutSubviews()
+        UIView._fangyuan_swizzle_layoutSubviews()
     }()
     
     override open var next: UIResponder? {
@@ -166,16 +166,16 @@ extension UIApplication {
 extension UIView {
     
     /// This method exchange the implmentation of `UIView.layoutSubviews` with `_swizzled_layoutSubviews`
-    class func _swizzle_layoutSubviews() {
+    class func _fangyuan_swizzle_layoutSubviews() {
         let originalSelector = #selector(layoutSubviews)
-        let swizzledSelector = #selector(_swizzled_layoutSubviews)
+        let swizzledSelector = #selector(_fangyuan_swizzled_layoutSubviews)
         let originalMethod = class_getInstanceMethod(self, originalSelector)
         let swizzledMethod = class_getInstanceMethod(self, swizzledSelector)
         method_exchangeImplementations(originalMethod!, swizzledMethod!)
     }
 
-    @objc func _swizzled_layoutSubviews() {
-        _swizzled_layoutSubviews()
+    @objc func _fangyuan_swizzled_layoutSubviews() {
+        _fangyuan_swizzled_layoutSubviews()
         ConstraintManager.layout(self)
     }
 

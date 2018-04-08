@@ -155,7 +155,7 @@ public extension UIView {
     }
     
     @discardableResult
-    func fy_xRange(_ left:CGFloat, right:CGFloat) -> Self {
+    func fy_xRange(_ left:CGFloat, _ right:CGFloat) -> Self {
         basicSetting {
             self.resetRelatedConstraintHorizontal(true)
             self.popConstraintAt(.left, value: left)
