@@ -171,10 +171,10 @@ extension UIView {
         let swizzledSelector = #selector(_swizzled_layoutSubviews)
         let originalMethod = class_getInstanceMethod(self, originalSelector)
         let swizzledMethod = class_getInstanceMethod(self, swizzledSelector)
-        method_exchangeImplementations(originalMethod, swizzledMethod)
+        method_exchangeImplementations(originalMethod!, swizzledMethod!)
     }
 
-    func _swizzled_layoutSubviews() {
+    @objc func _swizzled_layoutSubviews() {
         _swizzled_layoutSubviews()
         ConstraintManager.layout(self)
     }

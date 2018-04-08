@@ -45,7 +45,7 @@ class FYDAnimationViewController: UIViewController {
         }
     }
     
-    func animate() {
+    @objc func animate() {
         let newY : CGFloat = self.demoView.frame.origin.y == 100 ? 200 : 100
         UIView.animate(withDuration: 0.25) {
             FangYuanDemo.BeginLayout {

@@ -128,7 +128,7 @@ extension FYDRectViewController {
         codeList.reloadData()
     }
     
-    func topLeftPanTouched(_ sender: UIPanGestureRecognizer) {
+    @objc func topLeftPanTouched(_ sender: UIPanGestureRecognizer) {
         let t = sender.translation(in: holder)
         switch sender.state {
         case .began:
@@ -156,7 +156,7 @@ extension FYDRectViewController {
         }
     }
 
-    func bottomRightPanTouched(_ sender: UIPanGestureRecognizer) {
+    @objc func bottomRightPanTouched(_ sender: UIPanGestureRecognizer) {
         let t = sender.translation(in: holder)
         switch sender.state {
         case .began:

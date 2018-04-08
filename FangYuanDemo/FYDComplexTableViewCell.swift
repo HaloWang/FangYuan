@@ -175,7 +175,7 @@ class FYDComplexTableViewCell: UITableViewCell {
             nickNameDisplayWidth = cachedWidth
         } else {
             let maxCGFloat = CGFloat(MAXFLOAT)
-            nickNameDisplayWidth = (item.nickName as NSString).boundingRect(with: maxCGFloat.size, options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName:nickNameLabel.font], context: nil).size.width
+            nickNameDisplayWidth = (item.nickName as NSString).boundingRect(with: maxCGFloat.size, options: .usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font:nickNameLabel.font], context: nil).size.width
             item.nickNameDisplayWidthCache = nickNameDisplayWidth
         }
         nickNameLabel.fy_width(nickNameDisplayWidth)
@@ -216,7 +216,7 @@ class FYDComplexTableViewCell: UITableViewCell {
         if let cachedHeight = item.messageDisplayHeightCache {
             messageDisplayHeight = cachedHeight
         } else {
-            messageDisplayHeight = (item.message as NSString).boundingRect(with: CGSize(width: ScreenWidth - 5.double, height:CGFloat(MAXFLOAT)), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: FontSize)], context: nil).size.height
+            messageDisplayHeight = (item.message as NSString).boundingRect(with: CGSize(width: ScreenWidth - 5.double, height:CGFloat(MAXFLOAT)), options: .usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font:UIFont.systemFont(ofSize: FontSize)], context: nil).size.height
             item.messageDisplayHeightCache = messageDisplayHeight
         }
         return messageDisplayHeight
