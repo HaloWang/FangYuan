@@ -220,10 +220,7 @@ public extension UIView {
     /// 触发动画
     ///
     /// 只有当 view.superview 不为空时，该方法才有效
-    func toAnimation() {
-        
-        /// - Todo: 这个方法还有更好的写法吗？
-        
+    func fy_animate() {
         guard let superview = superview else {
             return
         }

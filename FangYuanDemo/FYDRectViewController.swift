@@ -142,7 +142,7 @@ extension FYDRectViewController {
             let newOrigin = CGPoint(x: storeLeftTop.x + t.x, y: storeLeftTop.y + t.y)
             rectView
                 .fy_origin(newOrigin)
-                .toAnimation()
+                .fy_animate()
         case .ended:
             if rectView.x < 20 {
                 rectView.fy_left(20)
@@ -150,7 +150,7 @@ extension FYDRectViewController {
             if rectView.y < 10 {
                 rectView.fy_top(10)
             }
-            rectView.toAnimation()
+            rectView.fy_animate()
         default:
             break
         }
@@ -167,7 +167,7 @@ extension FYDRectViewController {
             let newSize = CGSize(width: storeWidthHeight.width + t.x, height: storeWidthHeight.height + t.y)
             rectView
                 .fy_size(newSize)
-                .toAnimation()
+                .fy_animate()
         case .ended:
             if rectView.x + rectView.width + 10 > rectView.superview!.width {
                 rectView
@@ -179,7 +179,7 @@ extension FYDRectViewController {
                     .fy_top(storeLeftTop.y)
                     .fy_bottom(10)
             }
-            rectView.toAnimation()
+            rectView.fy_animate()
         default:
             break
         }
