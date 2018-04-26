@@ -25,6 +25,7 @@ extension UIView {
     
     func basicSetting(_ setting:@escaping ()->Void) {
         usingFangYuan = true
+        superview?.setNeedsLayout()
         _fy_layoutQueue {
             setting()
         }
